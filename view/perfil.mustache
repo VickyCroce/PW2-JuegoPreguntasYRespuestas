@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{{#perfiles}}
+        <title>Perfil {{nombreUsuario}}</title>
+    </head>
+    <body class="w3-light-grey">
+
+    <div class="w3-container w3-margin-top">
+        <div class="w3-card-4 w3-white w3-round-large w3-margin w3-center" style="max-width: 600px; margin: auto;">
+            <div class="w3-container">
+                <img src="/{{fotoPerfil}}" alt="Foto de perfil" class="w3-circle w3-margin-top" style="width: 150px; height: 150px;">
+                <h3 class="w3-text-dark-grey">{{nombreUsuario}}</h3>
+                <p><strong>Puntaje:</strong> {{puntajeAcumulado}}</p>
+                <p><strong>Partidas jugadas:</strong> {{cantidadPartidas}}</p>
+
+                <div id="mapa-container" class="w3-margin-top w3-margin-bottom">
+                    <div id="mapa" class="w3-border w3-round-large" style="height: 300px;"></div>
+                </div>
+
+                <div id="qr" class="w3-margin-top w3-margin-bottom">
+                    <img src="{{qr}}" alt="QR Code" class="w3-image" style="max-width: 150px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{/perfiles}}
+
+{{{script}}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/public/mapPerfil.js?v=1.0.1"></script>
+</body>
+</html>
+
