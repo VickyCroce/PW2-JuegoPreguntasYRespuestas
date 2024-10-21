@@ -2,39 +2,35 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-{{#perfiles}}
-        <title>Perfil {{nombreUsuario}}</title>
-    </head>
-    <body class="w3-light-grey">
+    <title>Perfil de {{nombre_completo}}</title>
+</head>
+<body>
+<h1>Perfil de {{nombre_completo}}</h1>
+<img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre_completo}}" style="width: 150px; height: 150px; object-fit: cover;"><br>
 
-    <div class="w3-container w3-margin-top">
-        <div class="w3-card-4 w3-white w3-round-large w3-margin w3-center" style="max-width: 600px; margin: auto;">
-            <div class="w3-container">
-                <img src="/{{fotoPerfil}}" alt="Foto de perfil" class="w3-circle w3-margin-top" style="width: 150px; height: 150px;">
-                <h3 class="w3-text-dark-grey">{{nombreUsuario}}</h3>
-                <p><strong>Puntaje:</strong> {{puntajeAcumulado}}</p>
-                <p><strong>Partidas jugadas:</strong> {{cantidadPartidas}}</p>
+<p><strong>Nombre de Usuario:</strong> {{nombre_usuario}}</p>
+<p><strong>Año de Nacimiento:</strong> {{anio_nacimiento}}</p>
+<p><strong>Sexo:</strong> {{sexo}}</p>
+<p><strong>País:</strong> {{pais}}</p>
+<p><strong>Ciudad:</strong> {{ciudad}}</p>
+<p><strong>Email:</strong> {{email}}</p>
+<p><strong>Fecha de Registro:</strong> {{fecha_registro}}</p>
 
-                <div id="mapa-container" class="w3-margin-top w3-margin-bottom">
-                    <div id="mapa" class="w3-border w3-round-large" style="height: 300px;"></div>
-                </div>
+<h3>Mapa de ubicación</h3>
+<iframe
+        width="600"
+        height="450"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        src="https://www.google.com/maps/embed/v1/place?key=TU_API_KEY&q={{ciudad}},{{pais}}">
+</iframe>
 
-                <div id="qr" class="w3-margin-top w3-margin-bottom">
-                    <img src="{{qr}}" alt="QR Code" class="w3-image" style="max-width: 150px;">
-                </div>
-            </div>
-        </div>
-    </div>
+<h3>Acceso rápido a este perfil</h3>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://tu_dominio.com/profile.php?user={{nombre_usuario}}" alt="Código QR para el perfil de {{nombre_usuario}}">
 
-{{/perfiles}}
-
-{{{script}}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="/public/mapPerfil.js?v=1.0.1"></script>
+<a href="lobby.php">Volver al lobby</a>
 </body>
 </html>
+
 

@@ -2,28 +2,42 @@
 
 class ControllerPerfil
 {
-    private $modelo;
+    private $model;
     private $presenter;
 
-    public function __construct($modelo, $presenter)
+    public function __construct($model, $presenter)
     {
-        $this->modelo = $modelo;
+        $this->model = $model;
         $this->presenter = $presenter;
     }
 
+    public function get(){
+        $this->presenter->render("View/perfil.mustache");
+    }
 
-    public function get()
+
+    // Función para mostrar el perfil del usuario
+    public function showProfile($username)
     {
-        echo $this->presenter->show('view/perfil.mustache');
+        // Obtener los datos del usuario del modelo
+        $user = $this->model->getUserProfile($username);
+
+        if ($user) {
+            // Si el usuario existe, cargar la vista con los datos del perfil
+            $this->renderProfileView($user);
+        } else {
+            echo "Usuario no encontrado.";
+        }
     }
 
+    // Función para renderizar la vista del perfil
+    private function renderProfileView($user)
+    {
+        // Cargar Mustache
+        $mustache = new Mustache_Engine();
+        $template = file_get_contents('View/perfil.mustache');
 
-    public function profile($userId) {
-        $user = $this->modelo->getUserById($userId);
-        $games = $this->modelo->getUserGames($userId);
-        $ranking = $this->modelo->getRankingPosition($userId);
-
-        include 'views/profile.php'; // Aquí mostrarías los datos del perfil en una vista
+        // Renderizar la vista con los datos del usuario
+        echo $mustache->render($template, $user);
     }
-
 }
