@@ -33,7 +33,7 @@ class ControllerLogin
             } else {
                 // Si no hay errores, el usuario es válido, iniciar sesión
                 $_SESSION['usuario'] = $resultado; // Guardar la información del usuario en la sesión
-                $this->presenter->show("view/perfil.mustache"); // Redirigir a la página de inicio o dashboard
+                $this->presenter->show("view/perfil.mustache"); // Redirigir a la página de inicio
             }
         } else {
             $this->presenter->show("view/login.mustache", ['error' => 'Por favor, ingresa tus credenciales.']);

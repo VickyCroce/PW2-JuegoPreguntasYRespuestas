@@ -20,6 +20,8 @@ class ModelLogin
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+
+    // Método para validar usuario
     public function validarUsuario($email, $password)
     {
         $sql = "SELECT * FROM users WHERE email = ? AND verificado = 1";
@@ -33,9 +35,8 @@ class ModelLogin
             mysqli_stmt_close($stmt);
 
             if ($user) {
-                // Comparar directamente la contraseña en texto plano
                 if ($password === $user['password']) {
-                    return $user; // Usuario verificado y contraseña correcta
+                    return $user;
                 } else {
                     return ['error' => 'Contraseña incorrecta.'];
                 }

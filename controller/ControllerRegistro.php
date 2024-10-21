@@ -51,13 +51,13 @@ class ControllerRegistro {
                 'pais' => $_POST['pais'],
                 'ciudad' => $_POST['ciudad'],
                 'email' => $email,
-                'password' => $_POST['password'], // Encriptamos la contraseña
+                'password' => $_POST['password'],
                 'nombre_usuario' => $_POST['nombre_usuario'],
                 'foto_perfil' => $fotoPerfilPath
             ];
 
             if ($this->modelo->saveUser($usuarioData)) {
-                // Guardamos el usuario temporal en sesión para usarlo después en la validación
+
                 $_SESSION['usuario_temporal'] = $usuarioData;
 
                 $asunto = "Verificación de correo electrónico";
@@ -81,11 +81,11 @@ class ControllerRegistro {
             $email = $_GET['email'];
             echo "Registro exitoso. Ya puedes iniciar sesión.";
 
-            // Verificamos si el usuario existe en la base de datos con el correo proporcionado
+
             $usuario = $this->modelo->findUserByEmail($email);
 
             if ($usuario) {
-                echo "Usuario encontrado: " . $usuario['email']; // Depuración
+                echo "Usuario encontrado: " . $usuario['email'];
 
                 // Actualizamos el campo 'verificado' a 1
                 if ($this->modelo->verifyUser($email)) {

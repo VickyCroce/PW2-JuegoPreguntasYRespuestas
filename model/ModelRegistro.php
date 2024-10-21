@@ -28,18 +28,17 @@ class ModelRegistro
 
     public function saveUser($data)
     {
-        // Asegúrate de que estamos incluyendo todos los parámetros y manejando el campo `foto_perfil` correctamente
-        $sql = "INSERT INTO users (nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil, verificado) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";  // Aquí agregamos 0 por defecto para 'verificado'
 
-        // Verificamos si 'foto_perfil' es NULL o tiene un valor
+        $sql = "INSERT INTO users (nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil, verificado) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+
+
         $fotoPerfil = isset($data['foto_perfil']) ? $data['foto_perfil'] : NULL;  // Esto manejará el caso en que no haya foto
 
-        // Preparamos la consulta
+
         $stmt = $this->db->prepare($sql);
 
         if ($stmt) {
-            // Establecemos los parámetros correctamente
             mysqli_stmt_bind_param($stmt, "sssssssss",
                 $data['nombre_completo'],
                 $data['anio_nacimiento'],
