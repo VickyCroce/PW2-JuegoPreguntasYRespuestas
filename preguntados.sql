@@ -1,3 +1,5 @@
+CREATE DATABASE preguntados_db;
+    USE preguntados_db;
 CREATE TABLE users (
                        id INT AUTO_INCREMENT PRIMARY KEY,
                        nombre_completo VARCHAR(100) NOT NULL,
