@@ -1,6 +1,5 @@
 <?php
 
-namespace model;
 class ModelRegistro
 {
     private $db;
@@ -10,6 +9,7 @@ class ModelRegistro
         $this->db = $db;
     }
 
+    //metodo para buscar usuario por mail
     public function findUserByEmail($email)
     {
         $sql = "SELECT * FROM users WHERE email = ?";
@@ -26,6 +26,7 @@ class ModelRegistro
         return false;
     }
 
+    // metodo guardar usuario
     public function saveUser($data)
     {
 
@@ -33,12 +34,13 @@ class ModelRegistro
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 
 
-        $fotoPerfil = isset($data['foto_perfil']) ? $data['foto_perfil'] : NULL;  // Esto manejará el caso en que no haya foto
+        $fotoPerfil = isset($data['foto_perfil']) ? $data['foto_perfil'] : NULL;
 
 
         $stmt = $this->db->prepare($sql);
 
         if ($stmt) {
+
             mysqli_stmt_bind_param($stmt, "sssssssss",
                 $data['nombre_completo'],
                 $data['anio_nacimiento'],
@@ -59,6 +61,7 @@ class ModelRegistro
         return false;
     }
 
+    //metodo para verificar usuario
     public function verifyUser($email)
     {
         $sql = "UPDATE users SET verificado = 1 WHERE email = ?";

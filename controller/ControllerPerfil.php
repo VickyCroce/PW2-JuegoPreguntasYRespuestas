@@ -3,41 +3,43 @@
 class ControllerPerfil
 {
     private $model;
-    private $presenter;
+    private $Mustachepresenter;
 
-    public function __construct($model, $presenter)
+    public function __construct($model, MustachePresenter $Mustachepresenter)
     {
         $this->model = $model;
-        $this->presenter = $presenter;
+        $this->Mustachepresenter = $Mustachepresenter;
     }
 
     public function get(){
-        $this->presenter->render("View/perfil.mustache");
+        $this->Mustachepresenter->render('view/perfil.mustache');
     }
 
 
-    // Función para mostrar el perfil del usuario
-    public function showProfile($username)
+    // Funcion para mostrar el perfil del usuario
+    public function showProfile()
     {
-        // Obtener los datos del usuario del modelo
-        $user = $this->model->getUserProfile($username);
+        if (isset($_GET['username'])) {
+            $username = $_GET['username'];
+            $user = $this->model->getUserProfile($username);
 
-        if ($user) {
-            // Si el usuario existe, cargar la vista con los datos del perfil
-            $this->renderProfileView($user);
+            if ($user) {
+                $this->renderProfileView($user);
+            } else {
+                echo "Usuario no encontrado.";
+            }
         } else {
-            echo "Usuario no encontrado.";
+            echo "Usuario no especificado.";
         }
     }
+
+
 
     // Función para renderizar la vista del perfil
     private function renderProfileView($user)
     {
-        // Cargar Mustache
-        $mustache = new Mustache_Engine();
-        $template = file_get_contents('View/perfil.mustache');
-
-        // Renderizar la vista con los datos del usuario
-        echo $mustache->render($template, $user);
+        echo $this->Mustachepresenter->render('view/perfil.mustache', $user);
     }
+
+
 }

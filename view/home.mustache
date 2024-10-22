@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lobby</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 600px; margin: 0 auto;">
+    <h1>{{nombre}}</h1>
+
+    <div class="w3-margin-top">
+        <a class="w3-button w3-teal w3-block w3-round" href="jugar.php">Jugar</a>
+    </div>
+    <div class="w3-margin-top">
+        <a class="w3-button w3-teal w3-block w3-round" href="/ControllerPerfil/showProfile?username={{nombre}}">Perfil</a>
+    </div>
+    <div class="w3-margin-top">
+        <a class="w3-button w3-teal w3-block w3-round" href="ranking.php">Ranking</a>
+    </div>
+    <div class="w3-margin-top">
+        <a class="w3-button w3-teal w3-block w3-round" href="partidas.php">Partidas Anteriores</a>
+    </div>
+    <div class="w3-margin-top">
+        <a class="w3-button w3-red w3-block w3-round" href="/ControllerLogin/get">Salir</a>
+    </div>
+</div>
+</body>
+</html>

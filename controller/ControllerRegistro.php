@@ -22,6 +22,7 @@ class ControllerRegistro {
     }
 
 
+    // Función para registrar usuario
     public function registrarUsuario() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
@@ -32,13 +33,27 @@ class ControllerRegistro {
 
             if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
                 $fotoPerfil = $_FILES['foto_perfil'];
+
+
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/img/';
-                $fotoPerfilPath = $uploadDir . basename(str_replace(' ', '_', $fotoPerfil['name']));
+
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
+                }
+
+
+                $fotoPerfilName = basename(str_replace(' ', '_', $fotoPerfil['name']));
+                $fotoPerfilPath = $uploadDir . $fotoPerfilName;
+
 
                 if (move_uploaded_file($fotoPerfil['tmp_name'], $fotoPerfilPath)) {
-                } else {
-                    return ['error' => 'Error al subir la foto de perfil.'];
+
+                    $fotoPerfilUrl = '/public/img/' . $fotoPerfilName;
                 }
+                else {
+                    echo "Error al cargar la imagen.";
+                }
+
             } else {
                 $fotoPerfilPath = null;
             }
@@ -53,7 +68,7 @@ class ControllerRegistro {
                 'email' => $email,
                 'password' => $_POST['password'],
                 'nombre_usuario' => $_POST['nombre_usuario'],
-                'foto_perfil' => $fotoPerfilPath
+                'foto_perfil' => $fotoPerfilUrl
             ];
 
             if ($this->modelo->saveUser($usuarioData)) {
@@ -85,8 +100,6 @@ class ControllerRegistro {
             $usuario = $this->modelo->findUserByEmail($email);
 
             if ($usuario) {
-                echo "Usuario encontrado: " . $usuario['email'];
-
                 // Actualizamos el campo 'verificado' a 1
                 if ($this->modelo->verifyUser($email)) {
                     unset($_SESSION['usuario_temporal']);

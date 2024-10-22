@@ -1,6 +1,5 @@
 <?php
 
-namespace model;
 class ModelLogin
 {
     private $db;
@@ -12,7 +11,7 @@ class ModelLogin
 
     }
 
-    // Método para buscar un usuario por su nombre de usuario
+    // metodo para buscar usuario por nombre de usuario
     public function findUserByUsername($username)
     {
         $stmt = $this->db->prepare('SELECT * FROM users WHERE username = :username');
@@ -20,8 +19,7 @@ class ModelLogin
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-
-    // Método para validar usuario
+    // metodo para validar usuario
     public function validarUsuario($email, $password)
     {
         $sql = "SELECT * FROM users WHERE email = ? AND verificado = 1";
