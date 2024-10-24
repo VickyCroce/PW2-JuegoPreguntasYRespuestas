@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div class="w3-container">
+    <h1>{{#correcta}}¡Correcto!{{/correcta}}{{^correcta}}Incorrecto{{/correcta}}</h1>
+    <p>Puntuación total: {{puntuacion}}</p>
+    <form method="POST" action="/ControllerJuego/reiniciarJuego">
+        <button type="submit" class="w3-button w3-green w3-round">Nueva Partida</button>
+    </form>
+    <form method="POST" action="/ControllerHome/get">
+        <button type="submit" class="w3-button w3-blue w3-round">Volver al Inicio</button>
+    </form>
+</div>
+</body>
+</html>
+
+

@@ -1,46 +1,136 @@
 <?php
+include_once "controller/ControllerRegistro.php";
+include_once "controller/ControllerLogin.php";
+include_once "controller/ControllerPerfil.php";
+include_once "controller/ControllerHome.php";
+include_once "controller/ControllerJuego.php";
+include_once "controller/ControllerPartida.php";
 
-use Controller\controladorUsuario;
-use Helper\Database;
-use Model\modeloUsuario;
+include_once "model/ModelRegistro.php";
+include_once "model/ModelLogin.php";
+include_once "model/ModelPerfil.php";
+include_once "model/ModelHome.php";
+include_once "model/ModelJuego.php";
+include_once "model/ModelPartida.php";
 
-include_once ("Config/Config.ini");
-include_once ("Helper/Database.php");
-include_once ("Helper/MustachePresenter.php");
-include_once ("Controller/controladorUsuario.php");
-include_once ("Model/modeloUsuario.php");
-
-
+include_once "helper/Database.php";
+include_once "helper/Presenter.php";
+include_once "helper/MustachePresenter.php";
+include_once "helper/Router.php";
+include_once("vendor\mustache\mustache\src\Mustache\Autoloader.php");
 class Configuration
 {
-    public static function getConfig(){
-        $config = parse_ini_file("Config/config.ini");
+    public function __construct()
+    {
+    }
+
+    //BASE DE DATOS
+    public static function getConfig()
+    {
+        $config = parse_ini_file("config/config.ini");
         return $config;
     }
 
-    public static function getDatabase(){
+    public static function getDatabase()
+    {
         $config = self::getConfig();
-        $host = $config["HOST"];
-        $user = $config["USER"];
-        $password = $config["PASSWORD"];
-        $database = $config["DATABASE"];
+        $server = $config["HOST"];
+        $user = $config["USUARIO"];
+        $password = $config["CONTRASENIA"];
+        $database = $config["BASE_DATOS"];
 
-        return new Database($host, $user, $password, $database);
+        return new Database($server, $user, $password, $database);
     }
 
-    public static function getPresenter(){
-        return new MustachePresenter();
+    private static function getPresenter2()
+    {
+
+        return new MustachePresenter("view/template");
+    }
+    // CONTROLADOR REGISTRO
+    public static function getControllerRegistro()
+    {
+        return new ControllerRegistro(self::getModelRegistro(),self::getPresenter());
     }
 
-    public static function getModeloUsuario(){
-        return new ModeloUsuario(self::getDatabase());
+    //CONTROLADOR LOGIN
+
+    public static function getControllerLogin(){
+        return new ControllerLogin(self::getModelLogin(),self::getPresenter());
     }
 
-    public static function getControladorUsuario(){
-        return new ControladorUsuario(self::getModeloUsuario(), self::getPresenter());
+    //CONTROLADOR PERFIL
+
+    public static function getControllerPerfil() {
+        return new ControllerPerfil(self::getModelPerfil(), self::getPresenter2());
     }
 
-    public static function getRouter(){
-        return new Router("getLobbyUsuarioController", "get");
+    //CONTROLADOR HOME
+
+    public static function getControllerHome() {
+        return new ControllerHome(self::getModelHome(), self::getPresenter2());
     }
+
+    //CONTROLADOR JUEGO
+
+    public static function getControllerJuego() {
+        return new ControllerJuego(self::getModelJuego(), self::getPresenter2());
+    }
+
+    //CONTROLADOR PARTIDA
+    public static function getControllerPartida() {
+        return new ControllerPartida(self::getModelPartida(), self::getPresenter2());
+    }
+
+    // MODELO REGISTRO
+    public static function getModelRegistro()
+    {
+        return new ModelRegistro(self::getDatabase());
+    }
+
+
+    // MODELO LOGIN
+    public static function getModelLogin()
+    {
+        return new ModelLogin(self::getDatabase());
+    }
+
+
+    // MODELO PERFIL
+    public static function getModelPerfil()
+    {
+        return new ModelPerfil(self::getDatabase());
+    }
+
+    // MODELO HOME
+
+    public static function getModelHome()
+    {
+        return new ModelHome(self::getDatabase());
+    }
+
+    //MODELO JUEGO
+
+    public static function getModelJuego()
+    {
+        return new ModelJuego(self::getDatabase());
+    }
+
+    //MODELO PARTIDA
+
+    public static function getModelPartida()
+    {
+        return new ModelPartida(self::getDatabase());
+    }
+    public static function getRouter()
+    {
+        return new Router(self::class,"getControllerLogin", "get");
+    }
+
+    private static function getPresenter()
+    {
+        return new Presenter();
+    }
+
+
 }

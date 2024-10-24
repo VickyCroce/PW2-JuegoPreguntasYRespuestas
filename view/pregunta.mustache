@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregunta</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body style="background-color: {{categoriaColor}};">
+<input type="hidden" name="partida_id" value="{{partida_id}}">
+<div class="w3-container">
+    <h1>{{pregunta.descripcion}}</h1>
+    <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large" method="POST" action="/ControllerJuego/verificarRespuesta">
+        {{#respuestas}}
+            <label class="w3-block w3-margin-bottom">
+                <input class="w3-radio" type="radio" name="letraSeleccionada" value="{{letra}}">
+                {{letra}}) {{descripción}}
+            </label>
+        {{/respuestas}}
+        <input type="hidden" name="pregunta_id" value="{{pregunta.id}}">
+        <button type="submit" class="w3-button w3-green w3-round">Responder</button>
+    </form>
+    <p>Puntuación actual: {{puntuacion}}</p>
+</div>
+
+</body>
+</html>
+
+
+
+
+
