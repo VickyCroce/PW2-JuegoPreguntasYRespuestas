@@ -9,8 +9,9 @@
 <body style="background-color: {{categoriaColor}};">
 <input type="hidden" name="partida_id" value="{{partida_id}}">
 <div class="w3-container">
-    <h1>{{pregunta.descripcion}}</h1>
-    <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large" method="POST" action="/ControllerJuego/verificarRespuesta">
+    <h2>{{pregunta.descripcion}}</h2>
+    <h1>{{tiempoRestante}}</h1>
+    <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large" method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/verificarRespuesta">
         {{#respuestas}}
             <label class="w3-block w3-margin-bottom">
                 <input class="w3-radio" type="radio" name="letraSeleccionada" value="{{letra}}">
@@ -22,7 +23,11 @@
     </form>
     <p>Puntuación actual: {{puntuacion}}</p>
 </div>
-
+<script>
+    var puntuacion = {{puntuacion}};
+    var sec = {{tiempoRestante}};
+</script>
+<script src="/PW2-JuegoPreguntasYRespuestas/public/js/ajax/temporizadorAjax.js"></script>
 </body>
 </html>
 

@@ -1,4 +1,18 @@
 <?php
+
+use Controller\ControllerHome;
+use Controller\ControllerJuego;
+use Controller\ControllerLogin;
+use Controller\ControllerPartida;
+use Controller\ControllerPerfil;
+use Controller\ControllerRegistro;
+use Model\ModelHome;
+use Model\ModelJuego;
+use Model\ModelLogin;
+use Model\ModelPartida;
+use Model\ModelRegistro;
+
+
 include_once "controller/ControllerRegistro.php";
 include_once "controller/ControllerLogin.php";
 include_once "controller/ControllerPerfil.php";
@@ -81,6 +95,7 @@ class Configuration
     public static function getControllerPartida() {
         return new ControllerPartida(self::getModelPartida(), self::getPresenter2());
     }
+
 
     // MODELO REGISTRO
     public static function getModelRegistro()
