@@ -1,33 +1,57 @@
 <?php
-class Router{
-
-    private $defaultMethod;
+class Router
+{
     private $defaultController;
-    public function __construct($defaultController, $defaultMethod){
+    private $defaultMethod;
+    private $configuration;
+
+    public function __construct($configuration,$defaultController, $defaultMethod) {
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
+        $this->configuration = $configuration;
     }
 
-    public function route($controllerName, $methodName)
-    {
+    public function route($controllerName, $methodName, $param = null) {
         $controller = $this->getControllerFrom($controllerName);
-        $this->executeMethodFromController($controller, $methodName);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $_POST;
+            if (isset($_FILES['foto_perfil'])) {
+                $data['foto_perfil'] = $_FILES['foto_perfil'];
+            }
+
+            // Ejecuta el método del controlador, pasando los datos del formulario
+            $this->executeMethodFromController($controller, $methodName, $data);
+        } else {
+            // Maneja las solicitudes GET
+            $this->executeMethodFromController($controller, $methodName, $param);
+        }
     }
 
-    //Llama al controlador
-    private function getControllerFrom($module)
-    {
-        $controllerName = 'get' . ucfirst($module) . 'Controller';
-        // Verifica si existe el controlador en el archivo de Configuration, si no existe usa el controlador por defecto
-        $validController = method_exists("Configuration", $controllerName) ? $controllerName : $this->defaultController;
 
-        return call_user_func(array("Configuration", $validController));
+
+    private function getControllerFrom($module) {
+        $controllerName = 'get' . ucfirst($module);
+
+        // Verifica si el método existe en la clase Configuration
+        if (method_exists($this->configuration, $controllerName)) {
+            return call_user_func(array($this->configuration, $controllerName));
+        } else {
+            // Si no existe, usa el controlador por defecto
+            return call_user_func(array($this->configuration, $this->defaultController));
+        }
     }
 
-    //Ejecuta el metodo del controlador
-    private function executeMethodFromController($controller, $method)
-    {
+
+
+    private function executeMethodFromController($controller, $method, $param = null) {
         $validMethod = method_exists($controller, $method) ? $method : $this->defaultMethod;
-        call_user_func(array($controller, $validMethod));
+        if ($param) {
+            call_user_func(array($controller, $validMethod), $param);
+        } else {
+            call_user_func(array($controller, $validMethod));
+        }
     }
+
+
 }

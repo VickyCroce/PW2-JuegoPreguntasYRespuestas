@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+</head>
+<body>
+
+<div class="w3-container w3-card-4 w3-light-grey w3-padding-32" style="max-width: 500px; margin: auto;">
+    <h2 class="w3-center">Registro de Usuario</h2>
+    <form action="../ControllerRegistro/registrarUsuario" method="POST" enctype="multipart/form-data" class="w3-container">
+
+        <label class="w3-label w3-text-teal">Nombre Completo:</label>
+        <input type="text" name="nombre_completo" class="w3-input w3-border w3-round" required>
+
+        <label class="w3-label w3-text-teal">Año de Nacimiento:</label>
+        <input type="number" name="anio_nacimiento" min="1900" max="2024" class="w3-input w3-border w3-round" required>
+
+        <label class="w3-label w3-text-teal">Sexo:</label>
+        <select name="sexo" class="w3-select w3-border w3-round" required>
+            <option value="" disabled selected>Selecciona tu sexo</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Prefiero no cargarlo">Prefiero no cargarlo</option>
+        </select>
+
+        <div id="map" style="height: 400px;"></div>
+        <input type="hidden" name="pais" id="pais">
+        <input type="hidden" name="ciudad" id="ciudad">
+
+
+        <label class="w3-label w3-text-teal">Correo Electrónico:</label>
+        <input type="email" name="email" class="w3-input w3-border w3-round" required>
+
+        <label class="w3-label w3-text-teal">Contraseña:</label>
+        <input type="password" name="password" class="w3-input w3-border w3-round" required>
+
+        <label class="w3-label w3-text-teal">Nombre de Usuario:</label>
+        <input type="text" name="nombre_usuario" class="w3-input w3-border w3-round" required>
+
+        <label class="w3-label w3-text-teal">Foto de Perfil:</label>
+        <input type="file" name="foto_perfil" accept="image/*" class="w3-input w3-border w3-round">
+
+        <button type="submit" class="w3-button w3-teal w3-block w3-margin-top">Registrarse</button>
+    </form>
+
+</div>
+</div>
+
+<script>
+    const map = L.map('map').setView([20, 0], 2); // Centro inicial y zoom
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        marker = L.marker([lat, lng]).addTo(map);
+
+        // Llamada a Nominatim para obtener la ciudad y el país
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.address) {
+                        const country = data.address.country;
+                        const city = data.address.city || data.address.town || data.address.village;
+
+                        document.getElementById('pais').value = country;
+                        document.getElementById('ciudad').value = city;
+
+                        console.log(`País: ${country}, Ciudad: ${city}`);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
+

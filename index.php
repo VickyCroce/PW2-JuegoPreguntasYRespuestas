@@ -1,13 +1,12 @@
 <?php
+require_once 'Configuration.php';
+require_once 'helper/Router.php';
 
-SESSION_START();
-include_once ("Configuration.php");
+session_start();
+
+$controller = isset($_GET["controller"]) ? $_GET["controller"] : "";
+$action = isset($_GET["action"]) ? $_GET["action"] : "";
+
 
 $router = Configuration::getRouter();
-
-if ($_GET['action'] === 'profile' && isset($_GET['username'])) {
-    $controller = Configuration::getControladorUsuario();
-    $controller->showProfile($_GET['username']);
-} else {
-    echo "Página no encontrada.";
-}
+$router->route($controller, $action);
