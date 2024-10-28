@@ -33,7 +33,7 @@ class ControllerLogin
                 $_SESSION['usuario_id'] = $resultado['id'];
                 $_SESSION['usuario'] = $resultado;
 
-                header('Location: /ControllerHome/get');
+                header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerHome/get');
                 exit();
             }
         } else {

@@ -46,12 +46,12 @@ class ControllerJuego
     if (isset($_SESSION['pregunta_actual'])) {
         $pregunta = $_SESSION['pregunta_actual'];
     } else {
-        // Si no existe, obtiene una nueva pregunta aleatoria
+
         $pregunta = $this->model->getPreguntaAleatoria();
         $_SESSION['pregunta_actual'] = $pregunta; // Guarda la pregunta en la sesión
     }
         $tiempoRestante = $_SESSION['tiempo_limite'] - time();
-        // Guarda el tiempo restante en la sesión
+
         $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
 
         if ($pregunta) {
@@ -76,11 +76,8 @@ class ControllerJuego
         $partidaId = $_SESSION['partida_id'];
 
         // Calcular el tiempo restante
-    $tiempoRestante = $_SESSION['tiempo_limite'] - time();
-
-
-    // Guarda el tiempo restante en la sesión
-    $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+        $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+        $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
 
         $respuestas = $this->model->getRespuestasPorPregunta($preguntaId);
         $correcta = false;
@@ -94,8 +91,9 @@ class ControllerJuego
         if ($correcta) {
             $this->puntuacion++;
             $_SESSION['puntuacion'] = $this->puntuacion;
-
             $this->model->actualizarPuntosPartida($partidaId, $this->puntuacion);
+
+            unset($_SESSION['pregunta_actual']);
 
             $this->mostrarPregunta();
         } else {
@@ -105,6 +103,7 @@ class ControllerJuego
             ]);
         }
     }
+
 
 
     public function reiniciarJuego()
