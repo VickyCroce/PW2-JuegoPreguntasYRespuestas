@@ -100,6 +100,11 @@ class Configuration
         return new ControllerPartida(self::getModelPartida(), self::getPresenter2());
     }
 
+    //CONTROLADOR RANKING
+    public static function getControllerRanking() {
+        return new ControllerRanking(self::getModelRanking(), self::getPresenter2());
+    }
+
 
     // MODELO REGISTRO
     public static function getModelRegistro()
@@ -140,6 +145,13 @@ class Configuration
     public static function getModelPartida()
     {
         return new ModelPartida(self::getDatabase());
+    }
+
+    //MODELO RANKING
+
+    public static function getModelRanking()
+    {
+        return new ModelRanking(self::getDatabase());
     }
     public static function getRouter()
     {
