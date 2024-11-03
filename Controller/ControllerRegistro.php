@@ -39,7 +39,7 @@ class ControllerRegistro
                 $fotoPerfil = $_FILES['foto_perfil'];
 
 
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/img/';
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
@@ -52,7 +52,7 @@ class ControllerRegistro
 
                 if (move_uploaded_file($fotoPerfil['tmp_name'], $fotoPerfilPath)) {
 
-                    $fotoPerfilUrl = '/public/img/' . $fotoPerfilName;
+                    $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/' . $fotoPerfilName;
                 } else {
                     echo "Error al cargar la imagen.";
                 }

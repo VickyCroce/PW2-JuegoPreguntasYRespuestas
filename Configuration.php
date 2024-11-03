@@ -6,11 +6,13 @@ use Controller\ControllerLogin;
 use Controller\ControllerPartida;
 use Controller\ControllerPerfil;
 use Controller\ControllerRegistro;
+use Controller\ControllerRanking;
 use Model\ModelHome;
 use Model\ModelJuego;
 use Model\ModelLogin;
 use Model\ModelPartida;
 use Model\ModelRegistro;
+use Model\ModelRanking;
 
 
 include_once "controller/ControllerRegistro.php";
@@ -19,6 +21,7 @@ include_once "controller/ControllerPerfil.php";
 include_once "controller/ControllerHome.php";
 include_once "controller/ControllerJuego.php";
 include_once "controller/ControllerPartida.php";
+include_once "controller/ControllerRanking.php";
 
 include_once "model/ModelRegistro.php";
 include_once "model/ModelLogin.php";
@@ -26,6 +29,7 @@ include_once "model/ModelPerfil.php";
 include_once "model/ModelHome.php";
 include_once "model/ModelJuego.php";
 include_once "model/ModelPartida.php";
+include_once "model/ModelRanking.php";
 
 include_once "helper/Database.php";
 include_once "helper/Presenter.php";

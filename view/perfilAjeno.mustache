@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de {{nombre}}</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<!-- Contenedor principal -->
+<div class="w3-container w3-padding-32">
+    <div class="w3-card-4 w3-margin">
+        <!-- Cabecera del perfil -->
+        <header class="w3-container w3-blue w3-center">
+            <h1>Perfil de {{nombre}}</h1>
+        </header>
+
+        <!-- Sección de información personal -->
+        <div class="w3-container w3-padding">
+            <div class="w3-row">
+                <div class="w3-half w3-center">
+                    <img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre}}" class="w3-circle" style="width:150px; height:150px;">
+                    <p class="w3-large">Puntuación total: <span class="w3-text-blue">{{puntaje_total}}</span></p>
+                </div>
+                <div class="w3-half w3-center">
+                    <img src="{{qr_code_url}}" alt="QR para perfil de {{nombre}}" class="w3-border" style="width:150px; height:150px;">
+                    <p>Escanea para acceder al perfil</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de partidas -->
+        <div class="w3-container w3-padding w3-light-grey">
+            <h2 class="w3-text-blue">Partidas Realizadas</h2>
+            <ul class="w3-ul w3-border w3-hoverable">
+                {{#partidas}}
+                    <li class="w3-padding-16">
+                        <span class="w3-large">Puntaje:</span> {{puntaje}}
+                        <br>
+                        <span class="w3-text-grey">Fecha: {{fechaCreacion}}</span>
+                    </li>
+                {{/partidas}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Aquí podrías integrar un mapa, como Google Maps o OpenStreetMap -->
+</body>
+</html>
+
+

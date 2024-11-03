@@ -23,10 +23,23 @@ class ModelPerfil
     }
 
 
-
     // Función para buscar por id
-    public function findById($id){
-        return $this->database->query("SELECT * FROM usuario WHERE id = '$id'");
+    public function findById($id)
+    {
+        $sql = "
+        SELECT u.nombre_completo AS nombre, u.foto_perfil, COALESCE(SUM(p.puntaje), 0) AS puntaje_total
+        FROM users u
+        LEFT JOIN Partida p ON u.id = p.usuario_id
+        WHERE u.id = '$id'
+        GROUP BY u.id";
+
+        $result = $this->database->query($sql);
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result[0];
+        }
+
+        return null;
     }
 
     // Función para obtener toda la tabla
