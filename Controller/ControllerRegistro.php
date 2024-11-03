@@ -80,7 +80,7 @@ class ControllerRegistro
 
                 $asunto = "Verificación de correo electrónico";
                 $mensaje = "<h1>Por favor, verifica tu correo haciendo clic en este enlace:</h1>";
-                $mensaje .= "<a href='http://localhost/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
+                $mensaje .= "<a href='http://localhost/PW2-JuegoPreguntasYRespuestas/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
 
                 if (!$this->sendMail($email, $asunto, $mensaje)) {
                     return ['error' => 'Error al enviar el correo de verificación.'];
