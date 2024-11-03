@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Perfil de {{nombre_completo}}</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
@@ -26,14 +27,7 @@
     </div>
 
     <h3>Mapa de ubicación</h3>
-    <iframe
-            width="100%"
-            height="300"
-            style="border:0"
-            loading="lazy"
-            allowfullscreen
-            src="https://www.google.com/maps/embed/v1/place?key=TU_API_KEY&q={{ciudad}},{{pais}}">
-    </iframe>
+    <div id="map" style="width: 100%; height: 300px;"></div>
 
     <h3>Acceso rápido a este perfil</h3>
     <div>
@@ -45,94 +39,40 @@
 
 </div>
 
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""></script>
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
+    // Inicializar el mapa centrado en las coordenadas de la ciudad y el país
+    const map = L.map('map').setView([0, 0], 10);
 
-
-    setCityAndCountry("{{usuarioLogeado.pais}}", "{{usuarioLogeado.ciudad}}");
-
-    var map = L.map('map').setView([0,0], 10);
-    var circle = L.circle([0,0], {
-        color: '#00c6fb',
-        fillColor: '#00c6fb',
-        fillOpacity: 0.5,
-        radius: 5000
-    }).addTo(map);
-
+    // Cargar las baldosas de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-
-    // Función para obtener ciudad y país
-    function getCityAndCountry(lat, lon) {
-        let url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
-
-        if(circle)
-            map.removeLayer(circle);
-
-        circle = L.circle([lat,lon], {
-            color: '#00c6fb',
-            fillColor: '#00c6fb',
-            fillOpacity: 0.5,
-            radius: 5000
-        }).addTo(map);
+    // Función para configurar el mapa basado en ciudad y país
+    function setCityAndCountry(pais, ciudad) {
+        const url = `https://nominatim.openstreetmap.org/search?q=${pais}+${ciudad}&format=json&limit=1`;
 
         fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    let city = data.address.city || data.address.town || data.address.village;
-                    let country = data.address.country;
-
-                    document.getElementById("pais").value= (country==undefined) ? "" : country;
-                    document.getElementById("ciudad").value= (city==undefined) ? "" :city;
-
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 10);
+                        L.circle([lat, lon], {
+                            color: '#00c6fb',
+                            fillColor: '#00c6fb',
+                            fillOpacity: 0.5,
+                            radius: 5000
+                        }).addTo(map);
+                    }
                 })
                 .catch(error => console.error('Error:', error));
     }
 
-
-    function setCityAndCountry(pais, ciudad){
-        let url = `https://nominatim.openstreetmap.org/search?q=${pais}+${ciudad}&format=json&limit=1`;
-
-        fetch(url)
-                .then(response=> response.json())
-                .then(data =>{
-                    let longitud = data[0].lon;
-                    let latitud = data[0].lat;
-                    if(circle)
-                        map.removeLayer(circle);
-
-                    map.setView([latitud, longitud], 10);
-                    circle = L.circle([latitud,longitud], {
-                        color: '#00c6fb',
-                        fillColor: '#00c6fb',
-                        fillOpacity: 0.5,
-                        radius: 5000
-                    }).addTo(map);
-                })
-                .catch(error => console.error('Error:', error));
-
-    }
-
-    // Evento de clic en el mapa para obtener ciudad y país
-    map.on('click', function(e) {
-        let lat = e.latlng.lat;
-        let lon = e.latlng.lng;
-        getCityAndCountry(lat, lon);
-    });
-
-    document.getElementById("ciudad").addEventListener("change", ()=>{
-        setCityAndCountry(document.getElementById("pais").value, document.getElementById("ciudad").value);
-    });
-
-
-    document.getElementById("pais").addEventListener("change", ()=>{
-        setCityAndCountry(document.getElementById("pais").value, document.getElementById("ciudad").value);
-    });
+    // Llamar a la función al cargar la página
+    setCityAndCountry("{{pais}}", "{{ciudad}}");
 </script>
 </body>
 </html>
