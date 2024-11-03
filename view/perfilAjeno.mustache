@@ -4,49 +4,82 @@
     <meta charset="UTF-8">
     <title>Perfil de {{nombre}}</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
-<!-- Contenedor principal -->
-<div class="w3-container w3-padding-32">
-    <div class="w3-card-4 w3-margin">
-        <!-- Cabecera del perfil -->
-        <header class="w3-container w3-blue w3-center">
-            <h1>Perfil de {{nombre}}</h1>
-        </header>
+<div class="w3-container w3-white w3-card-4 w3-center" style="max-width: 500px; margin: auto; padding: 20px;">
+    <!-- Cabecera del perfil -->
+    <h1 class="w3-text-blue">Perfil de {{nombre}}</h1>
 
-        <!-- Sección de información personal -->
-        <div class="w3-container w3-padding">
-            <div class="w3-row">
-                <div class="w3-half w3-center">
-                    <img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre}}" class="w3-circle" style="width:150px; height:150px;">
-                    <p class="w3-large">Puntuación total: <span class="w3-text-blue">{{puntaje_total}}</span></p>
-                </div>
-                <div class="w3-half w3-center">
-                    <img src="{{qr_code_url}}" alt="QR para perfil de {{nombre}}" class="w3-border" style="width:150px; height:150px;">
-                    <p>Escanea para acceder al perfil</p>
-                </div>
-            </div>
-        </div>
+    <!-- Foto de perfil -->
+    <img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre}}" class="w3-circle" style="width:150px;height:150px; border: 3px solid #00c6fb; margin-top: 15px;">
 
-        <!-- Historial de partidas -->
-        <div class="w3-container w3-padding w3-light-grey">
-            <h2 class="w3-text-blue">Partidas Realizadas</h2>
-            <ul class="w3-ul w3-border w3-hoverable">
-                {{#partidas}}
-                    <li class="w3-padding-16">
-                        <span class="w3-large">Puntaje:</span> {{puntaje}}
-                        <br>
-                        <span class="w3-text-grey">Fecha: {{fechaCreacion}}</span>
-                    </li>
-                {{/partidas}}
-            </ul>
-        </div>
+    <!-- Información del usuario -->
+    <div class="w3-left-align" style="margin-top: 20px;">
+        <h3 class="w3-text-blue">Nombre Completo:</h3>
+        <p>{{nombre}}</p>
+        <h3 class="w3-text-blue">País y Ciudad:</h3>
+        <p>{{pais}}, {{ciudad}}</p>
+        <h3 class="w3-text-blue">Puntos totales:</h3>
+        <p>{{puntaje_total}} puntos</p>
+    </div>
+
+    <!-- Mapa de ubicación -->
+    <div id="map" style="width: 100%; height: 200px; border-radius: 10px; margin-top: 10px;"></div>
+
+    <!-- Historial de partidas -->
+    <div class="w3-center" style="margin-top: 20px;">
+        <h3 class="w3-text-blue">Partidas Recientes:</h3>
+        <table class="w3-table w3-bordered">
+            <tr>
+                <th>Partida</th>
+                <th>Resultado</th>
+            </tr>
+            {{#partidas}}
+                <tr>
+                    <td>Partida#{{numero_partida}}</td>
+                    <td>{{puntaje}}</td>
+                </tr>
+            {{/partidas}}
+        </table>
     </div>
 </div>
 
-<!-- Aquí podrías integrar un mapa, como Google Maps o OpenStreetMap -->
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    // Inicializar el mapa centrado en las coordenadas de la ciudad y el país
+    const map = L.map('map').setView([0, 0], 10);
+
+    // Cargar las baldosas de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Función para configurar el mapa basado en ciudad y país
+    function setCityAndCountry(pais, ciudad) {
+        const url = `https://nominatim.openstreetmap.org/search?q=${pais}+${ciudad}&format=json&limit=1`;
+
+        fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 10);
+                        L.circle([lat, lon], {
+                            color: '#00c6fb',
+                            fillColor: '#00c6fb',
+                            fillOpacity: 0.5,
+                            radius: 5000
+                        }).addTo(map);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+    }
+
+    // Llamar a la función al cargar la página
+    setCityAndCountry("{{pais}}", "{{ciudad}}");
+</script>
 </body>
 </html>
-
-

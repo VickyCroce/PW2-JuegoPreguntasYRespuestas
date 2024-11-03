@@ -27,7 +27,7 @@ class ModelPerfil
     public function findById($id)
     {
         $sql = "
-        SELECT u.nombre_completo AS nombre, u.foto_perfil, COALESCE(SUM(p.puntaje), 0) AS puntaje_total
+        SELECT u.nombre_completo AS nombre, u.foto_perfil, u.ciudad, u.pais, COALESCE(SUM(p.puntaje), 0) AS puntaje_total
         FROM users u
         LEFT JOIN Partida p ON u.id = p.usuario_id
         WHERE u.id = '$id'
@@ -36,7 +36,7 @@ class ModelPerfil
         $result = $this->database->query($sql);
 
         if ($result && is_array($result) && count($result) > 0) {
-            return $result[0];
+            return $result[0]; // Retorna el primer resultado con los datos del usuario
         }
 
         return null;
