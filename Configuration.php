@@ -74,7 +74,7 @@ class Configuration
     //CONTROLADOR LOGIN
 
     public static function getControllerLogin(){
-        return new ControllerLogin(self::getModelLogin(),self::getPresenter());
+        return new ControllerLogin(self::getModelLogin(),self::getPresenter2());
     }
 
     //CONTROLADOR PERFIL

@@ -8,7 +8,8 @@
 </head>
 <body>
 <div class="w3-container">
-    <h1>{{#correcta}}¡Correcto!{{/correcta}}{{^correcta}}Incorrecto{{/correcta}}</h1>
+    <h1>{{mensaje}}
+        {{^correcta}}Incorrecto{{/correcta}}</h1>
     <p>Puntuación total: {{puntuacion}}</p>
     <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/reiniciarJuego">
         <button type="submit" class="w3-button w3-green w3-round">Nueva Partida</button>
