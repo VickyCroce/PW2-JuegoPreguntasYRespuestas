@@ -58,7 +58,7 @@ class ModelPerfil
     public function getPartidasPorUsuario($usuario_id)
     {
         $sql = "
-    SELECT puntaje, fechaCreacion
+    SELECT id, puntaje, fechaCreacion
     FROM Partida
     WHERE usuario_id = ?";
 
@@ -75,4 +75,5 @@ class ModelPerfil
         $stmt->close();
         return $partidas;
     }
+
 }
