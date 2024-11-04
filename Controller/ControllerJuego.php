@@ -43,15 +43,16 @@ class ControllerJuego
     public function mostrarPregunta()
     {
         // Intenta obtener la pregunta actual de la sesión
-    if (isset($_SESSION['pregunta_actual'])) {
-        $pregunta = $_SESSION['pregunta_actual'];
-    } else {
+        if (isset($_SESSION['pregunta_actual'])) {
+            $pregunta = $_SESSION['pregunta_actual'];
+        } else {
+            $pregunta = $this->model->getPreguntaAleatoria();
+            $_SESSION['pregunta_actual'] = $pregunta; // Guarda la pregunta en la sesión
+        }
 
-        $pregunta = $this->model->getPreguntaAleatoria();
-        $_SESSION['pregunta_actual'] = $pregunta; // Guarda la pregunta en la sesión
-    }
+        // Reiniciar el tiempo límite cada vez que se muestra una nueva pregunta
+        $_SESSION['tiempo_limite'] = time() + 30;
         $tiempoRestante = $_SESSION['tiempo_limite'] - time();
-
         $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
 
         if ($pregunta) {
@@ -68,6 +69,7 @@ class ControllerJuego
             echo "No se pudo obtener una pregunta.";
         }
     }
+
 
     public function verificarRespuesta()
     {

@@ -85,8 +85,6 @@ class ControllerRegistro
                 if (!$this->sendMail($email, $asunto, $mensaje)) {
                     return ['error' => 'Error al enviar el correo de verificación.'];
                 }
-
-                return ['success' => 'Correo de verificación enviado. Revisa tu bandeja de entrada.'];
             } else {
                 return ['error' => 'Error al registrar el usuario en la base de datos.'];
             }
@@ -147,7 +145,7 @@ class ControllerRegistro
 
             // Enviar el correo
             $mail->send();
-            echo 'El mensaje ha sido enviado';
+            echo 'Correo de verificación enviado. Revisa tu bandeja de entrada.';
         } catch (Exception $e) {
             echo "El mensaje no se pudo enviar. Error de PHPMailer: {$mail->ErrorInfo}";
         }
