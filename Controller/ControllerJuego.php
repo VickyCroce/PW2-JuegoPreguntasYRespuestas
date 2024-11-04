@@ -30,6 +30,7 @@ class ControllerJuego
 
         $_SESSION['partida_id'] = $partidaId;
         $_SESSION['puntuacion'] = 0;
+        $_SESSION['preguntas_mostradas'] = []; // Reiniciar preguntas mostradas
         $this->puntuacion = 0;
 
         $_SESSION['tiempo_limite'] = time() + 30;
@@ -37,18 +38,29 @@ class ControllerJuego
         $this->mostrarPregunta();
     }
 
+
     public function mostrarPregunta()
     {
-        // Obtener una nueva pregunta y generar un token único
-        $pregunta = $this->model->getPreguntaAleatoria();
-        $_SESSION['pregunta_actual'] = $pregunta;
-        $_SESSION['pregunta_token'] = bin2hex(random_bytes(16)); // Genera un token único
+        // Inicializar la lista de preguntas mostradas si no existe
+        if (!isset($_SESSION['preguntas_mostradas'])) {
+            $_SESSION['preguntas_mostradas'] = [];
+        }
 
-        $_SESSION['tiempo_limite'] = time() + 30;
-        $tiempoRestante = $_SESSION['tiempo_limite'] - time();
-        $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+        // Obtener una nueva pregunta que no esté en la lista de mostradas
+        $pregunta = $this->model->getPreguntaAleatoria($_SESSION['preguntas_mostradas']);
 
         if ($pregunta) {
+            $_SESSION['pregunta_actual'] = $pregunta;
+            $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
+
+            // Agregar la pregunta a la lista de mostradas
+            $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
+
+            // Reiniciar el tiempo límite para la nueva pregunta
+            $_SESSION['tiempo_limite'] = time() + 30;
+            $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+            $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+
             $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
 
             $this->presenter->render('view/pregunta.mustache', [
@@ -57,12 +69,16 @@ class ControllerJuego
                 'categoriaColor' => $pregunta['color'],
                 'puntuacion' => $this->puntuacion,
                 'tiempoRestante' => max($tiempoRestante, 0),
-                'pregunta_token' => $_SESSION['pregunta_token'] // Pasar el token a la vista
+                'pregunta_token' => $_SESSION['pregunta_token']
             ]);
         } else {
-            echo "No se pudo obtener una pregunta.";
+            // Reiniciar la lista de preguntas mostradas si no quedan más preguntas
+            $_SESSION['preguntas_mostradas'] = [];
+            $this->mostrarPregunta(); // Mostrar pregunta nuevamente
         }
     }
+
+
 
     public function verificarRespuesta()
     {
@@ -98,14 +114,17 @@ class ControllerJuego
             unset($_SESSION['pregunta_actual']);
             unset($_SESSION['pregunta_token']);
 
+            // Mostrar la siguiente pregunta
             $this->mostrarPregunta();
         } else {
+            // Renderizar el resultado
             $this->presenter->render('view/resultado.mustache', [
                 'correcta' => false,
                 'puntuacion' => $this->puntuacion
             ]);
         }
     }
+
 
 
     private function finalizarPorRecarga()
@@ -125,5 +144,6 @@ class ControllerJuego
         $this->iniciarPartida();
     }
 }
+
 
 

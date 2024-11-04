@@ -36,18 +36,23 @@ class ModelJuego
     }
 
 
-    public function getPreguntaAleatoria()
+    public function getPreguntaAleatoria($preguntasMostradas)
     {
+        $placeholders = implode(',', array_fill(0, count($preguntasMostradas), '?'));
         $sql = "
-            SELECT p.id, p.descripcion, p.punto, p.categoria_id, c.nombre AS categoria, c.color AS color
-            FROM Pregunta p
-            JOIN Categoria c ON p.categoria_id = c.id
-            WHERE p.esValido = TRUE
-            ORDER BY RAND()
-            LIMIT 1
-        ";
+        SELECT p.id, p.descripcion, p.punto, p.categoria_id, c.nombre AS categoria, c.color AS color
+        FROM Pregunta p
+        JOIN Categoria c ON p.categoria_id = c.id
+        WHERE p.esValido = TRUE " .
+            (count($preguntasMostradas) ? "AND p.id NOT IN ($placeholders)" : "") . "
+        ORDER BY RAND()
+        LIMIT 1
+    ";
 
         $stmt = $this->db->getConexion()->prepare($sql);
+        if (count($preguntasMostradas)) {
+            $stmt->bind_param(str_repeat('i', count($preguntasMostradas)), ...$preguntasMostradas);
+        }
         $stmt->execute();
         $result = $stmt->get_result();
         $pregunta = $result->fetch_assoc();
@@ -55,6 +60,7 @@ class ModelJuego
 
         return $pregunta;
     }
+
 
     public function getRespuestasPorPregunta($pregunta_id)
     {
@@ -80,4 +86,5 @@ class ModelJuego
 
 
 }
+
 
