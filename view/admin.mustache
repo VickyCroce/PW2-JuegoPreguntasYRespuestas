@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 800px; margin: 0 auto;">
+    <h1 class="w3-text-teal">Panel de Administración</h1>
+
+    <!-- Filtros de tiempo -->
+    <div class="w3-padding-large w3-margin-top">
+        <h2 class="w3-text-dark-grey">Filtros</h2>
+        <form method="GET" action="/admin" class="w3-container">
+            <label for="fecha" class="w3-margin-bottom">Periodo:</label>
+            <select name="filtroFecha" id="fecha" class="w3-select w3-border">
+                <option value="dia">Día</option>
+                <option value="semana">Semana</option>
+                <option value="mes">Mes</option>
+                <option value="anio">Año</option>
+            </select>
+            <button type="submit" class="w3-button w3-blue w3-round-large w3-margin-top">Aplicar Filtros</button>
+        </form>
+    </div>
+
+    <!-- Estadísticas generales -->
+    <div class="w3-padding-large w3-margin-top">
+        <h2 class="w3-text-dark-grey">Estadísticas Generales</h2>
+        <ul class="w3-ul w3-border">
+            <li><strong>Cantidad de jugadores:</strong> {{cantidadJugadores}}</li>
+            <li><strong>Cantidad de partidas jugadas:</strong> {{cantidadPartidas}}</li>
+            <li><strong>Cantidad de preguntas en el juego:</strong> {{cantidadPreguntasJuego}}</li>
+            <li><strong>Cantidad de preguntas creadas:</strong> {{cantidadPreguntasCreadas}}</li>
+            <li><strong>Cantidad de usuarios nuevos:</strong> {{cantidadUsuariosNuevos}}</li>
+        </ul>
+    </div>
+
+    <!-- Porcentaje de preguntas correctas -->
+    <div class="w3-padding-large w3-margin-top">
+        <h2 class="w3-text-dark-grey">Porcentaje de Preguntas Respondidas Correctamente</h2>
+        <table class="w3-table w3-bordered w3-striped w3-centered">
+            <thead>
+            <tr class="w3-light-grey">
+                <th>Usuario</th>
+                <th>Porcentaje Correctas</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#porcentajeCorrectas}}
+                <tr>
+                    <td>{{usuario}}</td>
+                    <td>{{porcentaje}}%</td>
+                </tr>
+            {{/porcentajeCorrectas}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Demografía de Usuarios -->
+    <div class="w3-padding-large w3-margin-top">
+        <h2 class="w3-text-dark-grey">Demografía de Usuarios</h2>
+
+        <!-- Usuarios por país -->
+        <h3 class="w3-text-teal">Por País</h3>
+        <table class="w3-table w3-bordered w3-striped w3-centered">
+            <thead>
+            <tr class="w3-light-grey">
+                <th>País</th>
+                <th>Cantidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#usuariosPorPais}}
+                <tr>
+                    <td>{{pais}}</td>
+                    <td>{{cantidad}}</td>
+                </tr>
+            {{/usuariosPorPais}}
+            </tbody>
+        </table>
+
+        <!-- Usuarios por sexo -->
+        <h3 class="w3-text-teal w3-margin-top">Por Sexo</h3>
+        <table class="w3-table w3-bordered w3-striped w3-centered">
+            <thead>
+            <tr class="w3-light-grey">
+                <th>Sexo</th>
+                <th>Cantidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#usuariosPorSexo}}
+                <tr>
+                    <td>{{sexo}}</td>
+                    <td>{{cantidad}}</td>
+                </tr>
+            {{/usuariosPorSexo}}
+            </tbody>
+        </table>
+
+        <!-- Usuarios por grupo de edad -->
+        <h3 class="w3-text-teal w3-margin-top">Por Grupo de Edad</h3>
+        <table class="w3-table w3-bordered w3-striped w3-centered">
+            <thead>
+            <tr class="w3-light-grey">
+                <th>Grupo de Edad</th>
+                <th>Cantidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#usuariosPorEdad}}
+                <tr>
+                    <td>{{grupoEdad}}</td>
+                    <td>{{cantidad}}</td>
+                </tr>
+            {{/usuariosPorEdad}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botón para imprimir -->
+    <div class="w3-margin-top">
+        <button onclick="window.print()" class="w3-button w3-teal w3-round-large">Imprimir Reportes</button>
+    </div>
+</div>
+
+</body>
+</html>

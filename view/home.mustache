@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 600px; margin: 0 auto;">
+    <h1 class="w3-text-teal">¡Hola {{nombre}}!</h1>
+
+    <div class="w3-padding-large">
+        <p class="w3-large"><strong>Tu puntaje máximo es:</strong> {{maxPuntaje}}</p>
+        <p>Desafía tu conocimiento y diviértete con nuestro juego de preguntas! ¿Estás listo para convertirte en el campeón del saber?</p>
+    </div>
+
+    <div class="w3-margin-top">
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/iniciarPartida" class="w3-button w3-blue w3-round-large w3-margin-bottom" style="width: 80%;">JUGAR</a>
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerPerfil/showProfile?username={{nombre}}" class="w3-button w3-teal w3-round-large w3-margin-bottom" style="width: 80%;">PERFIL</a>
+        <a href="ranking.php" class="w3-button w3-green w3-round-large w3-margin-bottom" style="width: 80%;">RANKING</a>
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerPartida/mostrarPartidas?id={{usuario_id}}" class="w3-button w3-indigo w3-round-large w3-margin-bottom" style="width: 80%;">PARTIDAS ANTERIORES</a>
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerLogin/get" class="w3-button w3-red w3-round-large w3-margin-bottom" style="width: 80%;">SALIR</a>
+    </div>
+
+</div>
+
+</body
+
+
