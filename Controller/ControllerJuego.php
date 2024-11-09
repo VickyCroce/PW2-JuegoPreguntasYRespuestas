@@ -30,7 +30,7 @@ class ControllerJuego
 
         $_SESSION['partida_id'] = $partidaId;
         $_SESSION['puntuacion'] = 0;
-        $_SESSION['preguntas_mostradas'] = []; // Reiniciar preguntas mostradas
+        $_SESSION['preguntas_mostradas'] = [];
         $this->puntuacion = 0;
 
         $_SESSION['tiempo_limite'] = time() + 30;
@@ -44,26 +44,39 @@ class ControllerJuego
         if (isset($_SESSION['pregunta_actual']) && isset($_SESSION['pregunta_token'])) {
             $pregunta = $_SESSION['pregunta_actual'];
             $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
-        } else {
-
-            $pregunta = $this->model->getPreguntaAleatoria($_SESSION['preguntas_mostradas']);
-            if ($pregunta) {
-                $_SESSION['pregunta_actual'] = $pregunta;
-                $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
-                $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
-                $_SESSION['tiempo_limite'] = time() + 30;
-            }
-            $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
         }
-        $this->presenter->render('view/pregunta.mustache', [
-            'pregunta' => $pregunta,
-            'respuestas' => $respuestas,
-            'categoriaColor' => $pregunta['color'],
-            'puntuacion' => $this->puntuacion,
-            'tiempoRestante' => $_SESSION['tiempo_limite'] - time(),
-            'pregunta_token' => $_SESSION['pregunta_token']
-        ]);
+        $pregunta = $this->model->getPreguntaSegunDificultad($_SESSION['preguntas_mostradas'], $_SESSION['usuario']['id']);
+
+        if ($pregunta) {
+            // Si el token no existe, lo generamos
+            if (!isset($_SESSION['pregunta_token'])) {
+                $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
+            }
+
+            $_SESSION['pregunta_actual'] = $pregunta;
+            $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
+
+            $_SESSION['tiempo_limite'] = time() + 30;
+            $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+            $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+
+            $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
+
+            $this->presenter->render('view/pregunta.mustache', [
+                'pregunta' => $pregunta,
+                'respuestas' => $respuestas,
+                'categoriaColor' => $pregunta['color'],
+                'puntuacion' => $this->puntuacion,
+                'tiempoRestante' => max($tiempoRestante, 0),
+                'pregunta_token' => $_SESSION['pregunta_token']
+            ]);
+        } else {
+            $_SESSION['preguntas_mostradas'] = [];
+            $this->mostrarPregunta();
+        }
     }
+
+
 
 
 
@@ -78,35 +91,35 @@ class ControllerJuego
         $letraSeleccionada = $_POST['letraSeleccionada'];
         $partidaId = $_SESSION['partida_id'];
 
-        // Actualizar el tiempo restante en la sesión
         $tiempoRestante = $_SESSION['tiempo_limite'] - time();
         $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
-
 
         $respuestas = $this->model->getRespuestasPorPregunta($preguntaId);
         $correcta = false;
 
         foreach ($respuestas as $respuesta) {
             if ($respuesta['letra'] === $letraSeleccionada) {
-                $correcta = $respuesta['esCorreto'];
+                $correcta = $respuesta['correcta'];
             }
         }
 
         if ($correcta) {
             $this->puntuacion++;
             $_SESSION['puntuacion'] = $this->puntuacion;
+            $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], true);
             $this->model->actualizarPuntosPartida($partidaId, $this->puntuacion);
 
+            $this->model->actualizarRatio($_SESSION['usuario']['id']);
 
             unset($_SESSION['pregunta_actual']);
             unset($_SESSION['pregunta_token']);
-
-
             $this->mostrarPregunta();
         } else {
+            $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
+            $this->model->actualizarRatio($_SESSION['usuario']['id']);
 
             $this->presenter->render('view/resultado.mustache', [
-                'correcta' => false,
+                'correta' => false,
                 'puntuacion' => $this->puntuacion
             ]);
         }
@@ -114,11 +127,12 @@ class ControllerJuego
 
 
 
+
     private function finalizarPorRecarga()
     {
-        // Acción que realiza cuando detecta recarga o retroceso
+        $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
         $this->presenter->render('view/resultado.mustache', [
-            'correcta' => false,
+            'correta' => false,
             'mensaje' => "Has perdido por refrescar la página o intentar retroceder.",
             'puntuacion' => $this->puntuacion
         ]);
@@ -128,8 +142,10 @@ class ControllerJuego
     {
         $_SESSION['puntuacion'] = 0;
         $this->puntuacion = 0;
+        $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
         $this->iniciarPartida();
     }
+
 }
 
 
