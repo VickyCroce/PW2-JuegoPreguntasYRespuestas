@@ -39,7 +39,7 @@ class ControllerRegistro
                 $fotoPerfil = $_FILES['foto_perfil'];
 
 
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/img/';
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
@@ -52,7 +52,7 @@ class ControllerRegistro
 
                 if (move_uploaded_file($fotoPerfil['tmp_name'], $fotoPerfilPath)) {
 
-                    $fotoPerfilUrl = '/public/img/' . $fotoPerfilName;
+                    $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/' . $fotoPerfilName;
                 } else {
                     echo "Error al cargar la imagen.";
                 }
@@ -80,13 +80,11 @@ class ControllerRegistro
 
                 $asunto = "Verificación de correo electrónico";
                 $mensaje = "<h1>Por favor, verifica tu correo haciendo clic en este enlace:</h1>";
-                $mensaje .= "<a href='http://localhost/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
+                $mensaje .= "<a href='http://localhost/PW2-JuegoPreguntasYRespuestas/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
 
                 if (!$this->sendMail($email, $asunto, $mensaje)) {
                     return ['error' => 'Error al enviar el correo de verificación.'];
                 }
-
-                return ['success' => 'Correo de verificación enviado. Revisa tu bandeja de entrada.'];
             } else {
                 return ['error' => 'Error al registrar el usuario en la base de datos.'];
             }
@@ -147,7 +145,7 @@ class ControllerRegistro
 
             // Enviar el correo
             $mail->send();
-            echo 'El mensaje ha sido enviado';
+            echo 'Correo de verificación enviado. Revisa tu bandeja de entrada.';
         } catch (Exception $e) {
             echo "El mensaje no se pudo enviar. Error de PHPMailer: {$mail->ErrorInfo}";
         }

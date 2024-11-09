@@ -2,41 +2,48 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Perfil de {{nombre_completo}}</title>
+    <title>Perfil de {{nombre}}</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
-<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 600px; margin: 0 auto;">
-    <h1 class="w3-text-teal">Perfil de {{nombre_completo}}</h1>
+<div class="w3-container w3-white w3-card-4 w3-center" style="max-width: 500px; margin: auto; padding: 20px;">
+    <!-- Cabecera del perfil -->
+    <h1 class="w3-text-teal">Perfil de {{nombre}}</h1>
 
-    <div>
-        <img class="w3-circle" src="{{foto_perfil}}" alt="Foto de perfil de {{nombre_completo}}" style="width: 150px; height: 150px; object-fit: cover;">
+    <!-- Foto de perfil -->
+    <img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre}}" class="w3-circle" style="width:150px;height:150px; border: 3px solid #00c6fb; margin-top: 15px;">
+
+    <!-- Información del usuario -->
+    <div class="w3-left-align" style="margin-top: 20px;">
+        <h4 class="w3-text-teal">Nombre Completo:</h4>
+        <p>{{nombre}}</p>
+        <h4 class="w3-text-teal">País y Ciudad:</h4>
+        <p>{{pais}}, {{ciudad}}</p>
+        <h4 class="w3-text-teal">Puntos totales:</h4>
+        <p>{{puntaje_total}} puntos</p>
     </div>
 
-    <div class="w3-padding-large">
-        <p><strong>Nombre de Usuario:</strong> {{nombre_usuario}}</p>
-        <p><strong>Año de Nacimiento:</strong> {{anio_nacimiento}}</p>
-        <p><strong>Sexo:</strong> {{sexo}}</p>
-        <p><strong>País:</strong> {{pais}}</p>
-        <p><strong>Ciudad:</strong> {{ciudad}}</p>
-        <p><strong>Email:</strong> {{email}}</p>
-        <p><strong>Fecha de Registro:</strong> {{fecha_registro}}</p>
-    </div>
+    <!-- Mapa de ubicación -->
+    <div id="map" style="width: 100%; height: 200px; border-radius: 10px; margin-top: 10px;"></div>
 
-    <h3>Mapa de ubicación</h3>
-    <div id="map" style="width: 100%; height: 300px;"></div>
-
-    <h3>Acceso rápido a este perfil</h3>
-    <div>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://tu_dominio.com/profile.php?user={{nombre_usuario}}" alt="Código QR para el perfil de {{nombre_usuario}}">
+    <!-- Historial de partidas -->
+    <div class="w3-center" style="margin-top: 20px;">
+        <h3 class="w3-text-teal">Partidas Recientes:</h3>
+        <table class="w3-table w3-bordered">
+            <tr>
+                <th>Partida</th>
+                <th>Resultado</th>
+            </tr>
+            {{#partidas}}
+                <tr>
+                    <td>Partida#{{id}}</td>
+                    <td>{{puntaje}}</td>
+                </tr>
+            {{/partidas}}
+        </table>
     </div>
-    <div class="w3-margin-top">
-        <a class="w3-button w3-teal w3-round" href="/PW2-JuegoPreguntasYRespuestas/ControllerHome/get">Volver al lobby</a>
-    </div>
-
 </div>
 
 <!-- Leaflet JavaScript -->

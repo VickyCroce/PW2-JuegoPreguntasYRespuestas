@@ -19,6 +19,8 @@
             </label>
         {{/respuestas}}
         <input type="hidden" name="pregunta_id" value="{{pregunta.id}}">
+        <input type="hidden" name="pregunta_token" value="{{pregunta_token}}">
+
         <button type="submit" class="w3-button w3-green w3-round">Responder</button>
     </form>
     <p>Puntuación actual: {{puntuacion}}</p>
@@ -30,6 +32,11 @@
 <script src="/PW2-JuegoPreguntasYRespuestas/public/js/ajax/temporizadorAjax.js"></script>
 </body>
 </html>
+
+
+
+
+
 
 
 

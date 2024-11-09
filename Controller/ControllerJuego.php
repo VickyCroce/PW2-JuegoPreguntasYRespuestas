@@ -1,6 +1,7 @@
 <?php
 
 namespace Controller;
+
 class ControllerJuego
 {
     private $model;
@@ -21,20 +22,18 @@ class ControllerJuego
     public function iniciarPartida()
     {
         $usuarioId = $_SESSION['usuario']['id'];
-        // Obtener el nombre de la partida basado en el último ID
         $ultimoId = $this->model->getUltimoIdPartida();
         $nombrePartida = "Partida " . ($ultimoId + 1);
         $codigo = rand(1000, 9999);
 
         $partidaId = $this->model->crearPartida($nombrePartida, 0, $codigo, $usuarioId);
 
-
         $_SESSION['partida_id'] = $partidaId;
-
         $_SESSION['puntuacion'] = 0;
+        $_SESSION['preguntas_mostradas'] = []; // Reiniciar preguntas mostradas
         $this->puntuacion = 0;
 
-        $_SESSION['tiempo_limite'] = time() + 30; // 30 segundos desde ahora
+        $_SESSION['tiempo_limite'] = time() + 30;
         $_SESSION['tiempo_restante'] = 30;
         $this->mostrarPregunta();
     }
@@ -42,19 +41,26 @@ class ControllerJuego
 
     public function mostrarPregunta()
     {
-        // Intenta obtener la pregunta actual de la sesión
-    if (isset($_SESSION['pregunta_actual'])) {
-        $pregunta = $_SESSION['pregunta_actual'];
-    } else {
-        // Si no existe, obtiene una nueva pregunta aleatoria
-        $pregunta = $this->model->getPreguntaAleatoria();
-        $_SESSION['pregunta_actual'] = $pregunta; // Guarda la pregunta en la sesión
-    }
-        $tiempoRestante = $_SESSION['tiempo_limite'] - time();
-        // Guarda el tiempo restante en la sesión
-        $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+        // Inicializar la lista de preguntas mostradas si no existe
+        if (!isset($_SESSION['preguntas_mostradas'])) {
+            $_SESSION['preguntas_mostradas'] = [];
+        }
+
+        // Obtener una nueva pregunta que no esté en la lista de mostradas
+        $pregunta = $this->model->getPreguntaAleatoria($_SESSION['preguntas_mostradas']);
 
         if ($pregunta) {
+            $_SESSION['pregunta_actual'] = $pregunta;
+            $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
+
+            // Agregar la pregunta a la lista de mostradas
+            $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
+
+            // Reiniciar el tiempo límite para la nueva pregunta
+            $_SESSION['tiempo_limite'] = time() + 30;
+            $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+            $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
+
             $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
 
             $this->presenter->render('view/pregunta.mustache', [
@@ -62,26 +68,34 @@ class ControllerJuego
                 'respuestas' => $respuestas,
                 'categoriaColor' => $pregunta['color'],
                 'puntuacion' => $this->puntuacion,
-                'tiempoRestante' => max($tiempoRestante, 0)
+                'tiempoRestante' => max($tiempoRestante, 0),
+                'pregunta_token' => $_SESSION['pregunta_token']
             ]);
         } else {
-            echo "No se pudo obtener una pregunta.";
+            // Reiniciar la lista de preguntas mostradas si no quedan más preguntas
+            $_SESSION['preguntas_mostradas'] = [];
+            $this->mostrarPregunta(); // Mostrar pregunta nuevamente
         }
     }
 
+
+
     public function verificarRespuesta()
     {
+        if (!isset($_SESSION['pregunta_token']) || $_SESSION['pregunta_token'] !== $_POST['pregunta_token']) {
+            $this->finalizarPorRecarga();
+            return;
+        }
+
         $preguntaId = $_POST['pregunta_id'];
         $letraSeleccionada = $_POST['letraSeleccionada'];
         $partidaId = $_SESSION['partida_id'];
 
-        // Calcular el tiempo restante
-    $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+        // Actualizar el tiempo restante en la sesión
+        $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+        $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
 
-
-    // Guarda el tiempo restante en la sesión
-    $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
-
+        // Obtener las respuestas y verificar si es correcta
         $respuestas = $this->model->getRespuestasPorPregunta($preguntaId);
         $correcta = false;
 
@@ -94,11 +108,16 @@ class ControllerJuego
         if ($correcta) {
             $this->puntuacion++;
             $_SESSION['puntuacion'] = $this->puntuacion;
-
             $this->model->actualizarPuntosPartida($partidaId, $this->puntuacion);
 
+            // Limpiar la pregunta actual y el token
+            unset($_SESSION['pregunta_actual']);
+            unset($_SESSION['pregunta_token']);
+
+            // Mostrar la siguiente pregunta
             $this->mostrarPregunta();
         } else {
+            // Renderizar el resultado
             $this->presenter->render('view/resultado.mustache', [
                 'correcta' => false,
                 'puntuacion' => $this->puntuacion
@@ -107,13 +126,24 @@ class ControllerJuego
     }
 
 
+
+    private function finalizarPorRecarga()
+    {
+        // Acción que realiza cuando detecta recarga o retroceso
+        $this->presenter->render('view/resultado.mustache', [
+            'correcta' => false,
+            'mensaje' => "Has perdido por refrescar la página o intentar retroceder.",
+            'puntuacion' => $this->puntuacion
+        ]);
+    }
+
     public function reiniciarJuego()
     {
         $_SESSION['puntuacion'] = 0;
         $this->puntuacion = 0;
         $this->iniciarPartida();
     }
-
-
 }
+
+
 

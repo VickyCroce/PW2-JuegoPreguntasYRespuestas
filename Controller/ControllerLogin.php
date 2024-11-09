@@ -14,7 +14,7 @@ class ControllerLogin
 
     public function get()
     {
-        echo $this->presenter->show('view/login.mustache');
+        echo $this->presenter->render('view/login.mustache');
     }
 
     // Funcion para iniciar sesion
@@ -28,18 +28,15 @@ class ControllerLogin
 
             if (isset($resultado['error'])) {
 
-                $this->presenter->show("view/login.mustache", ['error' => $resultado['error']]);
+                $this->presenter->render("view/login.mustache", ['error' => $resultado['error']]);
             } else {
                 $_SESSION['usuario_id'] = $resultado['id'];
                 $_SESSION['usuario'] = $resultado;
 
-                header('Location: /ControllerHome/get');
+                header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerHome/get');
                 exit();
             }
-        } else {
-            $this->presenter->show("view/login.mustache", ['error' => 'Por favor, ingresa tus credenciales.']);
         }
-
     }
 
 }

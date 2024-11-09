@@ -10,7 +10,10 @@
 
 <div class="w3-container w3-card-4 w3-light-grey w3-margin w3-padding">
     <h2>Login</h2>
-
+    <!-- Muestra el mensaje de error en rojo si existe -->
+    {{#error}}
+        <h4 style="color: red;">{{error}}</h4>
+    {{/error}}
     <form action="/PW2-JuegoPreguntasYRespuestas/ControllerLogin/iniciarSesion" method="POST" class="w3-container">
         <label for="username">Usuario:</label>
         <input class="w3-input w3-border" type="email" id="username" name="email" required>
