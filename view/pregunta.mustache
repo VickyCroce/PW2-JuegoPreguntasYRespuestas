@@ -10,7 +10,9 @@
 <input type="hidden" name="partida_id" value="{{partida_id}}">
 <div class="w3-container">
     <h2>{{pregunta.descripcion}}</h2>
-    <h1>{{tiempoRestante}}</h1>
+        <div>
+            <span id="contador_tiempo">30</span>
+        </div>
     <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large" method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/verificarRespuesta">
         {{#respuestas}}
             <label class="w3-block w3-margin-bottom">

@@ -41,6 +41,9 @@ class ControllerJuego
 
     public function mostrarPregunta()
     {
+        // Código para manejar el tiempo en el backend
+        $this->verificarTiempo();
+
         // Inicializar la lista de preguntas mostradas si no existe
         if (!isset($_SESSION['preguntas_mostradas'])) {
             $_SESSION['preguntas_mostradas'] = [];
@@ -72,13 +75,25 @@ class ControllerJuego
                 'pregunta_token' => $_SESSION['pregunta_token']
             ]);
         } else {
-            // Reiniciar la lista de preguntas mostradas si no quedan más preguntas
             $_SESSION['preguntas_mostradas'] = [];
-            $this->mostrarPregunta(); // Mostrar pregunta nuevamente
+            $this->mostrarPregunta();
         }
     }
 
-
+    private function verificarTiempo()
+    {
+        $tiempoRestante = $_SESSION['tiempo_limite'] - time();
+        if ($tiempoRestante <= 0) {
+            $this->presenter->render('view/resultado.mustache', [
+                'correcta' => false,
+                'mensaje' => "¡Se acabó el tiempo!",
+                'puntuacion' => $this->puntuacion
+            ]);
+            exit;
+        } else {
+            $_SESSION['tiempo_restante'] = $tiempoRestante;
+        }
+    }
 
     public function verificarRespuesta()
     {
@@ -124,8 +139,6 @@ class ControllerJuego
             ]);
         }
     }
-
-
 
     private function finalizarPorRecarga()
     {

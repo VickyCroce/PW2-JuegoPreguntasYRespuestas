@@ -19,28 +19,27 @@ export function cerrarVentana(selector) {
 // Importar funciones para abrir y cerrar ventanas
 import { abrirVentana, cerrarVentana } from "./abrir_cerrar_ventana.js";
 
-// Función para manejar el temporizador
-let tiempoRestante = 20; // Tiempo en segundos
-
-function iniciarTemporizador() {
-    const contador = document.getElementById('contador_tiempo');
-    const interval = setInterval(() => {
-        if (tiempoRestante <= 0) {
-            clearInterval(interval);
-            // Lógica para cuando el tiempo se acaba, puedes redirigir o mostrar un mensaje
-            alert("¡Se acabó el tiempo!");
-            // Aquí podrías llamar a la función que maneje la respuesta automática
-            // manejarRespuestaAutomaticamente();
-        } else {
-            contador.textContent = tiempoRestante;
-            tiempoRestante--;
-        }
-    }, 1000);
-}
+// // Función para manejar el temporizador
+// // let tiempoRestante = 20;
+//
+// function iniciarTemporizador() {
+//     const contador = document.getElementById('contador_tiempo');
+//     const interval = setInterval(() => {
+//         if (tiempoRestante <= 0) {
+//             clearInterval(interval);
+//             // Lógica para cuando el tiempo se acaba, puedes redirigir o mostrar un mensaje
+//             alert("¡Se acabó el tiempo!");
+//             // Aquí podrías llamar a la función que maneje la respuesta automática
+//             // manejarRespuestaAutomaticamente();
+//         } else {
+//             contador.textContent = tiempoRestante;
+//             tiempoRestante--;
+//         }
+//     }, 1000);
+// }
 
 // Inicializa el temporizador al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-    iniciarTemporizador();
 
     // Manejador de eventos para abrir y cerrar el popup de reportar
     document.addEventListener("click", (e) => {
