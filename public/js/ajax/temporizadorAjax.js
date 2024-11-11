@@ -11,7 +11,6 @@ function add() {
     if (sec <= 0) {
         clearTimeout(t); // Detiene el temporizador
         alert("Tiempo agotado. Tu puntaje final es" +""+ puntuacion);
-        // Redirige a la página principal
         window.location.href = "/PW2-JuegoPreguntasYRespuestas/ControllerHome/get";
     } else {
         timer();
