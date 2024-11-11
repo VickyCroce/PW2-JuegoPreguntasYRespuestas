@@ -1,29 +1,33 @@
 <?php
 
 
+namespace Controller;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-class ControllerRegistro {
+class ControllerRegistro
+{
 
     private $modelo;
     private $presenter;
 
-    public function __construct($Model,$presenter) {
+    public function __construct($Model, $presenter)
+    {
         $this->modelo = $Model;
         $this->presenter = $presenter;
     }
 
     public function get()
     {
-        $this->presenter->show("view/registro.mustache");
+        $this->presenter->render("view/registro.mustache");
     }
 
 
     // Función para registrar usuario
-    public function registrarUsuario() {
+    public function registrarUsuario()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
 
@@ -35,7 +39,7 @@ class ControllerRegistro {
                 $fotoPerfil = $_FILES['foto_perfil'];
 
 
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/img/';
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
@@ -48,9 +52,8 @@ class ControllerRegistro {
 
                 if (move_uploaded_file($fotoPerfil['tmp_name'], $fotoPerfilPath)) {
 
-                    $fotoPerfilUrl = '/public/img/' . $fotoPerfilName;
-                }
-                else {
+                    $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/' . $fotoPerfilName;
+                } else {
                     echo "Error al cargar la imagen.";
                 }
 
@@ -77,44 +80,38 @@ class ControllerRegistro {
 
                 $asunto = "Verificación de correo electrónico";
                 $mensaje = "<h1>Por favor, verifica tu correo haciendo clic en este enlace:</h1>";
-                $mensaje .= "<a href='http://localhost/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
-
+                $mensaje .= "<a href='http://localhost/PW2-JuegoPreguntasYRespuestas/ControllerRegistro/verificarCorreo?email=" . urlencode($email) . "'>Aquí</a>";
 
                 if (!$this->sendMail($email, $asunto, $mensaje)) {
                     return ['error' => 'Error al enviar el correo de verificación.'];
                 }
-
-                return ['success' => 'Correo de verificación enviado. Revisa tu bandeja de entrada.'];
             } else {
                 return ['error' => 'Error al registrar el usuario en la base de datos.'];
             }
         }
     }
 
-    public function verificarCorreo() {
+    public function verificarCorreo()
+    {
         if (isset($_GET['email'])) {
             $email = $_GET['email'];
-            echo "Registro exitoso. Ya puedes iniciar sesión.";
-
-
             $usuario = $this->modelo->findUserByEmail($email);
 
             if ($usuario) {
                 // Actualizamos el campo 'verificado' a 1
                 if ($this->modelo->verifyUser($email)) {
                     unset($_SESSION['usuario_temporal']);
-                    $this->presenter->show("view/login.mustache", ['success' => 'Registro exitoso. Ya puedes iniciar sesión.']);
+                    $this->presenter->render("view/login.mustache", ['error' => 'Registro exitoso. Ya puedes iniciar sesión.']);
                 } else {
-                    $this->presenter->show("view/login.mustache", ['error' => 'No se pudo verificar el usuario.']);
+                    $this->presenter->render("view/login.mustache", ['error' => 'No se pudo verificar el usuario.']);
                 }
             } else {
-                $this->presenter->show("view/login.mustache", ['error' => 'El usuario no existe o ya ha sido verificado.']);
+                $this->presenter->render("view/login.mustache", ['error' => 'El usuario no existe o ya ha sido verificado.']);
             }
         } else {
-            $this->presenter->show("view/login.mustache", ['error' => 'Correo no proporcionado para la verificación.']);
+            $this->presenter->render("view/login.mustache", ['error' => 'Correo no proporcionado para la verificación.']);
         }
     }
-
 
 
     // Función para enviar el correo de verificación
@@ -128,12 +125,12 @@ class ControllerRegistro {
         try {
             // Configuración del servidor
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'preguntadospw2@gmail.com'; // Tu correo SMTP
-            $mail->Password   = 'hbos sinb unvs vvtu'; // Tu contraseña SMTP
+            $mail->Host = 'smtp.gmail.com'; // Servidor SMTP
+            $mail->SMTPAuth = true;
+            $mail->Username = 'preguntadospw2@gmail.com'; // Tu correo SMTP
+            $mail->Password = 'hbos sinb unvs vvtu'; // Tu contraseña SMTP
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
+            $mail->Port = 587;
 
             // Destinatarios
             $mail->setFrom('preguntadospw2@gmail.com', 'preguntados');
@@ -142,11 +139,11 @@ class ControllerRegistro {
             // Contenido del correo
             $mail->isHTML(true);
             $mail->Subject = $subject;
-            $mail->Body    = $body;
+            $mail->Body = $body;
 
             // Enviar el correo
             $mail->send();
-            echo 'El mensaje ha sido enviado';
+            echo 'Correo de verificación enviado. Revisa tu bandeja de entrada.';
         } catch (Exception $e) {
             echo "El mensaje no se pudo enviar. Error de PHPMailer: {$mail->ErrorInfo}";
         }

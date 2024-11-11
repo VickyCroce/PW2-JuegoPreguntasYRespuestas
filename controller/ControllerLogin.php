@@ -1,5 +1,6 @@
 <?php
 
+namespace Controller;
 class ControllerLogin
 {
     private $modelo;
@@ -13,7 +14,7 @@ class ControllerLogin
 
     public function get()
     {
-        echo $this->presenter->show('view/login.mustache');
+        echo $this->presenter->render('view/login.mustache');
     }
 
     // Funcion para iniciar sesion
@@ -27,17 +28,29 @@ class ControllerLogin
 
             if (isset($resultado['error'])) {
 
-                $this->presenter->show("view/login.mustache", ['error' => $resultado['error']]);
+                $this->presenter->render("view/login.mustache", ['error' => $resultado['error']]);
             } else {
+                $_SESSION['usuario_id'] = $resultado['id'];
                 $_SESSION['usuario'] = $resultado;
-                header('Location: /ControllerHome/get');
-                // header('Location: /ControllerPerfil/showProfile?username=' . urlencode($resultado['nombre_usuario']));
+
+                /*Si es editor lo mando a su vista */
+                if($resultado["rol"] == "Editor"){
+                    header("Location:/PW2-JuegoPreguntasYRespuestas/ControllerEditor/get");
+                    return;
+                }
+                header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerHome/get');
                 exit();
             }
-        } else {
-            $this->presenter->show("view/login.mustache", ['error' => 'Por favor, ingresa tus credenciales.']);
         }
+    }
 
+    public function cerrarSesion()
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+        header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get');
+        exit();
     }
 
 }

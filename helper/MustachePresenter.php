@@ -1,11 +1,6 @@
 <?php
 
 
-namespace helper;
-use Mustache_Autoloader;
-use Mustache_Engine;
-use Mustache_Loader_FilesystemLoader;
-
 class MustachePresenter
 {
     private $mustache;
@@ -26,9 +21,8 @@ class MustachePresenter
         echo $this->generateHtml($contentFile, $data);
     }
 
-    public function generateHtml($contentFile, $data = array())
-    {
-        $contentAsString = file_get_contents($contentFile);
+    public function generateHtml($contentFile, $data = array()) {
+        $contentAsString = file_get_contents( $contentFile);
         return $this->mustache->render($contentAsString, $data);
     }
 }

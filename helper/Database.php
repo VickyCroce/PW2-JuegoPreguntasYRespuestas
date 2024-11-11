@@ -1,6 +1,5 @@
 <?php
 
-namespace helper;
 class Database
 {
     private $conexion;
@@ -18,11 +17,19 @@ class Database
     {
         $result = mysqli_query($this->conexion, $sql);
 
-        if (mysqli_num_rows($result) == 1) {
-            return mysqli_fetch_assoc($result);
+        if (!$result) {
+
+            echo "Error en la consulta: " . mysqli_error($this->conexion) . "<br>";
+            return null;
         }
+
+        if (mysqli_num_rows($result) == 1) {
+            return [mysqli_fetch_assoc($result)];
+        }
+
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+
 
     public function execute($sql)
     {
@@ -44,4 +51,6 @@ class Database
     {
         return $this->conexion;
     }
+
+
 }

@@ -1,21 +1,17 @@
 <?php
-
-namespace helper;
 class Router
 {
     private $defaultController;
     private $defaultMethod;
     private $configuration;
 
-    public function __construct($configuration, $defaultController, $defaultMethod)
-    {
+    public function __construct($configuration,$defaultController, $defaultMethod) {
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
         $this->configuration = $configuration;
     }
 
-    public function route($controllerName, $methodName, $param = null)
-    {
+    public function route($controllerName, $methodName, $param = null) {
         $controller = $this->getControllerFrom($controllerName);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,13 +29,13 @@ class Router
     }
 
 
-    private function getControllerFrom($module)
-    {
-        $controllerName = 'get' . ucfirst($module); // Por ejemplo, "getControllerLogin" o "getControllerRegistro"
+
+    private function getControllerFrom($module) {
+        $controllerName = 'get' . ucfirst($module);
 
         // Verifica si el método existe en la clase Configuration
         if (method_exists($this->configuration, $controllerName)) {
-            return call_user_func(array($this->configuration, $controllerName)); // Llama al método estático
+            return call_user_func(array($this->configuration, $controllerName));
         } else {
             // Si no existe, usa el controlador por defecto
             return call_user_func(array($this->configuration, $this->defaultController));
@@ -47,8 +43,8 @@ class Router
     }
 
 
-    private function executeMethodFromController($controller, $method, $param = null)
-    {
+
+    private function executeMethodFromController($controller, $method, $param = null) {
         $validMethod = method_exists($controller, $method) ? $method : $this->defaultMethod;
         if ($param) {
             call_user_func(array($controller, $validMethod), $param);
