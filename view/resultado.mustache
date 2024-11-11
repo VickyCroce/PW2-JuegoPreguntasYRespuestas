@@ -11,12 +11,8 @@
     <h1>{{mensaje}}
         {{^correcta}}Incorrecto{{/correcta}}</h1>
     <p>Puntuación total: {{puntuacion}}</p>
-    <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/reiniciarJuego">
-        <button type="submit" class="w3-button w3-green w3-round">Nueva Partida</button>
-    </form>
-    <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerHome/get">
-        <button type="submit" class="w3-button w3-blue w3-round">Volver al Inicio</button>
-    </form>
+    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/reiniciarJuego" class="w3-button w3-green w3-round">Nueva partida</a>
+    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerHome/get" class="w3-button w3-blue w3-round">Volver al Inicio</a>
 </div>
 </body>
 </html>

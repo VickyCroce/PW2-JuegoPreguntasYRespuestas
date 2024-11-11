@@ -7,12 +7,14 @@ use Controller\ControllerPartida;
 use Controller\ControllerPerfil;
 use Controller\ControllerRegistro;
 use Controller\ControllerRanking;
+use Controller\ControllerEditor;
 use Model\ModelHome;
 use Model\ModelJuego;
 use Model\ModelLogin;
 use Model\ModelPartida;
 use Model\ModelRegistro;
 use Model\ModelRanking;
+use Model\ModelEditor;
 
 
 include_once "controller/ControllerRegistro.php";
@@ -22,6 +24,7 @@ include_once "controller/ControllerHome.php";
 include_once "controller/ControllerJuego.php";
 include_once "controller/ControllerPartida.php";
 include_once "controller/ControllerRanking.php";
+include_once "controller/ControllerEditor.php";
 
 include_once "model/ModelRegistro.php";
 include_once "model/ModelLogin.php";
@@ -30,6 +33,7 @@ include_once "model/ModelHome.php";
 include_once "model/ModelJuego.php";
 include_once "model/ModelPartida.php";
 include_once "model/ModelRanking.php";
+include_once "model/ModelEditor.php";
 
 include_once "helper/Database.php";
 include_once "helper/Presenter.php";
@@ -105,6 +109,11 @@ class Configuration
         return new ControllerRanking(self::getModelRanking(), self::getPresenter2());
     }
 
+    //CONTROLADOR EDITOR
+
+    public static function getControllerEditor() {
+        return new ControllerEditor(self::getModelEditor(), self::getPresenter2());
+    }
 
     // MODELO REGISTRO
     public static function getModelRegistro()
@@ -153,6 +162,13 @@ class Configuration
     {
         return new ModelRanking(self::getDatabase());
     }
+
+    //MODELO EDITOS
+    public static function getModelEditor()
+    {
+        return new ModelEditor(self::getDatabase());
+    }
+
     public static function getRouter()
     {
         return new Router(self::class,"getControllerLogin", "get");

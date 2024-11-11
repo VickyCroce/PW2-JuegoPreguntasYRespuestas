@@ -17,8 +17,22 @@ CREATE TABLE users (
                        cantidad_acertadas INT NOT NULL,
                        ratio INT NOT NULL,
                        verificado BOOLEAN DEFAULT 0,
-                       fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+                       fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+                       rol VARCHAR(50)  NOT NULL);
+-- Creación de la tabla Básico
+CREATE TABLE jugador
+(
+    Usuario_id INT PRIMARY KEY,
+    FOREIGN KEY (Usuario_id) REFERENCES users (id)
 );
+
+-- Creación de la tabla Editor
+CREATE TABLE Editor
+(
+    Usuario_id INT PRIMARY KEY,
+    FOREIGN KEY (Usuario_id) REFERENCES users (id)
+);
+
 -- Creación de la tabla Partida
 CREATE TABLE Partida
 (   id      INT PRIMARY KEY auto_increment,
@@ -64,8 +78,11 @@ CREATE TABLE Respuesta
     FOREIGN KEY (pregunta_id) REFERENCES Pregunta (id)
 );
 
+INSERT INTO users(id,nombre_completo,anio_nacimiento,sexo,pais,ciudad,email,password,nombre_usuario,foto_perfil,cantidad_dadas,cantidad_acertadas,ratio,verificado,fecha_registro,rol)
+    VALUES (1,'Editor', "1985-01-02", "Masculino","Argentina","Buenos Aires",'editor@gmail.com',
+        'editor1234', 'editor',null,0,0,0,1,"2000-01-10",'Editor');
 
--- Insertar datos en la tabla Categoría
+        -- Insertar datos en la tabla Categoría
 INSERT INTO Categoria (id, nombre, color) VALUES
                                               (1, 'Historia', '#FFFF00'),
                                               (2, 'Ciencia', '#008000'),

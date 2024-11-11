@@ -77,9 +77,6 @@ class ControllerJuego
     }
 
 
-
-
-
     public function verificarRespuesta()
     {
         if (!isset($_SESSION['pregunta_token']) || $_SESSION['pregunta_token'] !== $_POST['pregunta_token']) {
@@ -108,21 +105,38 @@ class ControllerJuego
             $_SESSION['puntuacion'] = $this->puntuacion;
             $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], true);
             $this->model->actualizarPuntosPartida($partidaId, $this->puntuacion);
-
             $this->model->actualizarRatio($_SESSION['usuario']['id']);
 
             unset($_SESSION['pregunta_actual']);
             unset($_SESSION['pregunta_token']);
+            unset($_SESSION['tiempo_restante']);
+
             $this->mostrarPregunta();
         } else {
+            // Cuando el jugador pierde, borra las sesiones
             $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
             $this->model->actualizarRatio($_SESSION['usuario']['id']);
 
+            // Borrar los datos de sesión cuando el jugador pierde
+            unset($_SESSION['pregunta_actual']);
+            unset($_SESSION['pregunta_token']);
+            unset($_SESSION['tiempo_restante']);
+
+            // Mostrar la vista de resultado
             $this->presenter->render('view/resultado.mustache', [
                 'correta' => false,
                 'puntuacion' => $this->puntuacion
             ]);
         }
+    }
+
+
+    public function mostrarResultado()
+    {
+        $this->presenter->render('view/resultado.mustache', [
+            'correta' => false,
+            'puntuacion' => $this->puntuacion
+        ]);
     }
 
 

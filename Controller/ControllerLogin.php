@@ -33,7 +33,11 @@ class ControllerLogin
                 $_SESSION['usuario_id'] = $resultado['id'];
                 $_SESSION['usuario'] = $resultado;
 
-
+                /*Si es editor lo mando a su vista */
+                if($resultado["rol"] == "Editor"){
+                    header("Location:/PW2-JuegoPreguntasYRespuestas/ControllerEditor/get");
+                    return;
+                }
                 header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerHome/get');
                 exit();
             }

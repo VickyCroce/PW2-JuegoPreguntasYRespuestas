@@ -31,8 +31,8 @@ class ModelRegistro
     public function saveUser($data)
     {
 
-        $sql = "INSERT INTO users (nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil, verificado) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+        $sql = "INSERT INTO users (nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil, verificado,rol) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0,'jugador')";
 
 
         $fotoPerfil = isset($data['foto_perfil']) ? $data['foto_perfil'] : NULL;
