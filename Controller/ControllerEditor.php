@@ -2,8 +2,11 @@
 
 namespace Controller;
 
+namespace Controller;
+
 class ControllerEditor
-{   private $model;
+{
+    private $model;
     private $presenter;
 
     public function __construct($model, $presenter){
@@ -11,38 +14,37 @@ class ControllerEditor
         $this->presenter = $presenter;
     }
 
-    public function get(){
-        $this->presenter->render('view/homeEditor.mustache', []);
+    private function checkEditor() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'Editor')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
 
+    public function get(){
+        $this->checkEditor();
+        $this->presenter->render('view/homeEditor.mustache', []);
     }
 
     public function gestionarPreguntas()
     {
-        if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'Editor') {
-            $preguntas = $this->model->getPreguntas();
-            $this->presenter->render('view/gestionarPreguntas.mustache', [
-                'preguntas' => $preguntas
-            ]);
-        } else {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
-            exit();
-        }
+        $this->checkEditor();
+        $preguntas = $this->model->getPreguntas();
+        $this->presenter->render('view/gestionarPreguntas.mustache', [
+            'preguntas' => $preguntas
+        ]);
     }
 
     public function agregarPregunta()
     {
-        if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'Editor') {
-            $this->presenter->render('view/agregarPregunta.mustache');
-        } else {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
-            exit();
-        }
+        $this->checkEditor();
+        $this->presenter->render('view/agregarPregunta.mustache');
     }
-
 
     public function guardarPregunta()
     {
         if (isset($_POST['descripcion'], $_POST['categoria'], $_POST['respuesta1'], $_POST['respuesta2'], $_POST['respuesta3'], $_POST['respuesta4'], $_POST['correcta'])) {
+            $this->checkEditor();
             $descripcion = $_POST['descripcion'];
             $categoriaNombre = $_POST['categoria'];
             $respuestas = [
@@ -65,6 +67,7 @@ class ControllerEditor
 
     public function editarPregunta()
     {
+        $this->checkEditor();
         $preguntaId = $_GET['id'];
         $pregunta = $this->model->getPreguntaById($preguntaId);
 
@@ -84,12 +87,10 @@ class ControllerEditor
         }
     }
 
-
     public function actualizarPregunta()
     {
-        var_dump($_POST); // Para verificar los datos que llegan
-
         if (isset($_POST['id'], $_POST['descripcion'], $_POST['categoria'], $_POST['respuesta1'], $_POST['respuesta2'], $_POST['respuesta3'], $_POST['respuesta4'], $_POST['correcta'])) {
+            $this->checkEditor();
             $id = $_POST['id'];
             $descripcion = $_POST['descripcion'];
             $categoria = $_POST['categoria'];
@@ -114,11 +115,10 @@ class ControllerEditor
         }
     }
 
-
-
     public function eliminarPregunta()
     {
         if (isset($_GET['id'])) {
+            $this->checkEditor();
             $preguntaId = $_GET['id'];
             $this->model->eliminarPregunta($preguntaId);
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas");
@@ -127,5 +127,4 @@ class ControllerEditor
             echo "Error: No se especificó un ID válido para eliminar la pregunta.";
         }
     }
-
 }
