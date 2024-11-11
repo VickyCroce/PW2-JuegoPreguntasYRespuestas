@@ -1,5 +1,4 @@
 <?php
-
 namespace Controller;
 use MustachePresenter;
 
@@ -53,7 +52,6 @@ class ControllerPerfil
 
             if ($user) {
                 $user['partidas'] = $partidas;
-                $user['qr_code_url'] = "/path/to/qrcode?user_id=$usuario_id"; // Genera la URL del QR
                 echo $this->Mustachepresenter->render('view/perfilAjeno.mustache', $user);
             } else {
                 echo "Usuario no encontrado.";

@@ -8,17 +8,23 @@
 </head>
 <body>
 <h1 class="w3-center w3-padding-16 w3-text-teal">Ranking de Jugadores</h1>
-<table class="w3-table w3-bordered w3-striped w3-hoverable">
+<table class="w3-table w3-bordered w3-striped w3-hoverable w3-centered">
     <tr class="w3-light-grey">
         <th>Posición</th>
         <th>Nombre</th>
         <th>Puntuación</th>
+        <th>QR</th>
     </tr>
     {{#jugadores}}
         <tr>
             <td>{{posicion}}</td>
-            <td><a href="/PW2-JuegoPreguntasYRespuestas/ControllerPerfil/showPerfilAjeno/?id={{usuario_id}}">{{nombre}}</a></td>
+            <td><a href="/PW2-JuegoPreguntasYRespuestas/ControllerPerfil/showPerfilAjeno/?id={{usuario_id}}" class="w3-text-teal">{{nombre}}</a></td>
             <td>{{puntuacion}}</td>
+            <td>
+                <div class="w3-center">
+                    <img class="w3-image w3-card" src="/PW2-JuegoPreguntasYRespuestas/public/img/Qr/{{id}}.png" style="width: 100px; height: 100px;">
+                </div>
+            </td>
         </tr>
     {{/jugadores}}
 </table>

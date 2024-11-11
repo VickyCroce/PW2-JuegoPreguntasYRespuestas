@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Controller;
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require_once __DIR__ . '/../vendor/phpqrcode/qrlib.php';
 
 class ControllerRegistro
 {
@@ -39,7 +38,7 @@ class ControllerRegistro
                 $fotoPerfil = $_FILES['foto_perfil'];
 
 
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/';
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/fotoPerfil/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
@@ -52,7 +51,7 @@ class ControllerRegistro
 
                 if (move_uploaded_file($fotoPerfil['tmp_name'], $fotoPerfilPath)) {
 
-                    $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/' . $fotoPerfilName;
+                    $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/fotoPerfil/' . $fotoPerfilName;
                 } else {
                     echo "Error al cargar la imagen.";
                 }
@@ -98,8 +97,11 @@ class ControllerRegistro
             $usuario = $this->modelo->findUserByEmail($email);
 
             if ($usuario) {
+                $userId = $usuario['id'];
                 // Actualizamos el campo 'verificado' a 1
                 if ($this->modelo->verifyUser($email)) {
+                    $this->generateQrCode($userId);
+
                     unset($_SESSION['usuario_temporal']);
                     $this->presenter->render("view/login.mustache", ['error' => 'Registro exitoso. Ya puedes iniciar sesión.']);
                 } else {
@@ -113,6 +115,19 @@ class ControllerRegistro
         }
     }
 
+    private function generateQrCode($usuario_id)
+    {
+        $url = "http://localhost/PW2-JuegoPreguntasYRespuestas/ControllerPerfil/showPerfilAjeno/?id=$usuario_id";
+        $qrCodePath = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/Qr/' . $usuario_id . '.png';
+
+        if (!is_dir(dirname($qrCodePath))) {
+            mkdir(dirname($qrCodePath), 0755, true);
+        }
+
+        // Generar el QR
+        \QRcode::png($url, $qrCodePath, QR_ECLEVEL_H, 3);
+        return $qrCodePath;
+    }
 
     // Función para enviar el correo de verificación
     private function sendMail($to, $subject, $body)

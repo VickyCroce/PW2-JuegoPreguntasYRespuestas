@@ -78,4 +78,9 @@ class ModelRegistro
         return false;
     }
 
+    public function getLastInsertedId()
+    {
+        $this->db->getLastInsertId();
+    }
+
 }
