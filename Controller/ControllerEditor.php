@@ -2,8 +2,6 @@
 
 namespace Controller;
 
-namespace Controller;
-
 class ControllerEditor
 {
     private $model;
@@ -57,7 +55,7 @@ class ControllerEditor
 
             $categoriaId = $this->model->getCategoriaId($categoriaNombre);
 
-            // Llamar al modelo para guardar la pregunta
+
             $this->model->guardarPregunta($descripcion, $categoriaId, $respuestas, $correcta);
 
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas");
@@ -72,20 +70,34 @@ class ControllerEditor
         $pregunta = $this->model->getPreguntaById($preguntaId);
 
         if ($pregunta) {
-            // Obtener las respuestas relacionadas
+
             $respuestas = $this->model->getRespuestasByPreguntaId($preguntaId);
 
-            $this->presenter->render('view/editarPregunta.mustache', [
+            $categorias = [
+                'isHistoria' => $pregunta['categoria_nombre'] === 'Historia',
+                'isCiencia' => $pregunta['categoria_nombre'] === 'Ciencia',
+                'isEntretenimiento' => $pregunta['categoria_nombre'] === 'Entretenimiento',
+                'isDeportes' => $pregunta['categoria_nombre'] === 'Deportes',
+                'isGeografia' => $pregunta['categoria_nombre'] === 'Geografía'
+            ];
+
+            $correctas = [];
+            foreach ($respuestas as $index => $respuesta) {
+                $correctas["correcta" . ($index + 1)] = $respuesta['correcta'] == 1;
+            }
+
+            $this->presenter->render('view/editarPregunta.mustache', array_merge([
                 'id' => $pregunta['id'],
                 'descripcion' => $pregunta['descripcion'],
                 'categoria' => $pregunta['categoria_nombre'],
                 'respuestas' => $respuestas
-            ]);
+            ], $categorias, $correctas));
         } else {
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas");
             exit();
         }
     }
+
 
     public function actualizarPregunta()
     {
@@ -104,10 +116,9 @@ class ControllerEditor
 
             $categoriaId = $this->model->getCategoriaId($categoria);
 
-            // Llamar al modelo para actualizar la pregunta
             $this->model->actualizarPregunta($id, $descripcion, $categoriaId, $respuestas, $correcta);
 
-            // Redirigir a la gestión de preguntas
+
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas");
             exit();
         } else {
