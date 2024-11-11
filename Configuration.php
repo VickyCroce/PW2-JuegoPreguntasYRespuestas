@@ -72,7 +72,7 @@ class Configuration
     // CONTROLADOR REGISTRO
     public static function getControllerRegistro()
     {
-        return new ControllerRegistro(self::getModelRegistro(),self::getPresenter());
+        return new ControllerRegistro(self::getModelRegistro(),self::getPresenter2());
     }
 
     //CONTROLADOR LOGIN

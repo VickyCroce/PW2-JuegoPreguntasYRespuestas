@@ -21,7 +21,7 @@ class ControllerRegistro
 
     public function get()
     {
-        $this->presenter->show("view/registro.mustache");
+        $this->presenter->render("view/registro.mustache");
     }
 
 
@@ -95,23 +95,21 @@ class ControllerRegistro
     {
         if (isset($_GET['email'])) {
             $email = $_GET['email'];
-            echo "Registro exitoso. Ya puedes iniciar sesión.";
-
             $usuario = $this->modelo->findUserByEmail($email);
 
             if ($usuario) {
                 // Actualizamos el campo 'verificado' a 1
                 if ($this->modelo->verifyUser($email)) {
                     unset($_SESSION['usuario_temporal']);
-                    $this->presenter->show("view/login.mustache", ['success' => 'Registro exitoso. Ya puedes iniciar sesión.']);
+                    $this->presenter->render("view/login.mustache", ['error' => 'Registro exitoso. Ya puedes iniciar sesión.']);
                 } else {
-                    $this->presenter->show("view/login.mustache", ['error' => 'No se pudo verificar el usuario.']);
+                    $this->presenter->render("view/login.mustache", ['error' => 'No se pudo verificar el usuario.']);
                 }
             } else {
-                $this->presenter->show("view/login.mustache", ['error' => 'El usuario no existe o ya ha sido verificado.']);
+                $this->presenter->render("view/login.mustache", ['error' => 'El usuario no existe o ya ha sido verificado.']);
             }
         } else {
-            $this->presenter->show("view/login.mustache", ['error' => 'Correo no proporcionado para la verificación.']);
+            $this->presenter->render("view/login.mustache", ['error' => 'Correo no proporcionado para la verificación.']);
         }
     }
 
