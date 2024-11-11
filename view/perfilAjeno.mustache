@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de {{nombre}}</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+<div class="w3-container w3-white w3-card-4 w3-center" style="max-width: 500px; margin: auto; padding: 20px;">
+    <!-- Cabecera del perfil -->
+    <h1 class="w3-text-teal">Perfil de {{nombre}}</h1>
+
+    <!-- Foto de perfil -->
+    <img src="{{foto_perfil}}" alt="Foto de perfil de {{nombre}}" class="w3-circle" style="width:150px;height:150px; border: 3px solid #00c6fb; margin-top: 15px;">
+
+    <!-- Información del usuario -->
+    <div class="w3-left-align" style="margin-top: 20px;">
+        <h4 class="w3-text-teal">Nombre Completo:</h4>
+        <p>{{nombre}}</p>
+        <h4 class="w3-text-teal">País y Ciudad:</h4>
+        <p>{{pais}}, {{ciudad}}</p>
+        <h4 class="w3-text-teal">Puntos totales:</h4>
+        <p>{{puntaje_total}} puntos</p>
+    </div>
+
+    <!-- Mapa de ubicación -->
+    <div id="map" style="width: 100%; height: 200px; border-radius: 10px; margin-top: 10px;"></div>
+
+    <!-- Historial de partidas -->
+    <div class="w3-center" style="margin-top: 20px;">
+        <h3 class="w3-text-teal">Partidas Recientes:</h3>
+        <table class="w3-table w3-bordered">
+            <tr>
+                <th>Partida</th>
+                <th>Resultado</th>
+            </tr>
+            {{#partidas}}
+                <tr>
+                    <td>Partida#{{id}}</td>
+                    <td>{{puntaje}}</td>
+                </tr>
+            {{/partidas}}
+        </table>
+    </div>
+</div>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    // Inicializar el mapa centrado en las coordenadas de la ciudad y el país
+    const map = L.map('map').setView([0, 0], 10);
+
+    // Cargar las baldosas de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Función para configurar el mapa basado en ciudad y país
+    function setCityAndCountry(pais, ciudad) {
+        const url = `https://nominatim.openstreetmap.org/search?q=${pais}+${ciudad}&format=json&limit=1`;
+
+        fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 10);
+                        L.circle([lat, lon], {
+                            color: '#00c6fb',
+                            fillColor: '#00c6fb',
+                            fillOpacity: 0.5,
+                            radius: 5000
+                        }).addTo(map);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+    }
+
+    // Llamar a la función al cargar la página
+    setCityAndCountry("{{pais}}", "{{ciudad}}");
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Pregunta</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div class="w3-container w3-padding">
+    <h2>Agregar Nueva Pregunta</h2>
+
+    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/guardarPregunta" method="POST">
+        <!-- Descripción de la pregunta -->
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion" class="w3-input w3-border w3-margin-bottom" required>
+
+        <!-- Categoría -->
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria" class="w3-select w3-border w3-margin-bottom" required>
+            <option value="Historia">Historia</option>
+            <option value="Ciencia">Ciencia</option>
+            <option value="Entretenimiento">Entretenimiento</option>
+            <option value="Deportes">Deportes</option>
+            <option value="Geografia">Geografía</option>
+        </select>
+
+        <!-- Respuestas -->
+        <label>Respuestas:</label><br>
+        <input type="text" name="respuesta1" class="w3-input w3-border w3-margin-bottom" placeholder="Respuesta 1" required><br>
+        <input type="text" name="respuesta2" class="w3-input w3-border w3-margin-bottom" placeholder="Respuesta 2" required><br>
+        <input type="text" name="respuesta3" class="w3-input w3-border w3-margin-bottom" placeholder="Respuesta 3" required><br>
+        <input type="text" name="respuesta4" class="w3-input w3-border w3-margin-bottom" placeholder="Respuesta 4" required><br>
+
+        <!-- Respuesta Correcta -->
+        <label>¿Cuál es la respuesta correcta?</label><br>
+        <input type="radio" name="correcta" value="1" required> Respuesta 1<br>
+        <input type="radio" name="correcta" value="2" required> Respuesta 2<br>
+        <input type="radio" name="correcta" value="3" required> Respuesta 3<br>
+        <input type="radio" name="correcta" value="4" required> Respuesta 4<br>
+
+        <button type="submit" class="w3-button w3-blue w3-round">Guardar Pregunta</button>
+    </form>
+</div>
+</body>
+</html>

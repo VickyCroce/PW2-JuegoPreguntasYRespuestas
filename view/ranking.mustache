@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Ranking de Jugadores</title>
+</head>
+<body>
+<h1 class="w3-center w3-padding-16 w3-text-teal">Ranking de Jugadores</h1>
+<table class="w3-table w3-bordered w3-striped w3-hoverable">
+    <tr class="w3-light-grey">
+        <th>Posición</th>
+        <th>Nombre</th>
+        <th>Puntuación</th>
+    </tr>
+    {{#jugadores}}
+        <tr>
+            <td>{{posicion}}</td>
+            <td><a href="/PW2-JuegoPreguntasYRespuestas/ControllerPerfil/showPerfilAjeno/?id={{usuario_id}}">{{nombre}}</a></td>
+            <td>{{puntuacion}}</td>
+        </tr>
+    {{/jugadores}}
+</table>
+</body>
+</html>

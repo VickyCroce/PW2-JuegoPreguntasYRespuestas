@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<h1 class="w3-text-teal">Tus Partidas Jugadas</h1>
+
+<table class="w3-table w3-bordered w3-striped w3-striped-blue w3-centered w3-card w3-round-large">
+    <thead>
+    <tr>
+        <th>Partida</th>
+        <th>Código</th>
+        <th>Resultado</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#partidas}}
+        <tr>
+            <td>Partida#{{id}}</td>
+            <td>{{codigo}}</td>
+            <td>{{resultado}}</td>
+        </tr>
+    {{/partidas}}
+    </tbody>
+</table>
+
+</body>
+</html>

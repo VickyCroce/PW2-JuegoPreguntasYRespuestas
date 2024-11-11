@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pregunta</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div class="w3-container w3-padding">
+    <h2>Editar Pregunta</h2>
+    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/actualizarPregunta" method="POST" class="w3-container">
+        <input type="hidden" name="id" value="{{id}}">
+
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" value="{{descripcion}}" class="w3-input" required>
+
+        <label>Categoría:</label>
+        <select name="categoria" class="w3-select">
+            <option value="Historia" {{#isHistoria}}selected{{/isHistoria}}>Historia</option>
+            <option value="Ciencia" {{#isCiencia}}selected{{/isCiencia}}>Ciencia</option>
+            <option value="Entretenimiento" {{#isEntretenimiento}}selected{{/isEntretenimiento}}>Entretenimiento</option>
+            <option value="Deportes" {{#isDeportes}}selected{{/isDeportes}}>Deportes</option>
+            <option value="Geografía" {{#isGeografia}}selected{{/isGeografia}}>Geografía</option>
+        </select>
+
+        <div>
+            <label>Respuesta 1:</label>
+            <input type="text" name="respuesta1" value="{{respuestas.0.descripcion}}" class="w3-input" required>
+        </div>
+        <div>
+            <label>Respuesta 2:</label>
+            <input type="text" name="respuesta2" value="{{respuestas.1.descripcion}}" class="w3-input" required>
+        </div>
+        <div>
+            <label>Respuesta 3:</label>
+            <input type="text" name="respuesta3" value="{{respuestas.2.descripcion}}" class="w3-input" required>
+        </div>
+        <div>
+            <label>Respuesta 4:</label>
+            <input type="text" name="respuesta4" value="{{respuestas.3.descripcion}}" class="w3-input" required>
+        </div>
+
+        <label>Correcta:</label>
+        <div class="w3-margin-left">
+            <input type="radio" name="correcta" value="1" {{#correcta1}}checked{{/correcta1}}> Respuesta 1<br>
+            <input type="radio" name="correcta" value="2" {{#correcta2}}checked{{/correcta2}}> Respuesta 2<br>
+            <input type="radio" name="correcta" value="3" {{#correcta3}}checked{{/correcta3}}> Respuesta 3<br>
+            <input type="radio" name="correcta" value="4" {{#correcta4}}checked{{/correcta4}}> Respuesta 4
+        </div>
+
+        <button type="submit" class="w3-button w3-green w3-margin-top">Guardar Cambios</button>
+    </form>
+</div>
+</body>
+</html>

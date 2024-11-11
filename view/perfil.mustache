@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Perfil de {{nombre_completo}}</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-
 <div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 600px; margin: 0 auto;">
-    <h1>Perfil de {{nombre_completo}}</h1>
+    <h1 class="w3-text-teal">Perfil de {{nombre_completo}}</h1>
 
     <div>
         <img class="w3-circle" src="{{foto_perfil}}" alt="Foto de perfil de {{nombre_completo}}" style="width: 150px; height: 150px; object-fit: cover;">
@@ -26,26 +26,52 @@
     </div>
 
     <h3>Mapa de ubicación</h3>
-    <iframe
-            width="100%"
-            height="300"
-            style="border:0"
-            loading="lazy"
-            allowfullscreen
-            src="https://www.google.com/maps/embed/v1/place?key=TU_API_KEY&q={{ciudad}},{{pais}}">
-    </iframe>
+    <div id="map" style="width: 100%; height: 300px;"></div>
 
     <h3>Acceso rápido a este perfil</h3>
     <div>
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://tu_dominio.com/profile.php?user={{nombre_usuario}}" alt="Código QR para el perfil de {{nombre_usuario}}">
     </div>
     <div class="w3-margin-top">
-        <a class="w3-button w3-teal w3-round" href="/ControllerHome/get">Volver al lobby</a>
+        <a class="w3-button w3-teal w3-round" href="/PW2-JuegoPreguntasYRespuestas/ControllerHome/get">Volver al lobby</a>
     </div>
 
 </div>
 
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    // Inicializar el mapa centrado en las coordenadas de la ciudad y el país
+    const map = L.map('map').setView([0, 0], 10);
+
+    // Cargar las baldosas de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Función para configurar el mapa basado en ciudad y país
+    function setCityAndCountry(pais, ciudad) {
+        const url = `https://nominatim.openstreetmap.org/search?q=${pais}+${ciudad}&format=json&limit=1`;
+
+        fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 10);
+                        L.circle([lat, lon], {
+                            color: '#00c6fb',
+                            fillColor: '#00c6fb',
+                            fillOpacity: 0.5,
+                            radius: 5000
+                        }).addTo(map);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+    }
+
+    // Llamar a la función al cargar la página
+    setCityAndCountry("{{pais}}", "{{ciudad}}");
+</script>
 </body>
 </html>
-
-

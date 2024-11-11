@@ -1,13 +1,39 @@
 <?php
+
+use Controller\ControllerHome;
+use Controller\ControllerJuego;
+use Controller\ControllerLogin;
+use Controller\ControllerPartida;
+use Controller\ControllerPerfil;
+use Controller\ControllerRegistro;
+use Controller\ControllerRanking;
+use Controller\ControllerEditor;
+use Model\ModelHome;
+use Model\ModelJuego;
+use Model\ModelLogin;
+use Model\ModelPartida;
+use Model\ModelRegistro;
+use Model\ModelRanking;
+use Model\ModelEditor;
+
+
 include_once "controller/ControllerRegistro.php";
 include_once "controller/ControllerLogin.php";
 include_once "controller/ControllerPerfil.php";
 include_once "controller/ControllerHome.php";
+include_once "controller/ControllerJuego.php";
+include_once "controller/ControllerPartida.php";
+include_once "controller/ControllerRanking.php";
+include_once "controller/ControllerEditor.php";
 
 include_once "model/ModelRegistro.php";
 include_once "model/ModelLogin.php";
 include_once "model/ModelPerfil.php";
 include_once "model/ModelHome.php";
+include_once "model/ModelJuego.php";
+include_once "model/ModelPartida.php";
+include_once "model/ModelRanking.php";
+include_once "model/ModelEditor.php";
 
 include_once "helper/Database.php";
 include_once "helper/Presenter.php";
@@ -46,13 +72,13 @@ class Configuration
     // CONTROLADOR REGISTRO
     public static function getControllerRegistro()
     {
-        return new ControllerRegistro(self::getModelRegistro(),self::getPresenter());
+        return new ControllerRegistro(self::getModelRegistro(),self::getPresenter2());
     }
 
     //CONTROLADOR LOGIN
 
     public static function getControllerLogin(){
-        return new ControllerLogin(self::getModelLogin(),self::getPresenter());
+        return new ControllerLogin(self::getModelLogin(),self::getPresenter2());
     }
 
     //CONTROLADOR PERFIL
@@ -65,6 +91,28 @@ class Configuration
 
     public static function getControllerHome() {
         return new ControllerHome(self::getModelHome(), self::getPresenter2());
+    }
+
+    //CONTROLADOR JUEGO
+
+    public static function getControllerJuego() {
+        return new ControllerJuego(self::getModelJuego(), self::getPresenter2());
+    }
+
+    //CONTROLADOR PARTIDA
+    public static function getControllerPartida() {
+        return new ControllerPartida(self::getModelPartida(), self::getPresenter2());
+    }
+
+    //CONTROLADOR RANKING
+    public static function getControllerRanking() {
+        return new ControllerRanking(self::getModelRanking(), self::getPresenter2());
+    }
+
+    //CONTROLADOR EDITOR
+
+    public static function getControllerEditor() {
+        return new ControllerEditor(self::getModelEditor(), self::getPresenter2());
     }
 
     // MODELO REGISTRO
@@ -93,6 +141,34 @@ class Configuration
     {
         return new ModelHome(self::getDatabase());
     }
+
+    //MODELO JUEGO
+
+    public static function getModelJuego()
+    {
+        return new ModelJuego(self::getDatabase());
+    }
+
+    //MODELO PARTIDA
+
+    public static function getModelPartida()
+    {
+        return new ModelPartida(self::getDatabase());
+    }
+
+    //MODELO RANKING
+
+    public static function getModelRanking()
+    {
+        return new ModelRanking(self::getDatabase());
+    }
+
+    //MODELO EDITOS
+    public static function getModelEditor()
+    {
+        return new ModelEditor(self::getDatabase());
+    }
+
     public static function getRouter()
     {
         return new Router(self::class,"getControllerLogin", "get");

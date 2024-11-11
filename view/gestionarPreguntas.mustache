@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Preguntas</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-container w3-padding">
+        <h2>Gestión de Preguntas</h2>
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/agregarPregunta" class="w3-button w3-blue w3-round">Agregar Pregunta</a>
+
+        <table class="w3-table w3-bordered w3-striped w3-margin-top">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pregunta</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#preguntas}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{descripcion}}</td>
+                        <td>
+                            <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/editarPregunta?id={{id}}" class="w3-button w3-orange w3-round">Editar</a>
+                            <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/eliminarPregunta?id={{id}}" class="w3-button w3-red w3-round">Eliminar</a>
+                        </td>
+                    </tr>
+                {{/preguntas}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
