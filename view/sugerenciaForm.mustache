@@ -1,0 +1,26 @@
+<form action="/guardar-sugerencia-pregunta" method="POST">
+    <label for="pregunta_sugerida">Pregunta Sugerida:</label>
+    <input type="text" name="pregunta_sugerida" id="pregunta_sugerida" required>
+
+    <label for="categoria">Categoría:</label>
+    <input type="text" name="categoria" id="categoria" required>
+
+    <div id="respuestas-container">
+        <label>Respuestas Sugeridas:</label>
+        <input type="text" name="respuestas[]" placeholder="Respuesta 1">
+    </div>
+
+    <button type="button" onclick="agregarRespuesta()">Agregar otra respuesta</button>
+    <button type="submit">Enviar Sugerencia</button>
+</form>
+
+<script>
+    function agregarRespuesta() {
+        const container = document.getElementById('respuestas-container');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'respuestas[]';
+        input.placeholder = `Respuesta ${container.children.length + 1}`;
+        container.appendChild(input);
+    }
+</script>
