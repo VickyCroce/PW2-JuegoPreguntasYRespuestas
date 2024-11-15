@@ -8,6 +8,7 @@ use Controller\ControllerPerfil;
 use Controller\ControllerRegistro;
 use Controller\ControllerRanking;
 use Controller\ControllerEditor;
+use Controller\ControllerAdmin;
 use Model\ModelHome;
 use Model\ModelJuego;
 use Model\ModelLogin;
@@ -15,6 +16,7 @@ use Model\ModelPartida;
 use Model\ModelRegistro;
 use Model\ModelRanking;
 use Model\ModelEditor;
+use Model\ModelAdmin;
 
 
 include_once "controller/ControllerRegistro.php";
@@ -25,6 +27,7 @@ include_once "controller/ControllerJuego.php";
 include_once "controller/ControllerPartida.php";
 include_once "controller/ControllerRanking.php";
 include_once "controller/ControllerEditor.php";
+include_once "controller/ControllerAdmin.php";
 
 include_once "model/ModelRegistro.php";
 include_once "model/ModelLogin.php";
@@ -34,6 +37,7 @@ include_once "model/ModelJuego.php";
 include_once "model/ModelPartida.php";
 include_once "model/ModelRanking.php";
 include_once "model/ModelEditor.php";
+include_once "model/ModelAdmin.php";
 
 include_once "helper/Database.php";
 include_once "helper/Presenter.php";
@@ -177,6 +181,13 @@ class Configuration
     private static function getPresenter()
     {
         return new Presenter();
+    }
+
+    public static function getControllerAdmin() {
+        return new ControllerAdmin(self::getModelAdmin(), self::getPresenter2());
+    }
+    public static function getModelAdmin() {
+        return new ModelAdmin(self::getDatabase());
     }
 
 

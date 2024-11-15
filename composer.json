@@ -1,7 +1,13 @@
 {
-    "require": {
-        "phpmailer/phpmailer": "^6.9",
-        "mustache/mustache": "^2.14",
-      "ext-json": "*"
-    }
+  "require": {
+    "phpmailer/phpmailer": "^6.9",
+    "mustache/mustache": "^2.14",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "vendor/jpgraph"
+    ]
+  }
 }
+

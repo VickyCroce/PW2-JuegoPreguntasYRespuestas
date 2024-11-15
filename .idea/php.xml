@@ -18,6 +18,10 @@
       <path value="$PROJECT_DIR$/vendor/phpqrcode/bindings" />
       <path value="$PROJECT_DIR$/vendor/phpqrcode/cache" />
       <path value="$PROJECT_DIR$/vendor/phpqrcode/tools" />
+      <path value="$PROJECT_DIR$/vendor/jpgraph-4.4.2/src" />
+      <path value="$PROJECT_DIR$/vendor/jpgraph-4.4.2/docs" />
+      <path value="$PROJECT_DIR$/vendor/jpgraph/docs" />
+      <path value="$PROJECT_DIR$/vendor/jpgraph/src" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

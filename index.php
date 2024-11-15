@@ -21,6 +21,11 @@ if (isset($_SESSION["usuario"])) {
         header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerIndex/get");
         exit();
     }
+
+    if ($userRole != "Administrador" && $controller == "ControllerAdmin") {
+        header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerHome/get");
+        exit();
+    }
 }
 
 
