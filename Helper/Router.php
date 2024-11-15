@@ -42,8 +42,6 @@ class Router
         }
     }
 
-
-
     private function executeMethodFromController($controller, $method, $param = null) {
         $validMethod = method_exists($controller, $method) ? $method : $this->defaultMethod;
         if ($param) {
