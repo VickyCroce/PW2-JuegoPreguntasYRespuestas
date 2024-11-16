@@ -16,10 +16,9 @@ class ControllerRanking
 
     public function mostrarRanking()
     {
-        // Obtén los jugadores con los puntajes más altos desde el modelo
         $jugadores = $this->model->getRankingJugadores();
 
-        // Renderiza la vista del ranking con los datos de los jugadores
+
         $this->presenter->render('view/ranking.mustache', [
             'jugadores' => $jugadores
         ]);

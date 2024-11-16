@@ -61,6 +61,21 @@ class ModelJuego
         return $pregunta;
     }
 
+    public function getPreguntaById($id)
+    {
+        $sql = "SELECT p.id, p.descripcion, p.punto, p.categoria_id, c.nombre AS categoria, c.color AS color
+        FROM Pregunta p
+        JOIN Categoria c ON p.categoria_id = c.id
+        WHERE id ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pregunta = $result->fetch_assoc();
+        $stmt->close();
+        return $pregunta;
+    }
+
 
     public function getRespuestasPorPregunta($pregunta_id)
     {
@@ -161,8 +176,6 @@ class ModelJuego
         return $pregunta;
     }
 
-
-
     public function actualizarContadoresUsuario($userId, $esCorrecta)
     {
         $sql = "UPDATE users SET cantidad_dadas = cantidad_dadas + 1" .
@@ -215,6 +228,37 @@ class ModelJuego
         $stmt->execute();
         $stmt->close();
     }
+
+    public function incrementarCantidadDadasPregunta($preguntaId)
+    {
+        $sql = "UPDATE Pregunta  SET cantidad_dadas = cantidad_dadas + 1 WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function incrementarCantidadAcertadasPregunta($preguntaId)
+    {
+        $sql = "
+        UPDATE Pregunta 
+        SET acertadas = acertadas + 1, 
+            porcentaje = (acertadas + 1) / cantidad_dadas * 100 
+        WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function recalcularPorcentajePregunta($preguntaId)
+    {
+        $sql = "UPDATE Pregunta SET porcentaje = (acertadas / cantidad_dadas) * 100 WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
 
 }
 
