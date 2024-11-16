@@ -41,23 +41,26 @@ class ControllerJuego
 
     public function mostrarPregunta()
     {
+        $usuarioId = $_SESSION['usuario']['id'];
         if (isset($_SESSION['pregunta_actual'])) {
             $pregunta = $_SESSION['pregunta_actual'];
         } else {
-            $pregunta = $this->model->getPreguntaSegunDificultad($_SESSION['preguntas_mostradas'], $_SESSION['usuario']['id']);
+            $preguntasMostradas = $this->model->obtenerPreguntasMostradas($usuarioId);
+
+            $pregunta = $this->model->getPreguntaSegunDificultad($preguntasMostradas, $usuarioId);
+
             if ($pregunta) {
+                $this->model->registrarPreguntaMostrada($usuarioId, $pregunta['id']);
                 $_SESSION['pregunta_actual'] = $pregunta;
-                $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
                 $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
                 $_SESSION['tiempo_limite'] = time() + 30;
             } else {
-                $_SESSION['preguntas_mostradas'] = [];
+                $this->model->limpiarPreguntasMostradas($usuarioId);
                 return $this->mostrarPregunta();
             }
         }
 
         $tiempoRestante = max($_SESSION['tiempo_limite'] - time(), 0);
-        $_SESSION['tiempo_restante'] = $tiempoRestante;
 
         $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
 
@@ -127,17 +130,6 @@ class ControllerJuego
             ]);
         }
     }
-
-
-    public function mostrarResultado()
-    {
-        $this->presenter->render('view/resultado.mustache', [
-            'correta' => false,
-            'puntuacion' => $this->puntuacion
-        ]);
-    }
-
-
 
 
     private function finalizarPorRecarga()
