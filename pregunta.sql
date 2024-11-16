@@ -78,6 +78,14 @@ CREATE TABLE Respuesta
     FOREIGN KEY (pregunta_id) REFERENCES Pregunta (id)
 );
 
+CREATE TABLE preguntas_mostradas (
+                                     id INT AUTO_INCREMENT PRIMARY KEY,
+                                     usuario_id INT NOT NULL,
+                                     pregunta_id INT NOT NULL,
+                                     fecha_mostrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                     FOREIGN KEY (usuario_id) REFERENCES users(id),
+                                     FOREIGN KEY (pregunta_id) REFERENCES Pregunta(id)
+);
 INSERT INTO users(id,nombre_completo,anio_nacimiento,sexo,pais,ciudad,email,password,nombre_usuario,foto_perfil,cantidad_dadas,cantidad_acertadas,ratio,verificado,fecha_registro,rol)
     VALUES (1,'Editor', "1985-01-02", "Masculino","Argentina","Buenos Aires",'editor@gmail.com',
         'editor1234', 'editor',null,0,0,0,1,"2000-01-10",'Editor');

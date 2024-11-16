@@ -54,14 +54,14 @@ class ModelPerfil
         return $this->database->query("SELECT * FROM usuario WHERE CorreoElectronico='".$usuario->getCorreoElectronico()."' AND contrasena='".$usuario->getContrasena()."'");
     }
 
-    // Método para obtener el historial de partidas de un usuario específico
+
     public function getPartidasPorUsuario($usuario_id)
     {
         $sql = "
         SELECT id, puntaje, fechaCreacion
         FROM Partida
         WHERE usuario_id = ?
-        ORDER BY fechaCreacion DESC
+        ORDER BY id DESC
         LIMIT 5";
 
         $stmt = $this->database->prepare($sql);

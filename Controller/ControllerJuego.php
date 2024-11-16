@@ -41,23 +41,26 @@ class ControllerJuego
 
     public function mostrarPregunta()
     {
+        $usuarioId = $_SESSION['usuario']['id'];
         if (isset($_SESSION['pregunta_actual'])) {
             $pregunta = $_SESSION['pregunta_actual'];
         } else {
-            $pregunta = $this->model->getPreguntaSegunDificultad($_SESSION['preguntas_mostradas'], $_SESSION['usuario']['id']);
+            $preguntasMostradas = $this->model->obtenerPreguntasMostradas($usuarioId);
+
+            $pregunta = $this->model->getPreguntaSegunDificultad($preguntasMostradas, $usuarioId);
             if ($pregunta) {
+                $this->model->registrarPreguntaMostrada($usuarioId, $pregunta['id']);
+                $this->model->incrementarCantidadDadasPregunta($pregunta['id']);
                 $_SESSION['pregunta_actual'] = $pregunta;
-                $_SESSION['preguntas_mostradas'][] = $pregunta['id'];
                 $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
                 $_SESSION['tiempo_limite'] = time() + 30;
             } else {
-                $_SESSION['preguntas_mostradas'] = [];
+                $this->model->limpiarPreguntasMostradas($usuarioId);
                 return $this->mostrarPregunta();
             }
         }
 
         $tiempoRestante = max($_SESSION['tiempo_limite'] - time(), 0);
-        $_SESSION['tiempo_restante'] = $tiempoRestante;
 
         $respuestas = $this->model->getRespuestasPorPregunta($pregunta['id']);
 
@@ -93,6 +96,7 @@ class ControllerJuego
         $correcta = false;
 
         if (empty($letraSeleccionada)) {
+            $this->model->recalcularPorcentajePregunta($preguntaId);
             $this->letraSinSeleccionar();
             return;
         }
@@ -106,6 +110,9 @@ class ControllerJuego
         if ($correcta) {
             $this->puntuacion++;
             $_SESSION['puntuacion'] = $this->puntuacion;
+
+            $this->model->incrementarCantidadAcertadasPregunta($preguntaId);
+            $this->model->recalcularPorcentajePregunta($preguntaId);
             $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], true);
             $this->model->actualizarPuntosPartida($partidaId, $this->puntuacion);
             $this->model->actualizarRatio($_SESSION['usuario']['id']);
@@ -117,6 +124,7 @@ class ControllerJuego
         } else {
             $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
             $this->model->actualizarRatio($_SESSION['usuario']['id']);
+            $this->model->recalcularPorcentajePregunta($preguntaId);
 
             unset($_SESSION['pregunta_actual']);
             unset($_SESSION['tiempo_restante']);
@@ -127,17 +135,6 @@ class ControllerJuego
             ]);
         }
     }
-
-
-    public function mostrarResultado()
-    {
-        $this->presenter->render('view/resultado.mustache', [
-            'correta' => false,
-            'puntuacion' => $this->puntuacion
-        ]);
-    }
-
-
 
 
     private function finalizarPorRecarga()

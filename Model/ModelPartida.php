@@ -12,7 +12,7 @@ class ModelPartida
 
     public function obtenerPartidasPorUsuario($usuario_id)
     {
-        $stmt = $this->db->prepare("SELECT id, codigo, puntaje AS resultado FROM Partida WHERE usuario_id = ? ORDER BY fechaCreacion DESC");
+        $stmt = $this->db->prepare("SELECT id, codigo, puntaje AS resultado FROM Partida WHERE usuario_id = ? ORDER BY id DESC");
         $stmt->bind_param('i', $usuario_id);
         $stmt->execute();
         $result = $stmt->get_result();

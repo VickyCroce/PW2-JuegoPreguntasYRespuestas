@@ -61,6 +61,21 @@ class ModelJuego
         return $pregunta;
     }
 
+    public function getPreguntaById($id)
+    {
+        $sql = "SELECT p.id, p.descripcion, p.punto, p.categoria_id, c.nombre AS categoria, c.color AS color
+        FROM Pregunta p
+        JOIN Categoria c ON p.categoria_id = c.id
+        WHERE id ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pregunta = $result->fetch_assoc();
+        $stmt->close();
+        return $pregunta;
+    }
+
 
     public function getRespuestasPorPregunta($pregunta_id)
     {
@@ -141,7 +156,6 @@ class ModelJuego
         WHERE p.porcentaje BETWEEN ? AND ?
     ";
 
-
         $types = "ii";
         $params = [$minPorcentaje, $maxPorcentaje];
         if (!empty($preguntasMostradas)) {
@@ -152,8 +166,6 @@ class ModelJuego
         }
 
         $sql .= " ORDER BY RAND() LIMIT 1";
-
-        // Preparar y ejecutar la consulta
         $stmt = $this->db->getConexion()->prepare($sql);
         $stmt->bind_param($types, ...$params);
         $stmt->execute();
@@ -163,8 +175,6 @@ class ModelJuego
 
         return $pregunta;
     }
-
-
 
     public function actualizarContadoresUsuario($userId, $esCorrecta)
     {
@@ -187,6 +197,68 @@ class ModelJuego
         $stmt->close();
         return $conteo;
     }
+
+    public function registrarPreguntaMostrada($usuarioId, $preguntaId)
+    {
+        $sql = "INSERT INTO preguntas_mostradas (usuario_id, pregunta_id) VALUES (?, ?)";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("ii", $usuarioId, $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function obtenerPreguntasMostradas($usuarioId)
+    {
+        $sql = "SELECT pregunta_id FROM preguntas_mostradas WHERE usuario_id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $preguntas = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return array_column($preguntas, 'pregunta_id');
+    }
+
+    public function limpiarPreguntasMostradas($usuarioId)
+    {
+        $sql = "DELETE FROM preguntas_mostradas WHERE usuario_id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function incrementarCantidadDadasPregunta($preguntaId)
+    {
+        $sql = "UPDATE Pregunta  SET cantidad_dadas = cantidad_dadas + 1 WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function incrementarCantidadAcertadasPregunta($preguntaId)
+    {
+        $sql = "
+        UPDATE Pregunta 
+        SET acertadas = acertadas + 1, 
+            porcentaje = (acertadas + 1) / cantidad_dadas * 100 
+        WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function recalcularPorcentajePregunta($preguntaId)
+    {
+        $sql = "UPDATE Pregunta SET porcentaje = (acertadas / cantidad_dadas) * 100 WHERE id = ?";
+        $stmt = $this->db->getConexion()->prepare($sql);
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
 
 }
 

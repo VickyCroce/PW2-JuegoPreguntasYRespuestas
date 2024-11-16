@@ -71,14 +71,14 @@ class ModelEditor
 
     public function guardarPregunta($descripcion, $categoriaId, $respuestas, $correcta)
     {
-        $sql = "INSERT INTO pregunta (descripcion, categoria_id, fechaCreacion,punto,esValido) VALUES (?, ?, NOW(),1,1)";
+        $sql = "INSERT INTO pregunta (descripcion, categoria_id, fechaCreacion, punto, esValido, cantidad_dadas, acertadas, porcentaje) 
+            VALUES (?, ?, NOW(), 1, 1, 0, 0, 0)";
         $stmt = $this->db->prepare($sql);
         mysqli_stmt_bind_param($stmt, "si", $descripcion, $categoriaId);
         mysqli_stmt_execute($stmt);
 
         $preguntaId = $this->db->getConexion()->insert_id;
 
-        // Insertar las respuestas
         foreach ($respuestas as $key => $respuesta) {
             $esCorrecta = ($key + 1 == $correcta) ? 1 : 0;
             $sqlRespuesta = "INSERT INTO respuesta (pregunta_id, descripcion, correcta) VALUES (?, ?, ?)";
@@ -91,22 +91,31 @@ class ModelEditor
         mysqli_stmt_close($stmtRespuesta);
     }
 
+
     public function eliminarPregunta($preguntaId)
     {
-        // Primero, eliminar las respuestas asociadas a la pregunta
+        // Eliminar las relaciones en la tabla `preguntas_mostradas`
+        $sqlPreguntasMostradas = "DELETE FROM preguntas_mostradas WHERE pregunta_id = ?";
+        $stmtPreguntasMostradas = $this->db->prepare($sqlPreguntasMostradas);
+        mysqli_stmt_bind_param($stmtPreguntasMostradas, "i", $preguntaId);
+        mysqli_stmt_execute($stmtPreguntasMostradas);
+        mysqli_stmt_close($stmtPreguntasMostradas);
+
+        // Eliminar las respuestas asociadas a la pregunta
         $sqlRespuestas = "DELETE FROM respuesta WHERE pregunta_id = ?";
         $stmtRespuestas = $this->db->prepare($sqlRespuestas);
         mysqli_stmt_bind_param($stmtRespuestas, "i", $preguntaId);
         mysqli_stmt_execute($stmtRespuestas);
         mysqli_stmt_close($stmtRespuestas);
 
-        // Luego eliminar la pregunta
+        // Finalmente, eliminar la pregunta
         $sqlPregunta = "DELETE FROM pregunta WHERE id = ?";
         $stmtPregunta = $this->db->prepare($sqlPregunta);
         mysqli_stmt_bind_param($stmtPregunta, "i", $preguntaId);
         mysqli_stmt_execute($stmtPregunta);
         mysqli_stmt_close($stmtPregunta);
     }
+
 
 
     public function actualizarPregunta($id, $descripcion, $categoriaId, $respuestas, $correcta)
@@ -130,7 +139,6 @@ class ModelEditor
         }
         $stmtObtenerRespuestas->close();
 
-        // Actualizar cada respuesta
         foreach ($respuestas as $index => $respuesta) {
             $esCorrecta = ($index + 1 == $correcta) ? 1 : 0;
             $sqlRespuesta = "UPDATE respuesta SET descripcion = ?, correcta = ? WHERE id = ?";
