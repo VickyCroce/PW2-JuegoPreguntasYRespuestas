@@ -29,21 +29,32 @@ class ControllerRegistro
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
+            $nombreUsuario = $_POST['nombre_usuario'];
+            $errors = [];
 
             if ($this->modelo->findUserByEmail($email)) {
-                return ['error' => 'El correo electrónico ya está registrado.'];
+                $errors[] = 'El correo electrónico ya está registrado.';
             }
+
+            if ($this->modelo->findUserByUsername($nombreUsuario)) {
+                $errors[] = 'El nombre de usuario ya está registrado.';
+            }
+
+            if (!empty($errors)) {
+                $this->presenter->render("view/registro.mustache", ['errors' => $errors]);
+                return;
+            }
+
+            $fotoPerfilUrl = '/PW2-JuegoPreguntasYRespuestas/public/img/fotoPerfil/fotoPerfil.jpg';
 
             if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
                 $fotoPerfil = $_FILES['foto_perfil'];
-
 
                 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/PW2-JuegoPreguntasYRespuestas/public/img/fotoPerfil/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true); // Crea el directorio si no existe
                 }
-
 
                 $fotoPerfilName = basename(str_replace(' ', '_', $fotoPerfil['name']));
                 $fotoPerfilPath = $uploadDir . $fotoPerfilName;

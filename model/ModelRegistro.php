@@ -27,6 +27,22 @@ class ModelRegistro
         return false;
     }
 
+    public function findUserByUsername($username)
+    {
+        $sql = "SELECT * FROM users WHERE nombre_usuario = ?";
+        $stmt = $this->db->prepare($sql);
+
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "s", $username);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $user = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
+            return $user;
+        }
+        return false;
+    }
+
     // metodo guardar usuario
     public function saveUser($data)
     {
