@@ -8,6 +8,7 @@ use Controller\ControllerPerfil;
 use Controller\ControllerRegistro;
 use Controller\ControllerRanking;
 use Controller\ControllerEditor;
+use Controller\ControllerReporte;
 use Controller\ControllerSugerencia;
 use Model\ModelHome;
 use Model\ModelJuego;
@@ -16,6 +17,7 @@ use Model\ModelPartida;
 use Model\ModelRegistro;
 use Model\ModelRanking;
 use Model\ModelEditor;
+use Model\ModelReporte;
 use Model\ModelSugerencia;
 
 
@@ -28,6 +30,7 @@ include_once "controller/ControllerPartida.php";
 include_once "controller/ControllerRanking.php";
 include_once "controller/ControllerEditor.php";
 include_once "controller/ControllerSugerencia.php";
+include_once "controller/ControllerReporte.php";
 
 include_once "model/ModelRegistro.php";
 include_once "model/ModelLogin.php";
@@ -38,6 +41,7 @@ include_once "model/ModelPartida.php";
 include_once "model/ModelRanking.php";
 include_once "model/ModelEditor.php";
 include_once "model/ModelSugerencia.php";
+include_once "model/ModelReporte.php";
 
 include_once "helper/Database.php";
 include_once "helper/Presenter.php";
@@ -124,6 +128,11 @@ class Configuration
         return new ControllerSugerencia(self::getModelSugerencia(), self::getPresenter2());
     }
 
+    //CONTROLADOR REPORTE
+    public static function getControllerReporte() {
+        return new ControllerReporte(self::getModelReporte(), self::getPresenter2());
+    }
+
     // MODELO REGISTRO
     public static function getModelRegistro()
     {
@@ -185,6 +194,13 @@ class Configuration
         return new ModelSugerencia(self::getDatabase());
     }
 
+    //MODELO REPORTE
+
+    public static function getModelReporte()
+    {
+        return new ModelReporte(self::getDatabase());
+    }
+
     public static function getRouter()
     {
         return new Router(self::class,"getControllerLogin", "get");
@@ -194,6 +210,7 @@ class Configuration
     {
         return new Presenter();
     }
+    
 
 
 }

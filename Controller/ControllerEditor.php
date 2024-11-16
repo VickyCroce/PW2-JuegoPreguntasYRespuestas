@@ -4,6 +4,8 @@ namespace Controller;
 
 namespace Controller;
 
+use Model\ModelReporte;
+
 class ControllerEditor
 {
     private $model;
@@ -127,4 +129,37 @@ class ControllerEditor
             echo "Error: No se especificó un ID válido para eliminar la pregunta.";
         }
     }
+
+    //REPORTE
+    public function verPreguntasReportadas() {
+        // Obtén las preguntas reportadas del modelo
+        $reportes = $this->model->obtenerReportes();
+
+        // Llama a la vista y pasa los reportes
+        include 'view/reportarForm.mustache';
+    }
+    public function aceptarReporte($id) {
+        // Lógica para aceptar el reporte
+        // Eliminar la pregunta asociada al reporte de la base de datos
+
+        $this->model->eliminarPregunta($id); // Método para eliminar la pregunta de la base de datos
+        $this->model->eliminarReporte($id);  // Eliminar el reporte de la base de datos
+
+        // Redirigir de nuevo a la página de reportes
+        header("Location: /ruta/a/mostrarReportes"); // Cambia esta ruta por la correcta
+        exit();
+    }
+
+    public function rechazarReporte($id) {
+        // Lógica para rechazar el reporte
+        // Actualizar el estado del reporte a 'rechazado' pero no eliminar la pregunta
+
+
+        $this->model->rechazarReporte($id);  // Actualizar el estado del reporte
+
+        // Redirigir de nuevo a la página de reportes
+        header("Location: /ruta/a/mostrarReportes"); // Cambia esta ruta por la correcta
+        exit();
+    }
+
 }

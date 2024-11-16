@@ -86,6 +86,7 @@ CREATE TABLE reportes_preguntas (
     razon VARCHAR(255) NOT NULL,
     descripcion TEXT,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50),
     CONSTRAINT fk_reporta_usuario FOREIGN KEY (usuario_id) REFERENCES users(id),
     CONSTRAINT fk_reporta_pregunta FOREIGN KEY (pregunta_id) REFERENCES pregunta(id)
 );

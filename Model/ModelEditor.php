@@ -141,6 +141,40 @@ class ModelEditor
         }
     }
 
+    //REPORTE
+    public function obtenerReportes() {
+        $conexion = $this->db->getConexion();
+        $stmt = $conexion->prepare("SELECT r.id, p.descripcion AS pregunta, r.razon, r.descripcion, r.status
+                                    FROM reportes_preguntas r
+                                    JOIN Pregunta p ON r.pregunta_id = p.id
+                                    WHERE r.status = 'pendiente';");  // Solo los reportes pendientes
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $reportes = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $reportes[] = $row;
+        }
+
+        return $reportes;
+    }
+
+
+    public function eliminarReporte($id) {
+        // Eliminar el reporte de la base de datos
+        $sql = "DELETE FROM reportes_preguntas WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+    }
+
+    public function rechazarReporte($id) {
+        // Actualizar el estado del reporte a "rechazado"
+        $sql = "UPDATE reportes_preguntas SET status = 'rechazado' WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+    }
+
 
 
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reportes de Preguntas</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 900px; margin: 0 auto;">
+    <h1 class="w3-text-teal">Reportes de Preguntas</h1>
+
+    <?php if (!empty($reportes)): ?>
+    <table class="w3-table w3-bordered w3-striped w3-hoverable">
+        <thead>
+        <tr>
+            <th>ID Reporte</th>
+            <th>Pregunta</th>
+            <th>Razón</th>
+            <th>Descripción</th>
+            <th>Acciones</th> <!-- Columna para los botones de aceptar y rechazar -->
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($reportes as $reporte): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($reporte['id']); ?></td>
+            <td><?php echo htmlspecialchars($reporte['pregunta']); ?></td>
+            <td><?php echo htmlspecialchars($reporte['razon']); ?></td>
+            <td><?php echo htmlspecialchars($reporte['descripcion']); ?></td>
+            <td>
+                <!-- Formulario para aceptar el reporte -->
+                <form action="/ruta/a/aceptarReporte/<?php echo htmlspecialchars($reporte['id']); ?>" method="POST" style="display:inline;">
+                    <button type="submit" class="w3-button w3-green w3-round-large">Aceptar</button>
+                </form>
+                <!-- Formulario para rechazar el reporte -->
+                <form action="/ruta/a/rechazarReporte/<?php echo htmlspecialchars($reporte['id']); ?>" method="POST" style="display:inline;">
+                    <button type="submit" class="w3-button w3-red w3-round-large">Rechazar</button>
+                </form>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php else: ?>
+    <p>No hay preguntas reportadas en este momento.</p>
+    <?php endif; ?>
+
+    <div class="w3-margin-top">
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor" class="w3-button w3-blue w3-round-large w3-margin-bottom" style="width: 80%;">Volver</a>
+    </div>
+</div>
+
+</body>
+</html>
