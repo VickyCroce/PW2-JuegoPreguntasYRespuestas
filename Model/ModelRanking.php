@@ -13,7 +13,7 @@ class ModelRanking
     public function getRankingJugadores()
     {
         $sql = "
-    SELECT u.nombre_completo AS nombre, MAX(p.puntaje) AS puntuacion, u.id AS usuario_id
+    SELECT u.nombre_usuario AS nombre, MAX(p.puntaje) AS puntuacion, u.id AS usuario_id
     FROM Partida p
     INNER JOIN users u ON p.usuario_id = u.id
     WHERE u.rol NOT IN ('administrador', 'editor')

@@ -52,7 +52,7 @@ class ControllerPerfil
 
             if ($user) {
                 $user['partidas'] = $partidas;
-                echo $this->presenter->render('view/perfilAjeno.mustache', $user);
+                 $this->presenter->render('view/perfilAjeno.mustache', $user);
             } else {
                 echo "Usuario no encontrado.";
             }
