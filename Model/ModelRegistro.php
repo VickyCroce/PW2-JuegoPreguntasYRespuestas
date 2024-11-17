@@ -11,7 +11,7 @@ class ModelRegistro
     }
 
     //metodo para buscar usuario por mail
-    public function findUserByEmail($email)
+    public function buscarUsuarioPorCorreo($email)
     {
         $sql = "SELECT * FROM users WHERE email = ?";
         $stmt = $this->db->prepare($sql);
@@ -27,7 +27,7 @@ class ModelRegistro
         return false;
     }
 
-    public function findUserByUsername($username)
+    public function buscarUsuarioPorNombreUsuario($username)
     {
         $sql = "SELECT * FROM users WHERE nombre_usuario = ?";
         $stmt = $this->db->prepare($sql);
@@ -44,7 +44,7 @@ class ModelRegistro
     }
 
     // metodo guardar usuario
-    public function saveUser($data)
+    public function guardarUsuario($data)
     {
 
         $sql = "INSERT INTO users (nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil, verificado,rol) 
@@ -79,7 +79,7 @@ class ModelRegistro
     }
 
     //metodo para verificar usuario
-    public function verifyUser($email)
+    public function verificarUsuario($email)
     {
         $sql = "UPDATE users SET verificado = 1 WHERE email = ?";
         $stmt = $this->db->prepare($sql);

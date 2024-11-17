@@ -5,17 +5,17 @@ use MustachePresenter;
 class ControllerPerfil
 {
     private $model;
-    private $Mustachepresenter;
+    private $presenter;
 
-    public function __construct($model, MustachePresenter $Mustachepresenter)
+    public function __construct($model,$presenter)
     {
         $this->model = $model;
-        $this->Mustachepresenter = $Mustachepresenter;
+        $this->presenter = $presenter;
     }
 
     public function get()
     {
-        $this->Mustachepresenter->render('view/perfil.mustache');
+        $this->presenter->render('view/perfil.mustache');
     }
 
 
@@ -40,7 +40,7 @@ class ControllerPerfil
     // Función para renderizar la vista del perfil
     private function renderProfileView($user)
     {
-        echo $this->Mustachepresenter->render('view/perfil.mustache', $user);
+        echo $this->presenter->render('view/perfil.mustache', $user);
     }
 
     public function showPerfilAjeno()
@@ -52,7 +52,7 @@ class ControllerPerfil
 
             if ($user) {
                 $user['partidas'] = $partidas;
-                echo $this->Mustachepresenter->render('view/perfilAjeno.mustache', $user);
+                echo $this->presenter->render('view/perfilAjeno.mustache', $user);
             } else {
                 echo "Usuario no encontrado.";
             }

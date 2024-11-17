@@ -18,7 +18,6 @@ class ControllerRanking
     {
         $jugadores = $this->model->getRankingJugadores();
 
-
         $this->presenter->render('view/ranking.mustache', [
             'jugadores' => $jugadores
         ]);
