@@ -19,7 +19,7 @@
             <th>Pregunta</th>
             <th>Razón</th>
             <th>Descripción</th>
-            <th>Acciones</th> <!-- Columna para los botones de aceptar y rechazar -->
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -30,12 +30,12 @@
             <td><?php echo htmlspecialchars($reporte['razon']); ?></td>
             <td><?php echo htmlspecialchars($reporte['descripcion']); ?></td>
             <td>
-                <!-- Formulario para aceptar el reporte -->
-                <form action="/ruta/a/aceptarReporte/<?php echo htmlspecialchars($reporte['id']); ?>" method="POST" style="display:inline;">
+                <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/aceptarReporte" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($reporte['id']); ?>">
                     <button type="submit" class="w3-button w3-green w3-round-large">Aceptar</button>
                 </form>
-                <!-- Formulario para rechazar el reporte -->
-                <form action="/ruta/a/rechazarReporte/<?php echo htmlspecialchars($reporte['id']); ?>" method="POST" style="display:inline;">
+                <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/rechazarReporte" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($reporte['id']); ?>">
                     <button type="submit" class="w3-button w3-red w3-round-large">Rechazar</button>
                 </form>
             </td>

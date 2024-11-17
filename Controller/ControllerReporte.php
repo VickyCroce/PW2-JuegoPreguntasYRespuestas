@@ -34,24 +34,6 @@ class ControllerReporte
             echo "Faltan datos requeridos para procesar el reporte.";
         }
     }
-   /* public function postReportarPregunta($data) {
-        $pregunta_id = isset($data['pregunta_id']) ? $data['pregunta_id'] : null;
-        $usuario_id = isset($data['usuario_id']) ? $data['usuario_id'] : null;
-        $razon = isset($data['razon']) ? $data['razon'] : '';
-        $descripcion = isset($data['descripcion']) ? $data['descripcion'] : '';
-        $status = isset($data['reporte_status']) ? $data['reporte_status'] : 'pendiente';
-
-            $this->modelReporte->guardarReporte($pregunta_id, $usuario_id, $razon, $descripcion, $status);
-
-            // Redirige al usuario al inicio después de reportar la pregunta
-            header('Location: /PW2-JuegoPreguntasYRespuestas/ControllerInicio');
-            exit;
-        /*if ($pregunta_id && $usuario_id) {
-            $this->modelReporte->guardarReporte($pregunta_id, $usuario_id, $razon, $descripcion, $status);
-        } else {
-            echo "Faltan datos requeridos para procesar el reporte.<br>";
-        }*/
-
 
 
 }

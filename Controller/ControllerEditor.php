@@ -132,34 +132,30 @@ class ControllerEditor
 
     //REPORTE
     public function verPreguntasReportadas() {
-        // Obtén las preguntas reportadas del modelo
         $reportes = $this->model->obtenerReportes();
-
-        // Llama a la vista y pasa los reportes
         include 'view/reportarForm.mustache';
     }
     public function aceptarReporte($id) {
-        // Lógica para aceptar el reporte
-        // Eliminar la pregunta asociada al reporte de la base de datos
-
-        $this->model->eliminarPregunta($id); // Método para eliminar la pregunta de la base de datos
-        $this->model->eliminarReporte($id);  // Eliminar el reporte de la base de datos
-
-        // Redirigir de nuevo a la página de reportes
-        header("Location: /ruta/a/mostrarReportes"); // Cambia esta ruta por la correcta
-        exit();
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $this->model->eliminarPreguntaYReporte($id);
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasReportadas");
+            exit();
+        }else {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/reportes?error=true");
+            exit();
+        }
     }
 
-    public function rechazarReporte($id) {
-        // Lógica para rechazar el reporte
-        // Actualizar el estado del reporte a 'rechazado' pero no eliminar la pregunta
-
-
-        $this->model->rechazarReporte($id);  // Actualizar el estado del reporte
-
-        // Redirigir de nuevo a la página de reportes
-        header("Location: /ruta/a/mostrarReportes"); // Cambia esta ruta por la correcta
-        exit();
+    public function rechazarReporte() {
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $this->model->rechazarReporte($id);
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasReportadas");
+            exit();
+        } else {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/reportes?error=true");
+            exit();
+        }
     }
-
 }
