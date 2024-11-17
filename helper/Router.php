@@ -9,7 +9,6 @@ class Router
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
         $this->configuration = $configuration;
-
     }
 
     public function route($controllerName, $methodName, $param = null) {
@@ -53,7 +52,6 @@ class Router
             call_user_func(array($controller, $validMethod));
         }
     }
-
 
 
 }
