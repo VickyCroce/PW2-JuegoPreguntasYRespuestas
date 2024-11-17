@@ -78,20 +78,45 @@ CREATE TABLE Respuesta
     FOREIGN KEY (pregunta_id) REFERENCES Pregunta (id)
 );
 
-CREATE TABLE preguntas_mostradas (
-                                     id INT AUTO_INCREMENT PRIMARY KEY,
-                                     usuario_id INT NOT NULL,
-                                     pregunta_id INT NOT NULL,
-                                     fecha_mostrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                     FOREIGN KEY (usuario_id) REFERENCES users(id),
-                                     FOREIGN KEY (pregunta_id) REFERENCES Pregunta(id)
+-- Tabla para reportes de preguntas
+CREATE TABLE reportes_preguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    razon VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50),
+    CONSTRAINT fk_reporta_usuario FOREIGN KEY (usuario_id) REFERENCES users(id),
+    CONSTRAINT fk_reporta_pregunta FOREIGN KEY (pregunta_id) REFERENCES pregunta(id)
 );
+
+
+-- Tabla para sugerencias de preguntas
+CREATE TABLE sugerencias_preguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    pregunta_sugerida TEXT NOT NULL,
+    categoria VARCHAR(255) NOT NULL,
+    estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_sugerencia FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- Tabla para sugerencias de respuestas en base a una pregunta
+CREATE TABLE sugerencias_respuestas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sugerencia_pregunta_id INT NOT NULL,
+    usuario_id INT,
+    respuesta_sugerida TEXT NOT NULL,
+    CONSTRAINT fk_sugerencia_pregunta FOREIGN KEY (sugerencia_pregunta_id) REFERENCES sugerencias_preguntas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_usuario_respuesta FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+
 INSERT INTO users(id,nombre_completo,anio_nacimiento,sexo,pais,ciudad,email,password,nombre_usuario,foto_perfil,cantidad_dadas,cantidad_acertadas,ratio,verificado,fecha_registro,rol)
     VALUES (1,'Editor', "1985-01-02", "Masculino","Argentina","Buenos Aires",'editor@gmail.com',
         'editor1234', 'editor',null,0,0,0,1,"2000-01-10",'Editor');
-        
-INSERT INTO users (id,nombre_completo,anio_nacimiento,sexo,pais,ciudad,email,password,nombre_usuario,foto_perfil,cantidad_dadas,cantidad_acertadas,ratio,verificado,fecha_registro,rol)
-VALUES (2,'Administrador', "2000-01-01",'Prefiero no cargarlo', "Argentina", "Buenos Aires", 'administrador@admin.com', 'admin1234', 'administrador', null,0,0,0,1,"2000-01-01", 'Administrador');
 
         -- Insertar datos en la tabla Categoría
 INSERT INTO Categoria (id, nombre, color) VALUES

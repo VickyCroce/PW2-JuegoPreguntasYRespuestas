@@ -2,6 +2,9 @@
 
 namespace Controller;
 
+use Model\ModelReporte;
+
+
 class ControllerEditor
 {
     private $model;
@@ -136,6 +139,35 @@ class ControllerEditor
             exit();
         } else {
             echo "Error: No se especificó un ID válido para eliminar la pregunta.";
+        }
+    }
+
+    //REPORTE
+    public function verPreguntasReportadas() {
+        $reportes = $this->model->obtenerReportes();
+        include 'view/reportarForm.mustache';
+    }
+    public function aceptarReporte($id) {
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $this->model->eliminarPreguntaYReporte($id);
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasReportadas");
+            exit();
+        }else {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/reportes?error=true");
+            exit();
+        }
+    }
+
+    public function rechazarReporte() {
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $this->model->rechazarReporte($id);
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasReportadas");
+            exit();
+        } else {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/reportes?error=true");
+            exit();
         }
     }
 }

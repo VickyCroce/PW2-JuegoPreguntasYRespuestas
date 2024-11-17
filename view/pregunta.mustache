@@ -24,6 +24,33 @@
         <button type="submit" class="w3-button w3-green w3-round">Responder</button>
     </form>
     <p>Puntuación actual: {{puntuacion}}</p>
+
+    <!-- Botón para abrir el popup de reporte -->
+    <button onclick="document.getElementById('idReporteModal').style.display='block'" class="w3-button w3-red w3-round">Reportar esta pregunta</button>
+
+    <!-- El Modal (Popup) para el reporte -->
+    <div id="idReporteModal" class="w3-modal">
+        <div class="w3-modal-content w3-animate-zoom">
+            <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('idReporteModal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <h2>Reportar Pregunta</h2>
+            </header>
+            <div class="w3-container">
+                <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerReporte/postReportarPregunta">
+                    <input type="hidden" name="pregunta_id" value="{{pregunta.id}}">
+                    <p>{{pregunta.descripcion}}</p>
+
+                    <label for="razon">Razón del reporte:</label>
+                    <input type="text" id="razon" name="razon" required class="w3-input w3-border w3-round">
+
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" class="w3-input w3-border w3-round"></textarea>
+                    <input type="hidden" name="reporte_status" value="pendiente">
+                    <button type="submit" class="w3-button w3-blue w3-round">Enviar reporte</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var puntuacion = {{puntuacion}};

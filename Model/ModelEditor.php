@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use Exception;
+
 class ModelEditor
 {
     private $db;
@@ -147,6 +149,51 @@ class ModelEditor
             $stmtRespuesta->execute();
             $stmtRespuesta->close();
         }
+    }
+
+    //REPORTE
+    public function obtenerReportes() {
+        $conexion = $this->db->getConexion();
+        $stmt = $conexion->prepare("SELECT r.id, p.descripcion AS pregunta, r.razon, r.descripcion 
+                                FROM reportes_preguntas r
+                                JOIN Pregunta p ON r.pregunta_id = p.id
+                                WHERE r.status = 'pendiente';");
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $reportes = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $reportes[] = $row;
+        }
+
+        return $reportes;
+    }
+
+    public function eliminarPreguntaYReporte($id) {
+        // Eliminar las respuestas asociadas con la pregunta reportada
+        $sqlRespuestas = "DELETE FROM respuesta WHERE pregunta_id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
+        $stmtRespuestas = $this->db->prepare($sqlRespuestas);
+        $stmtRespuestas->bind_param("i", $id);
+        $stmtRespuestas->execute();
+
+        //  Eliminar el reporte de la base de datos
+        $sqlReporte = "DELETE FROM reportes_preguntas WHERE id = ?";
+        $stmtReporte = $this->db->prepare($sqlReporte);
+        $stmtReporte->bind_param("i", $id);
+        $stmtReporte->execute();
+
+        // Eliminar la pregunta
+        $sqlPregunta = "DELETE FROM pregunta WHERE id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
+        $stmtPregunta = $this->db->prepare($sqlPregunta);
+        $stmtPregunta->bind_param("i", $id);
+        $stmtPregunta->execute();
+    }
+
+    public function rechazarReporte($id) {
+        $sql = "UPDATE reportes_preguntas SET status = 'rechazado' WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
     }
 
 
