@@ -137,6 +137,12 @@ class Configuration
         return new ControllerReporte(self::getModelReporte(), self::getPresenter2());
     }
 
+    //CONTROLADOR ADMIN
+
+    public static function getControllerAdmin() {
+        return new ControllerAdmin(self::getModelAdmin(), self::getPresenter2());
+    }
+
     // MODELO REGISTRO
     public static function getModelRegistro()
     {
@@ -205,6 +211,11 @@ class Configuration
         return new ModelReporte(self::getDatabase());
     }
 
+    //MODELO ADMIN
+    public static function getModelAdmin()
+    {
+        return new ModelAdmin(self::getDatabase());
+    }
     public static function getRouter()
     {
         return new Router(self::class,"getControllerLogin", "get");
@@ -213,13 +224,6 @@ class Configuration
     private static function getPresenter()
     {
         return new Presenter();
-    }
-
-    public static function getControllerAdmin() {
-        return new ControllerAdmin(self::getModelAdmin(), self::getPresenter2());
-    }
-    public static function getModelAdmin() {
-        return new ModelAdmin(self::getDatabase());
     }
 
 }

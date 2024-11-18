@@ -16,7 +16,7 @@ class ControllerAdmin
 
 
     private function checkAdministrador() {
-        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'Administrador')) {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'administrador')) {
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
             exit();
         }
@@ -25,16 +25,17 @@ class ControllerAdmin
 
     public function get(){
         $this->checkAdministrador();
-
+        $fechaInicio = '2024-11-01';
+        $fechaFin = '2024-11-18';
         $data = [
             'cantidadJugadores' => $this->model->getCantidadJugadores(),
-        /**    'cantidadPartidas' => $this->model->getCantidadPartidas(),
+           'cantidadPartidas' => $this->model->getCantidadPartidas(),
             'cantidadPreguntasJuego' => $this->model->getCantidadPreguntasJuego(),
             'cantidadPreguntasCreadas' => $this->model->getCantidadPreguntasCreadas(),
-            'cantidadUsuariosNuevos' => $this->model->getCantidadUsuariosNuevos(),
+            'cantidadUsuariosNuevos' => $this->model->getCantidadUsuariosNuevos($fechaInicio, $fechaFin),
             'usuariosPorPais' => $this->model->getUsuariosPorPais(),
             'usuariosPorSexo' => $this->model->getUsuariosPorSexo(),
-            'usuariosPorEdad' => $this->model->getUsuariosPorEdad(),**/
+            'usuariosPorEdad' => $this->model->getUsuariosPorEdad()
         ];
 
 

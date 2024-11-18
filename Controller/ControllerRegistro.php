@@ -37,7 +37,7 @@ class ControllerRegistro
             }
 
             $datos['foto_perfil'] = $this->manejarFotoPerfil($_FILES['foto_perfil'] ?? null);
-            $datos['password'] = $datos['password']; // Sin aplicar hash (puedes modificar esto)
+            $datos['password'] = $datos['password'];
 
             if ($this->modelo->guardarUsuario($datos)) {
                 $_SESSION['usuario_temporal'] = $datos;
@@ -96,7 +96,9 @@ class ControllerRegistro
     // Sanitiza y valida la entrada del usuario
     private function sanitizarEntradaUsuario($entrada)
     {
-        return array_map(fn($valor) => htmlspecialchars(trim($valor), ENT_QUOTES, 'UTF-8'), $entrada);
+        return array_map(function ($valor) {
+            return htmlspecialchars(trim($valor), ENT_QUOTES, 'UTF-8');
+        }, $entrada);
     }
 
     // Valida los datos del registro

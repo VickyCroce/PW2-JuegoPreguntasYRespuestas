@@ -25,7 +25,7 @@ class GenerarGraficos {
         $barplot->SetFillColor('orange');
 
 
-        $imagePath = 'public/images/temp_graph.png';
+        $imagePath = 'public/img/temp_graph.png';
 
 
         $graph->Stroke($imagePath);

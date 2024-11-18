@@ -14,12 +14,6 @@ class ControllerHome
 
     public function get()
     {
-        if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] === 'Administrador') {
-
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerAdmin");
-            exit();
-        }
-
         $nombre_usuario = isset($_SESSION['usuario']['nombre_usuario']) ? $_SESSION['usuario']['nombre_usuario'] : 'Invitado';
         $usuario_id = $_SESSION['usuario']['id'];
 
