@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 class GenerarGraficos {
 
@@ -41,5 +40,4 @@ class GenerarGraficos {
     }
 }
 
-$grafico = new GenerarGraficos();
-$grafico->obtenerGrafico();
+

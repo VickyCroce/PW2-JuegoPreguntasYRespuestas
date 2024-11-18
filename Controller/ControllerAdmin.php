@@ -23,36 +23,40 @@ class ControllerAdmin
     }
 
 
-    public function get(){
+    public function get()
+    {
         $this->checkAdministrador();
-        $fechaInicio = '2024-11-01';
+        $fechaInicio = '2024-11-11';
         $fechaFin = '2024-11-18';
         $data = [
             'cantidadJugadores' => $this->model->getCantidadJugadores(),
-           'cantidadPartidas' => $this->model->getCantidadPartidas(),
+            'cantidadPartidas' => $this->model->getCantidadPartidas(),
             'cantidadPreguntasJuego' => $this->model->getCantidadPreguntasJuego(),
             'cantidadPreguntasCreadas' => $this->model->getCantidadPreguntasCreadas(),
             'cantidadUsuariosNuevos' => $this->model->getCantidadUsuariosNuevos($fechaInicio, $fechaFin),
+            'porcentajeCorrectas' => $this->model->getRatioPorUsuario(),
             'usuariosPorPais' => $this->model->getUsuariosPorPais(),
             'usuariosPorSexo' => $this->model->getUsuariosPorSexo(),
             'usuariosPorEdad' => $this->model->getUsuariosPorEdad()
         ];
 
-
-        $this->presenter->render('view/admin.mustache', $data);
+        $this->presenter->render('view/admin.mustache', $data); // Enviando los datos al presentador
+        $grafico = new GenerarGraficos();
+        $grafico->obtenerGrafico();
     }
+
 
     // Método para obtener el gráfico generado y enviarlo como respuesta
     public function getGrafico()
         {
-        // Leer el filtro de la solicitud
+
         $filtro = $_GET['filtroFecha'] ?? 'dia';
 
-        // Crear instancia de GenerarGraficos y generar el gráfico según el filtro
+
         $grafico = new GenerarGraficos();
         $filePath = $grafico->crearGraficoUsuariosPorPais($filtro);
 
-        // Enviar la imagen como respuesta
+
         header('Content-Type: image/png');
         readfile($filePath);
         exit();

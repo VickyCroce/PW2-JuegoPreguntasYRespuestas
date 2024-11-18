@@ -29,7 +29,17 @@ class Database
 
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+    public function query2($sql){
+        $result = mysqli_query($this->conexion, $sql);
+        if(mysqli_num_rows($result) == 1)
+            return mysqli_fetch_assoc($result);
+        return mysqli_fetch_all($result,MYSQLI_ASSOC);
+    }
+// Si estás usando una clase Database personalizada, verifica si tiene un método getError()
 
+    public function getError() {
+        return $this->mysqli->error;
+    }
 
     public function execute($sql)
     {
