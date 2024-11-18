@@ -51,6 +51,7 @@ include_once "helper/Database.php";
 include_once "helper/Presenter.php";
 include_once "helper/MustachePresenter.php";
 include_once "helper/Router.php";
+include_once "helper/GenerarGraficos.php";
 include_once("vendor\mustache\mustache\src\Mustache\Autoloader.php");
 class Configuration
 {
@@ -225,5 +226,7 @@ class Configuration
     {
         return new Presenter();
     }
+
+
 
 }
