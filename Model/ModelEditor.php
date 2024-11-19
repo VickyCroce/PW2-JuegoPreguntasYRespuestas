@@ -171,23 +171,16 @@ class ModelEditor
     }
 
     public function eliminarPreguntaYReporte($id) {
-        // Eliminar las respuestas asociadas con la pregunta reportada
-        $sqlRespuestas = "DELETE FROM respuesta WHERE pregunta_id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
-        $stmtRespuestas = $this->db->prepare($sqlRespuestas);
-        $stmtRespuestas->bind_param("i", $id);
-        $stmtRespuestas->execute();
-
-        //  Eliminar el reporte de la base de datos
-        $sqlReporte = "DELETE FROM reportes_preguntas WHERE id = ?";
+        $sqlReporte = "UPDATE reportes_preguntas SET status = 'aprobado' WHERE id = ?";
         $stmtReporte = $this->db->prepare($sqlReporte);
         $stmtReporte->bind_param("i", $id);
         $stmtReporte->execute();
 
-        // Eliminar la pregunta
-        $sqlPregunta = "DELETE FROM pregunta WHERE id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
-        $stmtPregunta = $this->db->prepare($sqlPregunta);
-        $stmtPregunta->bind_param("i", $id);
-        $stmtPregunta->execute();
+        // Actualizar la columna esValido a 0 en la tabla pregunta
+        $sqlActualizarPregunta = "UPDATE pregunta SET esValido = 0 WHERE id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
+        $stmtActualizarPregunta = $this->db->prepare($sqlActualizarPregunta);
+        $stmtActualizarPregunta->bind_param("i", $id);
+        $stmtActualizarPregunta->execute();
     }
 
     public function rechazarReporte($id) {
