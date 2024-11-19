@@ -14,9 +14,14 @@ class ControllerSugerencia
         $this->presenter = $presenter;
     }
 
-    // Mostrar formulario para crear una sugerencia de pregunta
+    private function checkJugador() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
     public function mostrarFormularioSugerencia()
-    {
+    {   $this->checkJugador();
         // Verificar si el usuario está en sesión
         if (isset($_SESSION['usuario']['id'])) {
             $usuarioId = $_SESSION['usuario']['id'];
@@ -33,7 +38,7 @@ class ControllerSugerencia
 
     // Guardar una nueva sugerencia de pregunta
     public function guardarSugerenciaPregunta()
-    {
+    {   $this->checkJugador();
         // Verificar si el usuario está logueado
         if (isset($_POST['usuario_id'])) {
             $usuarioId = $_POST['usuario_id'];

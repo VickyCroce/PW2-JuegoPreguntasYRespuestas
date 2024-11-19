@@ -170,4 +170,55 @@ class ControllerEditor
             exit();
         }
     }
+
+    public function verPreguntasSugeridas() {
+        $preguntas = $this->model->obtenerPreguntasSugeridas();
+
+        foreach ($preguntas as &$pregunta) {
+            $pregunta['respuestas'] = $this->model->obtenerRespuestasPorPreguntaSugeridaId($pregunta['id']);
+        }
+
+        $this->presenter->render('view/mostrarSugerencias.mustache', [
+            'preguntas' => $preguntas
+        ]);
+    }
+
+    public function aceptarPreguntaSugerida()
+    {
+        $this->checkEditor();
+
+        if (isset($_POST['id'])) {
+            $preguntaSugeridaId = $_POST['id'];
+
+            // Obtener la pregunta sugerida y sus respuestas
+            $preguntaSugerida = $this->model->getPreguntaSugeridaById($preguntaSugeridaId);
+            $respuestasSugeridas = $this->model->getRespuestasSugeridasByPreguntaId($preguntaSugeridaId);
+
+            if ($preguntaSugerida && $respuestasSugeridas) {
+                // Guardar la pregunta en la tabla `pregunta`
+                $categoriaId = $this->model->getCategoriaId($preguntaSugerida['categoria']);
+                $preguntaId = $this->model->guardarPregunta(
+                    $preguntaSugerida['descripcion'],
+                    $categoriaId,
+                    array_column($respuestasSugeridas, 'descripcion'),
+                    array_search(true, array_column($respuestasSugeridas, 'es_correcta')) + 1
+                );
+
+                // Eliminar la sugerencia de pregunta tras ser aceptada
+                $this->model->eliminarPreguntaSugerida($preguntaSugeridaId);
+
+                header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasSugeridas?success=true");
+                exit();
+            }
+        }
+
+        header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasSugeridas?error=true");
+        exit();
+    }
+
+
+
+
+
+
 }

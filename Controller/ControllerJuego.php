@@ -18,9 +18,14 @@ class ControllerJuego
         }
         $this->puntuacion = $_SESSION['puntuacion'];
     }
-
+    private function checkJugador() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
     public function iniciarPartida()
-    {
+    {   $this->checkJugador();
         $usuarioId = $_SESSION['usuario']['id'];
         $ultimoId = $this->model->getUltimoIdPartida();
         $nombrePartida = "Partida " . ($ultimoId + 1);
@@ -40,7 +45,7 @@ class ControllerJuego
 
 
     public function mostrarPregunta()
-    {
+    {   $this->checkJugador();
         $usuarioId = $_SESSION['usuario']['id'];
         if (isset($_SESSION['pregunta_actual'])) {
             $pregunta = $_SESSION['pregunta_actual'];
@@ -77,7 +82,7 @@ class ControllerJuego
 
 
     public function verificarRespuesta()
-    {
+    {   $this->checkJugador();
         if (!isset($_SESSION['pregunta_token']) || $_SESSION['pregunta_token'] !== $_POST['pregunta_token']) {
             $this->finalizarPorRecarga();
             return;
@@ -138,7 +143,7 @@ class ControllerJuego
 
 
     private function finalizarPorRecarga()
-    {
+    {   $this->checkJugador();
         $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
         $this->presenter->render('view/resultado.mustache', [
             'correta' => false,
@@ -148,7 +153,7 @@ class ControllerJuego
     }
 
     private function letraSinSeleccionar()
-    {
+    {   $this->checkJugador();
         $this->model->actualizarContadoresUsuario($_SESSION['usuario']['id'], false);
         $this->presenter->render('view/resultado.mustache', [
             'correta' => false,
@@ -158,7 +163,7 @@ class ControllerJuego
     }
 
     public function reiniciarJuego()
-    {
+    {   $this->checkJugador();
         $_SESSION['puntuacion'] = 0;
         $this->puntuacion = 0;
         $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));

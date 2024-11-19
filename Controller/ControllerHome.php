@@ -11,9 +11,14 @@ class ControllerHome
         $this->model = $model;
         $this->presenter = $presenter;
     }
-
+    private function checkJugador() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
     public function get()
-    {
+    {   $this->checkJugador();
         $nombre_usuario = isset($_SESSION['usuario']['nombre_usuario']) ? $_SESSION['usuario']['nombre_usuario'] : 'Invitado';
         $usuario_id = $_SESSION['usuario']['id'];
 

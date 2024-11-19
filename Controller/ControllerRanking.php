@@ -13,9 +13,14 @@ class ControllerRanking
         $this->presenter = $presenter;
     }
 
-
+    private function checkJugador() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
     public function mostrarRanking()
-    {
+    {   $this->checkJugador();
         $jugadores = $this->model->getRankingJugadores();
 
         $this->presenter->render('view/ranking.mustache', [

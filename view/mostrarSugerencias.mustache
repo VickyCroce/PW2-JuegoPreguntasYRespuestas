@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preguntas Sugeridas</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 900px; margin: 0 auto;">
+    <h1 class="w3-text-teal">Preguntas Sugeridas</h1>
+
+    <table class="w3-table w3-bordered w3-striped w3-hoverable">
+        <thead>
+        <tr>
+            <th>Pregunta</th>
+            <th>Respuestas</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#preguntas}}
+            <tr>
+                <!-- Mostrar la pregunta -->
+                <td>{{pregunta_sugerida}}</td>
+
+                <!-- Mostrar las respuestas -->
+                <td>
+                    <ul>
+                        {{#respuestas}}
+                            <li>
+                                {{respuesta_sugerida}}
+                                {{#es_correcta}}(Correcta){{/es_correcta}}
+                            </li>
+                        {{/respuestas}}
+                    </ul>
+                </td>
+
+                <!-- Botones de acciones -->
+                <td>
+                    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/aceptarPreguntaSugerida" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button type="submit" class="w3-button w3-green w3-round-large">Aceptar</button>
+                    </form>
+                    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/rechazarPreguntaSugerida" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button type="submit" class="w3-button w3-red w3-round-large">Rechazar</button>
+                    </form>
+                </td>
+            </tr>
+        {{/preguntas}}
+        </tbody>
+    </table>
+
+
+
+    <div class="w3-margin-top">
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor" class="w3-button w3-teal w3-round-large w3-margin-bottom" style="width: 80%;">Volver</a>
+    </div>
+</div>
+
+</body>
+</html>

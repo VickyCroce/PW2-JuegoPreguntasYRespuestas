@@ -60,23 +60,23 @@ class ControllerAdmin
         $this->checkAdministrador();
         $this->limpiarCarpeta();
 
-        // Obtener datos para ambos gráficos
+
         $usuariosPorPais = $this->model->getUsuariosPorPais();
         $usuariosPorSexo = $this->model->getUsuariosPorSexo();
         $usuariosPorEdad = $this->model->getUsuariosPorEdad();
 
-        // Generar el gráfico de usuarios por país
+
         $labelsPais = array_column($usuariosPorPais, 'pais');
         $valuesPais = array_column($usuariosPorPais, 'cantidad');
         $grafico = new GenerarGraficos();
         $filePathPais = $grafico->generarGrafico($valuesPais, $labelsPais, 'Usuarios por País');
 
-        // Generar el gráfico de usuarios por sexo
+
         $labelsSexo = array_column($usuariosPorSexo, 'sexo');
         $valuesSexo = array_column($usuariosPorSexo, 'cantidad');
         $filePathSexo = $grafico->generarGrafico($valuesSexo, $labelsSexo, 'Usuarios por Sexo');
 
-        // Generar el gráfico de usuarios por sexo
+
         $labelsEdad = array_column($usuariosPorEdad, 'rango_edad');
         $valuesEdad = array_column($usuariosPorEdad, 'cantidad');
         $filePathEdad = $grafico->generarGrafico($valuesEdad, $labelsEdad, 'Usuarios por Edad');
@@ -97,6 +97,7 @@ class ControllerAdmin
 
     public function limpiarCarpeta()
     {
+        $this->checkAdministrador();
         // Función para limpiar la carpeta public/img/grafico/
         $carpeta = 'public/img/Grafico/';
 

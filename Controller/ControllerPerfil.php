@@ -13,15 +13,21 @@ class ControllerPerfil
         $this->presenter = $presenter;
     }
 
+    private function checkJugador() {
+        if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            exit();
+        }
+    }
     public function get()
-    {
+    {   $this->checkJugador();
         $this->presenter->render('view/perfil.mustache');
     }
 
 
     // Funcion para mostrar el perfil del usuario
     public function showProfile()
-    {
+    {   $this->checkJugador();
         if (isset($_GET['username'])) {
             $username = $_GET['username'];
             $user = $this->model->getUserProfile($username);
@@ -39,12 +45,12 @@ class ControllerPerfil
 
     // Función para renderizar la vista del perfil
     private function renderProfileView($user)
-    {
+    {   $this->checkJugador();
         echo $this->presenter->render('view/perfil.mustache', $user);
     }
 
     public function showPerfilAjeno()
-    {
+    {   $this->checkJugador();
         if (isset($_GET['id'])) {
             $usuario_id = $_GET['id'];
             $user = $this->model->findById($usuario_id);
