@@ -65,6 +65,7 @@ class ControllerAdmin
         $grafico = new GenerarGraficos();
         $filePathPais = $grafico->generarGrafico($valuesPais, $labelsPais, 'Usuarios por País');
 
+
         // Generar el gráfico de usuarios por sexo
         $labelsSexo = array_column($usuariosPorSexo, 'sexo');
         $valuesSexo = array_column($usuariosPorSexo, 'cantidad');
@@ -74,8 +75,8 @@ class ControllerAdmin
         if (file_exists($filePathPais) && file_exists($filePathSexo)) {
             header('Content-Type: application/json');
             echo json_encode([
-                'graficoPais' => $filePathPais,
-                'graficoSexo' => $filePathSexo
+                'graficoPais' => 'public/img/Grafico/' . $filePathPais,
+                'graficoSexo' => 'public/img/Grafico/' . $filePathSexo
             ]);
             exit();
         } else {
@@ -83,15 +84,16 @@ class ControllerAdmin
             echo json_encode(['error' => 'No se pudo generar los gráficos.']);
             exit();
         }
-    }
 
+
+
+    }
 
     public function limpiarCarpeta()
     {
         // Función para limpiar la carpeta public/img/grafico/
         $carpeta = 'public/img/Grafico/';
 
-        // Asegurarse de que el camino tenga una barra diagonal al final
         $carpeta = rtrim($carpeta, '/') . '/';
 
         if (is_dir($carpeta) && strpos(realpath($carpeta), realpath('public/img/Grafico')) === 0) {
