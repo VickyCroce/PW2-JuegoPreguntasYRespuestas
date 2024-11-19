@@ -10,7 +10,7 @@ function add() {
     // Verifica si el tiempo ha llegado a cero
     if (sec <= 0) {
         clearTimeout(t); // Detiene el temporizador
-        alert("Tiempo agotado. Tu puntaje final es" +""+ puntuacion);
+        alert("Tiempo agotado. Tu puntaje final es " +""+ puntuacion);
         window.location.href = "/PW2-JuegoPreguntasYRespuestas/ControllerHome/get";
     } else {
         timer();
