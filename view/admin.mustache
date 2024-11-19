@@ -60,81 +60,24 @@
         </table>
     </div>
 
-
-
-
+    <!-- Demografía de Usuarios -->
+    <div class="w3-padding-large w3-margin-top">
+        <h2 class="w3-text-dark-grey">Demografía de Usuarios</h2>
         <div class="w3-padding-large w3-margin-top">
-            <h2 class="w3-text-dark-grey">Gráfico de Usuarios por País</h2>
-            <img src="{{graficoPais}}" alt="Gráfico de Usuarios por País" class="w3-image" style="width:100%; max-width:800px;">
+            <h2 class="w3-text-dark-grey">Gráfico de Usuarios por País </h2>
+            <img src="/PW2-JuegoPreguntasYRespuestas//{{graficoPais}}" alt="Gráfico de Usuarios por País" class="w3-image" style="width:100%; max-width:800px;">
+
         </div>
 
         <div class="w3-padding-large w3-margin-top">
             <h2 class="w3-text-dark-grey">Gráfico de Usuarios por Sexo</h2>
-            <img src="{{graficoSexo}}" alt="Gráfico de Usuarios por Sexo" class="w3-image" style="width:100%; max-width:800px;">
+            <img src="/PW2-JuegoPreguntasYRespuestas/{{graficoSexo}}" alt="Gráfico de Usuarios por Sexo" class="w3-image" style="width:100%; max-width:800px;">
         </div>
 
-
-    </div>
-
-    <!-- Demografía de Usuarios -->
-    <div class="w3-padding-large w3-margin-top">
-        <h2 class="w3-text-dark-grey">Demografía de Usuarios</h2>
-        <!-- Usuarios por país -->
-        <h3 class="w3-text-teal">Por País</h3>
-        <table class="w3-table w3-bordered w3-striped w3-centered">
-            <thead>
-            <tr class="w3-light-grey">
-                <th>País</th>
-                <th>Cantidad</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#usuariosPorPais}}
-                <tr>
-                    <td>{{pais}}</td>
-                    <td>{{cantidad}}</td>
-                </tr>
-            {{/usuariosPorPais}}
-            </tbody>
-        </table>
-
-        <!-- Usuarios por sexo -->
-        <h3 class="w3-text-teal w3-margin-top">Por Sexo</h3>
-        <table class="w3-table w3-bordered w3-striped w3-centered">
-            <thead>
-            <tr class="w3-light-grey">
-                <th>Sexo</th>
-                <th>Cantidad</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#usuariosPorSexo}}
-                <tr>
-                    <td>{{sexo}}</td>
-                    <td>{{cantidad}}</td>
-                </tr>
-            {{/usuariosPorSexo}}
-            </tbody>
-        </table>
-
-        <!-- Usuarios por grupo de edad -->
-        <h3 class="w3-text-teal w3-margin-top">Por Grupo de Edad</h3>
-        <table class="w3-table w3-bordered w3-striped w3-centered">
-            <thead>
-            <tr class="w3-light-grey">
-                <th>Grupo de Edad</th>
-                <th>Cantidad</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#usuariosPorEdad}}
-                <tr>
-                    <td>{{grupoEdad}}</td>
-                    <td>{{cantidad}}</td>
-                </tr>
-            {{/usuariosPorEdad}}
-            </tbody>
-        </table>
+        <div class="w3-padding-large w3-margin-top">
+            <h2 class="w3-text-dark-grey">Gráfico de Usuarios por rango de edad</h2>
+            <img src="/PW2-JuegoPreguntasYRespuestas/{{graficoEdad}}" alt="Gráfico de Usuarios por edad" class="w3-image" style="width:100%; max-width:800px;">
+        </div>
     </div>
 
     <!-- Botón para imprimir -->
@@ -142,38 +85,6 @@
         <button onclick="window.print()" class="w3-button w3-teal w3-round-large">Imprimir Reportes</button>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const selectFiltro = document.getElementById("fecha");
-        const chartImage = document.getElementById("chartImage");
-
-        const fetchGrafico = () => {
-            const filtro = selectFiltro.value;
-            fetch(`/PW2-JuegoPreguntasYRespuestas/ControllerAdmin/getGrafico?filtroFecha=${filtro}`)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.blob();
-                        } else {
-                            throw new Error("Error al generar el gráfico");
-                        }
-                    })
-                    .then(blob => {
-                        chartImage.src = URL.createObjectURL(blob);
-                    })
-                    .catch(error => {
-                        console.error("Error al obtener el gráfico:", error);
-                        chartImage.src = ""; // Resetear imagen si hay error
-                        alert("No se pudo generar el gráfico.");
-                    });
-        };
-
-        selectFiltro.addEventListener("change", fetchGrafico);
-        fetchGrafico(); // Llama al cargar la página
-    });
-
-
-</script>
 
 </body>
 </html>

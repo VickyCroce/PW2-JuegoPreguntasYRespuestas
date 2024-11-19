@@ -22,16 +22,23 @@ class ControllerAdmin
     }
 
 
-    public function get()
-    {
+    public function get() {
         $this->checkAdministrador();
-
 
         $fechaInicio = '2024-11-11';
         $fechaFin = '2024-11-18';
 
-        // Obtener datos del modelo
-        $data = [
+        try {
+            $graficos = $this->getGrafico();
+        } catch (Exception $e) {
+            $graficos = [
+                'graficoPais' => '',
+                'graficoSexo' => ''
+            ];
+            error_log($e->getMessage());
+        }
+
+        $data = array_merge([
             'cantidadJugadores' => $this->model->getCantidadJugadores(),
             'cantidadPartidas' => $this->model->getCantidadPartidas(),
             'cantidadPreguntasJuego' => $this->model->getCantidadPreguntasJuego(),
@@ -40,15 +47,13 @@ class ControllerAdmin
             'porcentajeCorrectas' => $this->model->getRatioPorUsuario(),
             'usuariosPorPais' => $this->model->getUsuariosPorPais(),
             'usuariosPorSexo' => $this->model->getUsuariosPorSexo(),
-            'usuariosPorEdad' => $this->model->getUsuariosPorEdad()
-        ];
+            'usuariosPorEdad' => $this->model->getUsuariosPorEdad(),
+        ], $graficos);
 
-        // Renderizar la vista con los datos
         $this->presenter->render('view/admin.mustache', $data);
 
-
-
     }
+
 
 
     public function getGrafico() {
@@ -58,6 +63,7 @@ class ControllerAdmin
         // Obtener datos para ambos gráficos
         $usuariosPorPais = $this->model->getUsuariosPorPais();
         $usuariosPorSexo = $this->model->getUsuariosPorSexo();
+        $usuariosPorEdad = $this->model->getUsuariosPorEdad();
 
         // Generar el gráfico de usuarios por país
         $labelsPais = array_column($usuariosPorPais, 'pais');
@@ -65,29 +71,29 @@ class ControllerAdmin
         $grafico = new GenerarGraficos();
         $filePathPais = $grafico->generarGrafico($valuesPais, $labelsPais, 'Usuarios por País');
 
-
         // Generar el gráfico de usuarios por sexo
         $labelsSexo = array_column($usuariosPorSexo, 'sexo');
         $valuesSexo = array_column($usuariosPorSexo, 'cantidad');
         $filePathSexo = $grafico->generarGrafico($valuesSexo, $labelsSexo, 'Usuarios por Sexo');
 
-        // Responder con los gráficos
-        if (file_exists($filePathPais) && file_exists($filePathSexo)) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'graficoPais' => 'public/img/Grafico/' . $filePathPais,
-                'graficoSexo' => 'public/img/Grafico/' . $filePathSexo
-            ]);
-            exit();
+        // Generar el gráfico de usuarios por sexo
+        $labelsEdad = array_column($usuariosPorEdad, 'rango_edad');
+        $valuesEdad = array_column($usuariosPorEdad, 'cantidad');
+        $filePathEdad = $grafico->generarGrafico($valuesEdad, $labelsEdad, 'Usuarios por Edad');
+
+
+        // Verificar que los gráficos se hayan generado correctamente
+        if (file_exists($filePathPais) && file_exists($filePathSexo)&& file_exists($filePathEdad)) {
+            return [
+                'graficoPais' => $filePathPais,
+                'graficoSexo' => $filePathSexo,
+                'graficoEdad' => $filePathEdad,
+            ];
         } else {
-            http_response_code(404);
-            echo json_encode(['error' => 'No se pudo generar los gráficos.']);
-            exit();
+            throw new Exception('No se pudieron generar los gráficos.');
         }
-
-
-
     }
+
 
     public function limpiarCarpeta()
     {

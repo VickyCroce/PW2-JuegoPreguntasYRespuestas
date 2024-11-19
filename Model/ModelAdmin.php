@@ -115,10 +115,19 @@ class ModelAdmin
     // 8. Obtener usuarios agrupados por edad
     public function getUsuariosPorEdad()
     {
-        $query = "SELECT FLOOR(DATEDIFF(CURDATE(), anio_nacimiento) / 365) AS edad, COUNT(*) AS cantidad 
-              FROM users WHERE verificado = 1 GROUP BY edad";
+        $query = "SELECT CASE 
+        WHEN anio_nacimiento IS NULL THEN 'Sin Datos'
+        WHEN YEAR(CURDATE()) - anio_nacimiento < 18 THEN 'Menores'
+        WHEN YEAR(CURDATE()) - anio_nacimiento > 60 THEN 'Jubilados'
+        ELSE 'Medios'
+        END AS rango_edad,
+        COUNT(*) AS cantidad
+        FROM users
+        WHERE verificado = 1
+        GROUP BY rango_edad;";
         return $this->ejecutarConsultaAgrupada($query);
     }
+
 
 
     public function prepareQuery($query){
