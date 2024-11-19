@@ -2,42 +2,36 @@
 
 class GenerarGraficos {
 
-    public function generarGrafico() {
-
-        $data = array(20, 34, 50, 80, 45);
-
-
+    public function generarGrafico($data, $labels, $titulo = 'Gráfico') {
         require_once 'vendor/jpgraph/src/jpgraph.php';
         require_once 'vendor/jpgraph/src/jpgraph_bar.php';
-        require_once 'vendor/jpgraph/src/jpgraph_pie.php';
 
-
-        $graph = new Graph(400, 300);
+        // Crear gráfico
+        $graph = new Graph(800, 600);
         $graph->SetScale('textint');
 
+        // Configuración del gráfico
+        $graph->title->Set($titulo);
+        $graph->xaxis->SetTickLabels($labels);
+        $graph->xaxis->SetLabelAngle(45);
+        $graph->yaxis->title->Set("Cantidad");
 
+        // Crear la barra
         $barplot = new BarPlot($data);
+        $barplot->SetFillColor('orange');
+        $barplot->value->Show();
+
         $graph->Add($barplot);
 
-
-        $graph->title->Set('Gráfico de Barras Ejemplo');
-        $barplot->SetFillColor('orange');
-
-
-        $imagePath = 'public/img/temp_graph.png';
-
-
+        // Guardar la imagen
+        $imagePath = 'public/img/Grafico/' . uniqid('grafico_', true) . '.png';
         $graph->Stroke($imagePath);
-
 
         return $imagePath;
     }
 
-    public function obtenerGrafico() {
-        $imagePath = $this->generarGrafico();
-
-        echo json_encode(['imageUrl' => $imagePath]);
+    public function obtenerGrafico($data, $labels, $titulo) {
+        $imagePath = $this->generarGrafico($data, $labels, $titulo);
+        return json_encode(['imageUrl' => $imagePath]);
     }
 }
-
-

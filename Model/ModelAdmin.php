@@ -84,6 +84,25 @@ class ModelAdmin
         return $this->ejecutarConsultaAgrupada($query);
     }
 
+    public function getUsuariosPorPaisConFiltro($fechaInicio, $fechaFin)
+    {
+        $query = "SELECT pais, COUNT(*) AS cantidad 
+              FROM users 
+              WHERE verificado = 1 AND fecha_registro BETWEEN ? AND ?
+              GROUP BY pais";
+        $stmt = $this->db->prepare($query);
+
+        if ($stmt) {
+            $stmt->bind_param("ss", $fechaInicio, $fechaFin);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+
+        return [];
+    }
+
+
 
     // 7. Obtener usuarios agrupados por sexo
     public function getUsuariosPorSexo()
