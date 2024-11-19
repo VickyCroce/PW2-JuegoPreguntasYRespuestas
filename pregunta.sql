@@ -109,6 +109,7 @@ CREATE TABLE sugerencias_respuestas (
     sugerencia_pregunta_id INT NOT NULL,
     usuario_id INT,
     respuesta_sugerida TEXT NOT NULL,
+    es_correcta TINYINT(1) NOT NULL DEFAULT 0,
     CONSTRAINT fk_sugerencia_pregunta FOREIGN KEY (sugerencia_pregunta_id) REFERENCES sugerencias_preguntas(id) ON DELETE CASCADE,
     CONSTRAINT fk_usuario_respuesta FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE SET NULL
 );
