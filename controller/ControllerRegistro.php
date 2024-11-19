@@ -156,7 +156,7 @@ class ControllerRegistro
     // Envía el correo de verificación
     private function enviarCorreoVerificacion($correo)
     {
-        $asunto = "Verificación de correo electrónico";
+        $asunto = "Verificacion de correo electronico";
         $cuerpo = "<h1>Por favor, verifica tu correo:</h1>";
         $cuerpo .= "<a href='http://localhost/PW2-JuegoPreguntasYRespuestas/ControllerRegistro/verificarCorreo?email=" . urlencode($correo) . "'>Aquí</a>";
 
