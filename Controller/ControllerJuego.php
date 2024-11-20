@@ -54,6 +54,7 @@ class ControllerJuego
                 $_SESSION['pregunta_actual'] = $pregunta;
                 $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
                 $_SESSION['tiempo_limite'] = time() + 30;
+                $_SESSION['hora_mostrar_pregunta'] = (new \DateTime())->format('Y-m-d H:i:s'); // Guardar la hora, minuto y segundo en la sesión
             } else {
                 $this->model->limpiarPreguntasMostradas($usuarioId);
                 return $this->mostrarPregunta();
@@ -74,8 +75,6 @@ class ControllerJuego
         ]);
     }
 
-
-
     public function verificarRespuesta()
     {
         if (!isset($_SESSION['pregunta_token']) || $_SESSION['pregunta_token'] !== $_POST['pregunta_token']) {
@@ -86,8 +85,21 @@ class ControllerJuego
         unset($_SESSION['pregunta_token']);
 
         $preguntaId = $_POST['pregunta_id'];
-        $letraSeleccionada = $_POST['letraSeleccionada']?? null;
+        $letraSeleccionada = $_POST['letraSeleccionada'] ?? null;
         $partidaId = $_SESSION['partida_id'];
+
+        // Obtener marca de tiempo cuando se mostró la pregunta y cuando se envió la respuesta
+        $tiempoMostrarPregunta = new \DateTime($_SESSION['hora_mostrar_pregunta']);
+        $tiempoEnvioRespuesta = new \DateTime();
+
+        // Calcular la diferencia en segundos
+        $interval = $tiempoMostrarPregunta->diff($tiempoEnvioRespuesta);
+        $diferenciaEnSegundos = ($interval->days * 24 * 3600) + ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+
+        if ($diferenciaEnSegundos > 30) {
+            $this->finalizarPorRecarga();
+            return;
+        }
 
         $tiempoRestante = $_SESSION['tiempo_limite'] - time();
         $_SESSION['tiempo_restante'] = max($tiempoRestante, 0);
