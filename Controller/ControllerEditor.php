@@ -145,8 +145,11 @@ class ControllerEditor
     //REPORTE
     public function verPreguntasReportadas() {
         $reportes = $this->model->obtenerReportes();
-        include 'view/reportarForm.mustache';
+        $this->presenter->render('view/reportarForm.mustache', [
+            'reportes' => $reportes
+        ]);
     }
+
     public function aceptarReporte($id) {
         if (isset($_POST['id'])) {
             $id = $_POST['id'];

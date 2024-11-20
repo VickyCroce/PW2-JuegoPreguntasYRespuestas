@@ -11,41 +11,43 @@
 <div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 900px; margin: 0 auto;">
     <h1 class="w3-text-teal">Reportes de Preguntas</h1>
 
-    <?php if (!empty($reportes)): ?>
-    <table class="w3-table w3-bordered w3-striped w3-hoverable">
-        <thead>
-        <tr>
-            <th>ID Reporte</th>
-            <th>Pregunta</th>
-            <th>Razón</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($reportes as $reporte): ?>
-        <tr>
-            <td><?php echo htmlspecialchars($reporte['id']); ?></td>
-            <td><?php echo htmlspecialchars($reporte['pregunta']); ?></td>
-            <td><?php echo htmlspecialchars($reporte['razon']); ?></td>
-            <td><?php echo htmlspecialchars($reporte['descripcion']); ?></td>
-            <td>
-                <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/aceptarReporte" method="POST" style="display:inline;">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($reporte['id']); ?>">
-                    <button type="submit" class="w3-button w3-green w3-round-large">Aceptar</button>
-                </form>
-                <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/rechazarReporte" method="POST" style="display:inline;">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($reporte['id']); ?>">
-                    <button type="submit" class="w3-button w3-red w3-round-large">Rechazar</button>
-                </form>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php else: ?>
-    <p>No hay preguntas reportadas en este momento.</p>
-    <?php endif; ?>
+    {{#reportes.length}}
+        <table class="w3-table w3-bordered w3-striped w3-hoverable">
+            <thead>
+            <tr>
+                <th>ID Reporte</th>
+                <th>Pregunta</th>
+                <th>Razón</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#reportes}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{pregunta}}</td>
+                    <td>{{razon}}</td>
+                    <td>{{descripcion}}</td>
+                    <td>
+                        <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/aceptarReporte" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit" class="w3-button w3-green w3-round-large">Aceptar</button>
+                        </form>
+                        <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/rechazarReporte" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit" class="w3-button w3-red w3-round-large">Rechazar</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/reportes}}
+            </tbody>
+        </table>
+    {{/reportes.length}}
+
+    {{^reportes.length}}
+        <p>No hay preguntas reportadas en este momento.</p>
+    {{/reportes.length}}
 
     <div class="w3-margin-top">
         <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor" class="w3-button w3-teal w3-round-large w3-margin-bottom" style="width: 80%;">Volver</a>

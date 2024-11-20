@@ -8,13 +8,13 @@ use MustachePresenter;
 
 class ControllerReporte
 {
-    private $db;
-    private $modelReporte;
+    private $modelo;
+    private $presenter;
 
-    public function __construct() {
-        // Inicializar la conexión a la base de datos
-        $this->db = new Database('localhost', 'root', '', 'pregunta');
-        $this->modelReporte = new ModelReporte($this->db);
+    public function __construct($Modelo, $Presentador)
+    {
+        $this->modelo = $Modelo;
+        $this->presenter = $Presentador;
     }
 
     public function postReportarPregunta($data) {
@@ -25,7 +25,7 @@ class ControllerReporte
         $status = isset($data['reporte_status']) ? $data['reporte_status'] : 'pendiente';
 
         if ($pregunta_id) {
-            $this->modelReporte->guardarReporte($pregunta_id, $usuario_id, $razon, $descripcion, $status);
+            $this->modelo->guardarReporte($pregunta_id, $usuario_id, $razon, $descripcion, $status);
 
             // Redirige a la página de la misma pregunta con un mensaje de confirmación
             header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerJuego/mostrarPregunta?id=$pregunta_id");
