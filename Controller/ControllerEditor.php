@@ -17,7 +17,7 @@ class ControllerEditor
 
     private function checkEditor() {
         if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'Editor')) {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/cerrarSesion");
             exit();
         }
     }

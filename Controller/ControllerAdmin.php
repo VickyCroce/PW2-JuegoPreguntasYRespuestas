@@ -16,7 +16,7 @@ class ControllerAdmin
 
     private function checkAdministrador() {
         if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'administrador')) {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/cerrarSesion");
             exit();
         }
     }

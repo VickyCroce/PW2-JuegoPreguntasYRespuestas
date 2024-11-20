@@ -20,7 +20,7 @@ class ControllerJuego
     }
     private function checkJugador() {
         if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/cerrarSesion");
             exit();
         }
     }
@@ -35,7 +35,6 @@ class ControllerJuego
 
         $_SESSION['partida_id'] = $partidaId;
         $_SESSION['puntuacion'] = 0;
-        $_SESSION['preguntas_mostradas'] = [];
         $this->puntuacion = 0;
 
         $_SESSION['tiempo_limite'] = time() + 30;

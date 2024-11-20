@@ -16,7 +16,7 @@ class ControllerSugerencia
 
     private function checkJugador() {
         if (!(isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'jugador')) {
-            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/get");
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerLogin/cerrarSesion");
             exit();
         }
     }
