@@ -103,7 +103,7 @@ class ControllerEditor
 
 
     public function actualizarPregunta()
-    {
+    {   $this->checkEditor();
         if (isset($_POST['id'], $_POST['descripcion'], $_POST['categoria'], $_POST['respuesta1'], $_POST['respuesta2'], $_POST['respuesta3'], $_POST['respuesta4'], $_POST['correcta'])) {
             $this->checkEditor();
             $id = $_POST['id'];
@@ -130,7 +130,7 @@ class ControllerEditor
     }
 
     public function eliminarPregunta()
-    {
+    {   $this->checkEditor();
         if (isset($_GET['id'])) {
             $this->checkEditor();
             $preguntaId = $_GET['id'];
@@ -144,6 +144,7 @@ class ControllerEditor
 
     //REPORTE
     public function verPreguntasReportadas() {
+        $this->checkEditor();
         $reportes = $this->model->obtenerReportes();
         $this->presenter->render('view/reportarForm.mustache', [
             'reportes' => $reportes
@@ -151,6 +152,7 @@ class ControllerEditor
     }
 
     public function aceptarReporte($id) {
+        $this->checkEditor();
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
             $this->model->eliminarPreguntaYReporte($id);
@@ -163,6 +165,7 @@ class ControllerEditor
     }
 
     public function rechazarReporte() {
+        $this->checkEditor();
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
             $this->model->rechazarReporte($id);
@@ -174,7 +177,11 @@ class ControllerEditor
         }
     }
 
+
+    //SUGERENCIAS
     public function verPreguntasSugeridas() {
+        $this->checkEditor();
+
         $preguntas = $this->model->obtenerPreguntasSugeridas();
 
         foreach ($preguntas as &$pregunta) {
@@ -184,6 +191,7 @@ class ControllerEditor
         $this->presenter->render('view/mostrarSugerencias.mustache', [
             'preguntas' => $preguntas
         ]);
+
     }
 
     public function aceptarPreguntaSugerida()
@@ -193,21 +201,18 @@ class ControllerEditor
         if (isset($_POST['id'])) {
             $preguntaSugeridaId = $_POST['id'];
 
-            // Obtener la pregunta sugerida y sus respuestas
             $preguntaSugerida = $this->model->getPreguntaSugeridaById($preguntaSugeridaId);
-            $respuestasSugeridas = $this->model->getRespuestasSugeridasByPreguntaId($preguntaSugeridaId);
+            $respuestasSugeridas = $this->model->obtenerRespuestasPorPreguntaSugeridaId($preguntaSugeridaId);
 
             if ($preguntaSugerida && $respuestasSugeridas) {
-                // Guardar la pregunta en la tabla `pregunta`
-                $categoriaId = $this->model->getCategoriaId($preguntaSugerida['categoria']);
+                $categoriaId = $preguntaSugerida['categoria'];
                 $preguntaId = $this->model->guardarPregunta(
-                    $preguntaSugerida['descripcion'],
+                    $preguntaSugerida['pregunta_sugerida'],
                     $categoriaId,
-                    array_column($respuestasSugeridas, 'descripcion'),
+                    array_column($respuestasSugeridas, 'respuesta_sugerida'),
                     array_search(true, array_column($respuestasSugeridas, 'es_correcta')) + 1
                 );
 
-                // Eliminar la sugerencia de pregunta tras ser aceptada
                 $this->model->eliminarPreguntaSugerida($preguntaSugeridaId);
 
                 header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasSugeridas?success=true");
@@ -220,7 +225,19 @@ class ControllerEditor
     }
 
 
+    public function rechazarPreguntaSugerida(){
+        $this->checkEditor();
 
+        if (isset($_POST['id'])) {
+            $preguntaSugeridaId = $_POST['id'];
+            $this->model->eliminarPreguntaSugerida($preguntaSugeridaId);
+            header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasSugeridas?success=true");
+            exit();
+        }
+        header("Location: /PW2-JuegoPreguntasYRespuestas/ControllerEditor/verPreguntasSugeridas?error=true");
+        exit();
+
+    }
 
 
 

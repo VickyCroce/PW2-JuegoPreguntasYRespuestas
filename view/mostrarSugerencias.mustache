@@ -15,6 +15,7 @@
         <thead>
         <tr>
             <th>Pregunta</th>
+            <th>Categoría Id</th>
             <th>Respuestas</th>
             <th>Acciones</th>
         </tr>
@@ -22,10 +23,8 @@
         <tbody>
         {{#preguntas}}
             <tr>
-                <!-- Mostrar la pregunta -->
                 <td>{{pregunta_sugerida}}</td>
-
-                <!-- Mostrar las respuestas -->
+                <td>{{categoria}}</td>
                 <td>
                     <ul>
                         {{#respuestas}}
@@ -36,8 +35,6 @@
                         {{/respuestas}}
                     </ul>
                 </td>
-
-                <!-- Botones de acciones -->
                 <td>
                     <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/aceptarPreguntaSugerida" method="POST" style="display:inline;">
                         <input type="hidden" name="id" value="{{id}}">
@@ -50,8 +47,14 @@
                 </td>
             </tr>
         {{/preguntas}}
+        {{^preguntas}}
+            <tr>
+                <td colspan="4" class="w3-center">No hay preguntas sugeridas en este momento.</td>
+            </tr>
+        {{/preguntas}}
         </tbody>
     </table>
+
 
 
 

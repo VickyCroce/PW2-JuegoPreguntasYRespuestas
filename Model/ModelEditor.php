@@ -176,7 +176,6 @@ class ModelEditor
         $stmtReporte->bind_param("i", $id);
         $stmtReporte->execute();
 
-        // Actualizar la columna esValido a 0 en la tabla pregunta
         $sqlActualizarPregunta = "UPDATE pregunta SET esValido = 0 WHERE id = (SELECT pregunta_id FROM reportes_preguntas WHERE id = ?)";
         $stmtActualizarPregunta = $this->db->prepare($sqlActualizarPregunta);
         $stmtActualizarPregunta->bind_param("i", $id);
@@ -223,36 +222,32 @@ class ModelEditor
 
     public function getPreguntaSugeridaById($id)
     {
-        $sql = "SELECT id, descripcion, categoria FROM sugerencias_preguntas WHERE id = ?";
+        $sql = "SELECT id, pregunta_sugerida, categoria FROM sugerencias_preguntas WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc();
     }
-    public function getRespuestasSugeridasByPreguntaId($preguntaId)
-    {
-        $sql = "SELECT descripcion, es_correcta FROM sugerencias_respuestas WHERE pregunta_id = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $preguntaId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
+
     public function eliminarPreguntaSugerida($id)
     {
-        $sqlRespuestas = "DELETE FROM respuestas_sugerida WHERE pregunta_id = ?";
+        // Eliminar respuestas asociadas a la sugerencia de pregunta
+        $sqlRespuestas = "DELETE FROM sugerencias_respuestas WHERE sugerencia_pregunta_id = ?";
         $stmtRespuestas = $this->db->prepare($sqlRespuestas);
         $stmtRespuestas->bind_param("i", $id);
         $stmtRespuestas->execute();
         $stmtRespuestas->close();
 
-        $sqlPregunta = "DELETE FROM preguntas_sugerida WHERE id = ?";
+        // Eliminar la sugerencia de pregunta
+        $sqlPregunta = "DELETE FROM sugerencias_preguntas WHERE id = ?";
         $stmtPregunta = $this->db->prepare($sqlPregunta);
         $stmtPregunta->bind_param("i", $id);
         $stmtPregunta->execute();
         $stmtPregunta->close();
     }
+
+
 
 
 

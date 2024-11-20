@@ -11,7 +11,6 @@
 <div class="w3-container w3-light-grey w3-card w3-round-large w3-margin-top w3-padding-large w3-center" style="max-width: 900px; margin: 0 auto;">
     <h1 class="w3-text-teal">Reportes de Preguntas</h1>
 
-    {{#reportes.length}}
         <table class="w3-table w3-bordered w3-striped w3-hoverable">
             <thead>
             <tr>
@@ -43,11 +42,10 @@
             {{/reportes}}
             </tbody>
         </table>
-    {{/reportes.length}}
 
-    {{^reportes.length}}
+    {{^reportes}}
         <p>No hay preguntas reportadas en este momento.</p>
-    {{/reportes.length}}
+    {{/reportes}}
 
     <div class="w3-margin-top">
         <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor" class="w3-button w3-teal w3-round-large w3-margin-bottom" style="width: 80%;">Volver</a>
