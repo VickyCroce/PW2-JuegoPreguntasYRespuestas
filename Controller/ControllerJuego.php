@@ -54,7 +54,7 @@ class ControllerJuego
                 $_SESSION['pregunta_actual'] = $pregunta;
                 $_SESSION['pregunta_token'] = bin2hex(random_bytes(16));
                 $_SESSION['tiempo_limite'] = time() + 30;
-                $_SESSION['hora_mostrar_pregunta'] = (new \DateTime())->format('Y-m-d H:i:s'); // Guardar la hora, minuto y segundo en la sesión
+                $_SESSION['hora_mostrar_pregunta'] = (new \DateTime())->format('Y-m-d H:i:s');
             } else {
                 $this->model->limpiarPreguntasMostradas($usuarioId);
                 return $this->mostrarPregunta();
@@ -157,6 +157,10 @@ class ControllerJuego
             'mensaje' => "Has perdido por refrescar la página o intentar retroceder.",
             'puntuacion' => $this->puntuacion
         ]);
+        unset($_SESSION['pregunta_actual']);
+        unset($_SESSION['tiempo_restante']);
+        unset ($_SESSION['hora_mostrar_pregunta']);
+
     }
 
     private function letraSinSeleccionar()
@@ -167,6 +171,8 @@ class ControllerJuego
             'mensaje' => "debes seleccionar una respuesta",
             'puntuacion' => $this->puntuacion
         ]);
+        unset($_SESSION['pregunta_actual']);
+        unset($_SESSION['tiempo_restante']);
     }
 
     public function reiniciarJuego()
