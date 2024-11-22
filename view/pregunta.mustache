@@ -6,52 +6,62 @@
     <title>Pregunta</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
-<body style="background-color: {{categoriaColor}};">
-<input type="hidden" name="partida_id" value="{{partida_id}}">
-<div class="w3-container">
-    <h2>{{pregunta.descripcion}}</h2>
-    <h1>{{tiempoRestante}}</h1>
-    <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large" method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/verificarRespuesta">
+<body style="background-color: {{categoriaColor}}; font-family: 'Arial', sans-serif;">
+
+<div class="w3-container w3-padding-32">
+    <h2 class=" w3-center">{{pregunta.descripcion}}</h2>
+    <h1 class="w3-text-red w3-center">{{tiempoRestante}} segundos</h1>
+
+    <form id="pregunta-form" class="w3-card-4 w3-padding w3-white w3-round-large w3-shadow-large" method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerJuego/verificarRespuesta">
         {{#respuestas}}
-            <label class="w3-block w3-margin-bottom">
-                <input class="w3-radio" type="radio" name="letraSeleccionada" value="{{letra}}">
-                {{letra}}) {{descripcion}}
+            <label class="w3-block w3-margin-bottom w3-large">
+                <input class="w3-radio w3-check" type="radio" name="letraSeleccionada" value="{{letra}}">
+                <span class="w3-text-dark-grey">{{letra}}) {{descripcion}}</span>
             </label>
         {{/respuestas}}
         <input type="hidden" name="pregunta_id" value="{{pregunta.id}}">
         <input type="hidden" name="pregunta_token" value="{{pregunta_token}}">
 
-        <button type="submit" class="w3-button w3-green w3-round">Responder</button>
+        <div class="w3-center">
+            <button type="submit" class="w3-button w3-green w3-round w3-large w3-hover-shadow">Responder</button>
+        </div>
     </form>
-    <p>Puntuación actual: {{puntuacion}}</p>
+
+    <p class="w3-center w3-margin-top w3-text-dark-grey">Puntuación actual: <strong>{{puntuacion}}</strong></p>
 
     <!-- Botón para abrir el popup de reporte -->
-    <button onclick="document.getElementById('idReporteModal').style.display='block'" class="w3-button w3-red w3-round">Reportar esta pregunta</button>
+    <div class="w3-center">
+        <button onclick="document.getElementById('idReporteModal').style.display='block'" class="w3-button w3-red w3-round w3-large w3-hover-shadow">Reportar esta pregunta</button>
+    </div>
 
     <!-- El Modal (Popup) para el reporte -->
     <div id="idReporteModal" class="w3-modal">
         <div class="w3-modal-content w3-animate-zoom">
             <header class="w3-container w3-teal">
-                <span onclick="document.getElementById('idReporteModal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <span onclick="document.getElementById('idReporteModal').style.display='none'" class="w3-button w3-display-topright w3-xlarge">&times;</span>
                 <h2>Reportar Pregunta</h2>
             </header>
             <div class="w3-container">
                 <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerReporte/postReportarPregunta">
                     <input type="hidden" name="pregunta_id" value="{{pregunta.id}}">
-                    <p>{{pregunta.descripcion}}</p>
+                    <p class="w3-large">{{pregunta.descripcion}}</p>
 
-                    <label for="razon">Razón del reporte:</label>
-                    <input type="text" id="razon" name="razon" required class="w3-input w3-border w3-round">
+                    <label for="razon" class="w3-text-grey">Razón del reporte:</label>
+                    <input type="text" id="razon" name="razon" required class="w3-input w3-border w3-round w3-light-grey">
 
-                    <label for="descripcion">Descripción:</label>
-                    <textarea id="descripcion" name="descripcion" class="w3-input w3-border w3-round"></textarea>
+                    <label for="descripcion" class="w3-text-grey">Descripción adicional:</label>
+                    <textarea id="descripcion" name="descripcion" class="w3-input w3-border w3-round w3-light-grey" rows="4"></textarea>
+
                     <input type="hidden" name="reporte_status" value="pendiente">
-                    <button type="submit" class="w3-button w3-blue w3-round">Enviar reporte</button>
+                    <div class="w3-center">
+                        <button type="submit" class="w3-button w3-blue w3-round w3-large w3-hover-shadow">Enviar reporte</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     var puntuacion = {{puntuacion}};
     var sec = {{tiempoRestante}};
@@ -59,6 +69,7 @@
 <script src="/PW2-JuegoPreguntasYRespuestas/public/js/ajax/temporizadorAjax.js"></script>
 </body>
 </html>
+
 
 
 

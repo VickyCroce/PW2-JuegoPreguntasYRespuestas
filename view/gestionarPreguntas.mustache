@@ -5,41 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Preguntas</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .navbar {
+            background-color: teal;
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            background-color: #1a2a38;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2rem;
+        }
+        .w3-button {
+            transition: all 0.3s ease;
+        }
+        .w3-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .w3-table {
+            margin-top: 40px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .w3-table th, .w3-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .w3-table th {
+            background-color: teal;
+            color: #fff;
+        }
+        .w3-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .w3-table tr:hover {
+            background-color: #e0f7fa;
+        }
+        .action-buttons a {
+            margin-right: 10px;
+        }
+        .w3-button.w3-blue {
+            background-color: #007bff;
+        }
+        .w3-button.w3-blue:hover {
+            background-color: #0056b3;
+        }
+        .w3-button.w3-orange {
+            background-color: #ffa500;
+        }
+        .w3-button.w3-orange:hover {
+            background-color: #e07b00;
+        }
+        .w3-button.w3-red {
+            background-color: #dc3545;
+        }
+        .w3-button.w3-red:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar con botón de regreso -->
-    <div class="w3-bar w3-teal">
-        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/get" class="w3-bar-item w3-button">
-            <i class="w3-margin-right">&larr;</i> Volver
+
+<!-- Navbar -->
+<div class="navbar">
+    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/get">
+        <i class="w3-margin-right">&larr;</i> Volver
+    </a>
+    <h2>Gestión de Preguntas</h2>
+</div>
+
+<!-- Contenedor principal -->
+<div class="w3-container w3-padding">
+
+    <!-- Botón para agregar preguntas -->
+    <div class="w3-center w3-margin-bottom">
+        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/agregarPregunta" class="w3-button w3-blue w3-round w3-large">
+            + Agregar Pregunta
         </a>
     </div>
 
-    <div class="w3-container w3-padding">
-        <h2>Gestión de Preguntas</h2>
-        <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/agregarPregunta" class="w3-button w3-blue w3-round">Agregar Pregunta</a>
+    <!-- Tabla de preguntas -->
+    <table class="w3-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pregunta</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#preguntas}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{descripcion}}</td>
+                <td class="action-buttons">
+                    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/editarPregunta?id={{id}}"
+                    class="w3-button w3-orange w3-round">
+                    Editar
+                    </a>
+                    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/eliminarPregunta?id={{id}}"
+                    class="w3-button w3-red w3-round">
+                    Eliminar
+                    </a>
+                </td>
+            </tr>
+        {{/preguntas}}
+        </tbody>
+    </table>
+</div>
 
-        <table class="w3-table w3-bordered w3-striped w3-margin-top">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Pregunta</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#preguntas}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{descripcion}}</td>
-                        <td>
-                            <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/editarPregunta?id={{id}}" class="w3-button w3-orange w3-round">Editar</a>
-                            <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/eliminarPregunta?id={{id}}" class="w3-button w3-red w3-round">Eliminar</a>
-                        </td>
-                    </tr>
-                {{/preguntas}}
-            </tbody>
-        </table>
-    </div>
 </body>
 </html>
-

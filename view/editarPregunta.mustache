@@ -5,21 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Pregunta</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f1f1f1;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .w3-btn {
+            width: 100%;
+        }
+        .w3-radio-label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-<div class="w3-margin-top">
-    <a class="w3-button w3-teal w3-round w3-margin-left" href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas">volver</a>
+
+<div class="w3-container back-button w3-left">
+    <a href="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/gestionarPreguntas"
+       class="w3-button w3-teal w3-round">
+        <i class="w3-margin-right w3-xlarge">&#10094;</i> Volver
+    </a>
 </div>
-<div class="w3-container w3-padding">
-    <h2>Editar Pregunta</h2>
-    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/actualizarPregunta" method="POST" class="w3-container">
+
+<div class="w3-container form-container w3-card-4">
+    <h2 class="w3-text-teal">Editar Pregunta</h2>
+
+    <form action="/PW2-JuegoPreguntasYRespuestas/ControllerEditor/actualizarPregunta" method="POST">
         <input type="hidden" name="id" value="{{id}}">
 
-        <label>Descripción:</label>
-        <input type="text" name="descripcion" value="{{descripcion}}" class="w3-input" required>
+        <!-- Descripción de la pregunta -->
+        <label for="descripcion" class="w3-text-teal"><b>Descripción:</b></label>
+        <input type="text" id="descripcion" name="descripcion" value="{{descripcion}}" class="w3-input w3-border w3-round w3-margin-bottom" required>
 
-        <label>Categoría:</label>
-        <select name="categoria" class="w3-select">
+        <!-- Categoría -->
+        <label for="categoria" class="w3-text-teal"><b>Categoría:</b></label>
+        <select id="categoria" name="categoria" class="w3-select w3-border w3-round w3-margin-bottom" required>
             <option value="Historia" {{#isHistoria}}selected{{/isHistoria}}>Historia</option>
             <option value="Ciencia" {{#isCiencia}}selected{{/isCiencia}}>Ciencia</option>
             <option value="Entretenimiento" {{#isEntretenimiento}}selected{{/isEntretenimiento}}>Entretenimiento</option>
@@ -27,33 +60,35 @@
             <option value="Geografía" {{#isGeografia}}selected{{/isGeografia}}>Geografía</option>
         </select>
 
-        <div>
-            <label>Respuesta 1:</label>
-            <input type="text" name="respuesta1" value="{{respuestas.0.descripcion}}" class="w3-input" required>
-        </div>
-        <div>
-            <label>Respuesta 2:</label>
-            <input type="text" name="respuesta2" value="{{respuestas.1.descripcion}}" class="w3-input" required>
-        </div>
-        <div>
-            <label>Respuesta 3:</label>
-            <input type="text" name="respuesta3" value="{{respuestas.2.descripcion}}" class="w3-input" required>
-        </div>
-        <div>
-            <label>Respuesta 4:</label>
-            <input type="text" name="respuesta4" value="{{respuestas.3.descripcion}}" class="w3-input" required>
+        <!-- Respuestas -->
+        <label class="w3-text-teal"><b>Respuestas:</b></label>
+        <input type="text" name="respuesta1" value="{{respuestas.0.descripcion}}" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Respuesta 1" required>
+        <input type="text" name="respuesta2" value="{{respuestas.1.descripcion}}" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Respuesta 2" required>
+        <input type="text" name="respuesta3" value="{{respuestas.2.descripcion}}" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Respuesta 3" required>
+        <input type="text" name="respuesta4" value="{{respuestas.3.descripcion}}" class="w3-input w3-border w3-round w3-margin-bottom" placeholder="Respuesta 4" required>
+
+        <!-- Respuesta Correcta -->
+        <label class="w3-text-teal"><b>¿Cuál es la respuesta correcta?</b></label>
+        <div class="w3-margin-bottom">
+            <label class="w3-radio-label">
+                <input type="radio" name="correcta" value="1" class="w3-radio" {{#correcta1}}checked{{/correcta1}}> Respuesta 1
+            </label>
+            <label class="w3-radio-label">
+                <input type="radio" name="correcta" value="2" class="w3-radio" {{#correcta2}}checked{{/correcta2}}> Respuesta 2
+            </label>
+            <label class="w3-radio-label">
+                <input type="radio" name="correcta" value="3" class="w3-radio" {{#correcta3}}checked{{/correcta3}}> Respuesta 3
+            </label>
+            <label class="w3-radio-label">
+                <input type="radio" name="correcta" value="4" class="w3-radio" {{#correcta4}}checked{{/correcta4}}> Respuesta 4
+            </label>
         </div>
 
-        <label>Correcta:</label>
-        <div class="w3-margin-left">
-            <input type="radio" name="correcta" value="1" {{#correcta1}}checked{{/correcta1}}> Respuesta 1<br>
-            <input type="radio" name="correcta" value="2" {{#correcta2}}checked{{/correcta2}}> Respuesta 2<br>
-            <input type="radio" name="correcta" value="3" {{#correcta3}}checked{{/correcta3}}> Respuesta 3<br>
-            <input type="radio" name="correcta" value="4" {{#correcta4}}checked{{/correcta4}}> Respuesta 4
-        </div>
-
-        <button type="submit" class="w3-button w3-green w3-margin-top">Guardar Cambios</button>
+        <button type="submit" class="w3-button w3-blue w3-round w3-hover-teal w3-margin-top">
+            Guardar Cambios
+        </button>
     </form>
 </div>
+
 </body>
 </html>

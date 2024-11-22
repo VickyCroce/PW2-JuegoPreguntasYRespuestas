@@ -13,7 +13,7 @@ class ModelAdmin
 
     // 1. Obtener la cantidad de jugadores
     public function getCantidadJugadores() {
-        $query = "SELECT COUNT(*) as cantidad FROM users WHERE verificado = 1";
+        $query = "SELECT COUNT(*) as cantidad FROM users WHERE verificado = 1 AND rol = 'jugador'";
         return $this->prepareQuery($query);
     }
 
@@ -43,7 +43,7 @@ class ModelAdmin
     // 5. Obtener la cantidad de usuarios nuevos dentro de un rango de fechas
     public function getRatioPorUsuario()
     {
-        $query = "SELECT id, nombre_usuario, ratio FROM users WHERE verificado = 1";
+        $query = "SELECT id, nombre_usuario, ratio FROM users WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor')";
 
         $resultado = $this->ejecutarConsultaAgrupada($query);
 
@@ -57,7 +57,7 @@ class ModelAdmin
 
     public function getCantidadUsuariosNuevos($fechaInicio, $fechaFin)
     {
-        $query = "SELECT COUNT(*) as cantidad FROM users WHERE fecha_registro BETWEEN ? AND ? AND verificado = 1";
+        $query = "SELECT COUNT(*) as cantidad FROM users WHERE fecha_registro BETWEEN ? AND ? AND verificado = 1 AND rol NOT IN ('administrador', 'editor')";
         $stmt = $this->db->prepare($query);
 
         if ($stmt) {
@@ -80,7 +80,7 @@ class ModelAdmin
     // 6. Obtener usuarios agrupados por país
     public function getUsuariosPorPais()
     {
-        $query = "SELECT pais, COUNT(*) AS cantidad FROM users WHERE verificado = 1 GROUP BY pais ";
+        $query = "SELECT pais, COUNT(*) AS cantidad FROM users WHERE verificado = 1  AND rol NOT IN ('administrador', 'editor') GROUP BY pais ";
         return $this->ejecutarConsultaAgrupada($query);
     }
 
@@ -107,7 +107,7 @@ class ModelAdmin
     // 7. Obtener usuarios agrupados por sexo
     public function getUsuariosPorSexo()
     {
-        $query = "SELECT sexo, COUNT(*) AS cantidad FROM users WHERE verificado = 1 GROUP BY sexo";
+        $query = "SELECT sexo, COUNT(*) AS cantidad FROM users WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor') GROUP BY sexo";
         return $this->ejecutarConsultaAgrupada($query);
     }
 
@@ -123,7 +123,7 @@ class ModelAdmin
         END AS rango_edad,
         COUNT(*) AS cantidad
         FROM users
-        WHERE verificado = 1
+        WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor')
         GROUP BY rango_edad;";
         return $this->ejecutarConsultaAgrupada($query);
     }

@@ -69,17 +69,17 @@ class ControllerAdmin
         $labelsPais = array_column($usuariosPorPais, 'pais');
         $valuesPais = array_column($usuariosPorPais, 'cantidad');
         $grafico = new GenerarGraficos();
-        $filePathPais = $grafico->generarGrafico($valuesPais, $labelsPais, 'Usuarios por País');
+        $filePathPais = $grafico->generarGraficoBarras($valuesPais, $labelsPais, 'Usuarios por País');
 
 
         $labelsSexo = array_column($usuariosPorSexo, 'sexo');
         $valuesSexo = array_column($usuariosPorSexo, 'cantidad');
-        $filePathSexo = $grafico->generarGrafico($valuesSexo, $labelsSexo, 'Usuarios por Sexo');
+        $filePathSexo = $grafico->generarGraficoTorta($valuesSexo, $labelsSexo, 'Usuarios por Sexo');
 
 
         $labelsEdad = array_column($usuariosPorEdad, 'rango_edad');
         $valuesEdad = array_column($usuariosPorEdad, 'cantidad');
-        $filePathEdad = $grafico->generarGrafico($valuesEdad, $labelsEdad, 'Usuarios por Edad');
+        $filePathEdad = $grafico->generarGraficoBarras($valuesEdad, $labelsEdad, 'Usuarios por Edad');
 
 
         // Verificar que los gráficos se hayan generado correctamente
