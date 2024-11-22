@@ -69,6 +69,8 @@
 
 
 <script>
+
+
     const map = L.map('map').setView([20, 0], 2); // Centro inicial y zoom
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -103,6 +105,8 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+
+
     });
 </script>
 

@@ -60,11 +60,6 @@ class ControllerSugerencia
             foreach ($respuestasIncorrectas as $respuestaIncorrecta) {
                 $this->model->crearSugerenciaRespuesta($sugerenciaPreguntaId, $usuarioId, $respuestaIncorrecta, 0); // `es_correcta` es 0 para incorrectas
             }
-
-            // Renderizar la vista de éxito
-            $this->presenter->render('view/sugerenciaExito.mustache', [
-                'mensaje' => '¡Tu sugerencia ha sido enviada exitosamente!'
-            ]);
         } else {
             echo "Debes estar logueado para sugerir una pregunta.";
         }
