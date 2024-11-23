@@ -45,9 +45,6 @@ class ControllerAdmin
             'cantidadPreguntasCreadas' => $this->model->getCantidadPreguntasCreadas(),
             'cantidadUsuariosNuevos' => $this->model->getCantidadUsuariosNuevos($fechaInicio, $fechaFin),
             'porcentajeCorrectas' => $this->model->getRatioPorUsuario(),
-            'usuariosPorPais' => $this->model->getUsuariosPorPais(),
-            'usuariosPorSexo' => $this->model->getUsuariosPorSexo(),
-            'usuariosPorEdad' => $this->model->getUsuariosPorEdad(),
         ], $graficos);
 
         $this->presenter->render('view/admin.mustache', $data);
@@ -94,11 +91,47 @@ class ControllerAdmin
         }
     }
 
+    public function getGraficoPorFiltro($fechaInicio, $fechaFin)
+    {
+        $this->checkAdministrador();
+        $this->limpiarCarpeta();
+
+        $usuariosPorPais = $this->model->getUsuariosPorPaisFiltrados($fechaInicio, $fechaFin);
+        $usuariosPorSexo = $this->model->getUsuariosPorSexoFiltrados($fechaInicio, $fechaFin);
+        $usuariosPorEdad = $this->model->getUsuariosPorEdadFiltrados($fechaInicio, $fechaFin);
+
+
+        $grafico = new GenerarGraficos();
+
+        $labelsPais = array_column($usuariosPorPais, 'pais');
+        $valuesPais = array_column($usuariosPorPais, 'cantidad');
+        $filePathPais = $grafico->generarGraficoBarras($valuesPais, $labelsPais, 'Usuarios por País');
+
+        $labelsSexo = array_column($usuariosPorSexo, 'sexo');
+        $valuesSexo = array_column($usuariosPorSexo, 'cantidad');
+        $filePathSexo = $grafico->generarGraficoTorta($valuesSexo, $labelsSexo, 'Usuarios por Sexo');
+
+        $labelsEdad = array_column($usuariosPorEdad, 'rango_edad');
+        $valuesEdad = array_column($usuariosPorEdad, 'cantidad');
+        $filePathEdad = $grafico->generarGraficoBarras($valuesEdad, $labelsEdad, 'Usuarios por Edad');
+
+        if (file_exists($filePathPais) && file_exists($filePathSexo) && file_exists($filePathEdad)) {
+            return [
+                'graficoPais' => $filePathPais,
+                'graficoSexo' => $filePathSexo,
+                'graficoEdad' => $filePathEdad,
+            ];
+        } else {
+            throw new Exception('No se pudieron generar los gráficos.');
+        }
+    }
+
+
 
     public function limpiarCarpeta()
     {
         $this->checkAdministrador();
-        // Función para limpiar la carpeta public/img/grafico/
+
         $carpeta = 'public/img/Grafico/';
 
         $carpeta = rtrim($carpeta, '/') . '/';
@@ -117,6 +150,54 @@ class ControllerAdmin
 
         }
     }
+
+    public function datosFiltrados()
+    {
+        $this->checkAdministrador();
+
+        $filtro = $_GET['filtroFecha'] ?? 'mes'; // Por defecto
+
+        $fechaFin = date('Y-m-d 23:59:59'); // Final del día actual
+        switch ($filtro) {
+            case 'dia':
+                $fechaInicio = date('Y-m-d 00:00:00'); // Inicio del día actual
+                break;
+            case 'semana':
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('monday this week')); // Inicio de la semana
+                break;
+            case 'mes':
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of this month')); // Inicio del mes
+                break;
+            case 'anio':
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of January this year')); // Inicio del año
+                break;
+            default:
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('-1 month')); // Rango por defecto (último mes)
+        }
+
+
+        $graficos = $this->getGraficoPorFiltro($fechaInicio, $fechaFin);
+
+
+        $data = array_merge([
+            'cantidadJugadores' => $this->model->getCantidadJugadores(),
+            'cantidadPartidas' => $this->model->getCantidadPartidas(),
+            'cantidadPreguntasJuego' => $this->model->getCantidadPreguntasJuego(),
+            'cantidadPreguntasCreadas' => $this->model->getCantidadPreguntasCreadas(),
+            'cantidadUsuariosNuevos' => $this->model->getCantidadUsuariosNuevos($fechaInicio, $fechaFin),
+            'porcentajeCorrectas' => $this->model->getRatioPorUsuario(),
+            'filtroSeleccionado' => [
+                'dia' => $filtro === 'dia',
+                'semana' => $filtro === 'semana',
+                'mes' => $filtro === 'mes',
+                'anio' => $filtro === 'anio',
+            ]
+        ], $graficos);
+
+        $this->presenter->render('view/admin.mustache', $data);
+    }
+
+
 }
 
 
