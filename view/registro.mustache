@@ -23,8 +23,78 @@
 {{/errores}}
 
 {{#exito}}
-    <div class="alert alert-success">{{exito}}</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const successMessage = "{{exito}}";
+            showSuccessPopup(successMessage);
+        });
+
+        function showSuccessPopup(message) {
+            // Crear un overlay oscuro
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '999';
+
+            // Crear el contenedor del popup
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = '#ffffff';
+            popup.style.color = 'teal';
+            popup.style.padding = '20px 30px';
+            popup.style.borderRadius = '10px';
+            popup.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+            popup.style.textAlign = 'center';
+            popup.style.fontFamily = 'Arial, sans-serif';
+            popup.style.maxWidth = '400px';
+            popup.style.zIndex = '1000';
+
+            // Icono de éxito
+            const icon = document.createElement('div');
+            icon.innerHTML = '&#10004;'; 
+            icon.style.fontSize = '40px';
+            icon.style.marginBottom = '15px';
+            icon.style.color = 'teal';
+
+            // Mensaje de texto
+            const text = document.createElement('div');
+            text.textContent = message;
+            text.style.fontSize = '18px';
+            text.style.marginBottom = '20px';
+
+            // Botón de cerrar
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'Cerrar';
+            closeButton.style.backgroundColor = '#teal';
+            closeButton.style.color = '#fff';
+            closeButton.style.border = 'none';
+            closeButton.style.padding = '10px 20px';
+            closeButton.style.borderRadius = '5px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.style.fontSize = '16px';
+
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                document.body.removeChild(popup);
+            });
+
+            // Ensamblar elementos
+            popup.appendChild(icon);
+            popup.appendChild(text);
+            popup.appendChild(closeButton);
+            document.body.appendChild(overlay);
+            document.body.appendChild(popup);
+        }
+    </script>
 {{/exito}}
+
 
 <div class="w3-container w3-card-4 w3-light-grey w3-padding-32" style="max-width: 500px; margin: auto;">
     <h2 class="w3-center">Registro de Usuario</h2>

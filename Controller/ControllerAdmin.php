@@ -157,22 +157,22 @@ class ControllerAdmin
 
         $filtro = $_GET['filtroFecha'] ?? 'mes'; // Por defecto
 
-        $fechaFin = date('Y-m-d 23:59:59'); // Final del día actual
+        $fechaFin = date('Y-m-d 23:59:59');
         switch ($filtro) {
             case 'dia':
-                $fechaInicio = date('Y-m-d 00:00:00'); // Inicio del día actual
+                $fechaInicio = date('Y-m-d 00:00:00');
                 break;
             case 'semana':
-                $fechaInicio = date('Y-m-d 00:00:00', strtotime('monday this week')); // Inicio de la semana
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('monday this week'));
                 break;
             case 'mes':
-                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of this month')); // Inicio del mes
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of this month'));
                 break;
             case 'anio':
-                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of January this year')); // Inicio del año
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('first day of January this year'));
                 break;
             default:
-                $fechaInicio = date('Y-m-d 00:00:00', strtotime('-1 month')); // Rango por defecto (último mes)
+                $fechaInicio = date('Y-m-d 00:00:00', strtotime('-1 month')); // Rango por defecto
         }
 
 
