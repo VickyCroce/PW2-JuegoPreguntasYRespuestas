@@ -43,7 +43,7 @@ class ModelAdmin
     // 5. Obtener la cantidad de usuarios nuevos dentro de un rango de fechas
     public function getRatioPorUsuario()
     {
-        $query = "SELECT id, nombre_usuario, ratio FROM users WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor')";
+        $query = "SELECT id, nombre_usuario, ratio FROM users WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor') order by ratio desc";
 
         $resultado = $this->ejecutarConsultaAgrupada($query);
 
@@ -102,13 +102,31 @@ class ModelAdmin
         return [];
     }
 
-
+    public function getUsuariosPorPaisFiltrados($fechaInicio, $fechaFin)
+    {
+        $query = "SELECT pais, COUNT(*) as cantidad FROM users 
+              WHERE verificado = 1 
+              AND rol NOT IN ('administrador', 'editor') 
+              AND fecha_registro BETWEEN ? AND ? 
+              GROUP BY pais";
+        return $this->ejecutarConsultaAgrupada($query, [$fechaInicio, $fechaFin]);
+    }
 
     // 7. Obtener usuarios agrupados por sexo
     public function getUsuariosPorSexo()
     {
-        $query = "SELECT sexo, COUNT(*) AS cantidad FROM users WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor') GROUP BY sexo";
+        $query = "SELECT sexo, COUNT(*) AS cantidad FROM users WHERE verificado = 1 
+                AND rol NOT IN ('administrador', 'editor')
+                GROUP BY sexo";
         return $this->ejecutarConsultaAgrupada($query);
+    }
+    public function getUsuariosPorSexoFiltrados($fechaInicio, $fechaFin)
+    {
+        $query = "SELECT sexo, COUNT(*) AS cantidad FROM users WHERE verificado = 1 
+                AND rol NOT IN ('administrador', 'editor')
+                AND fecha_registro BETWEEN ? AND ? 
+                GROUP BY sexo";
+        return $this->ejecutarConsultaAgrupada($query, [$fechaInicio, $fechaFin]);
     }
 
 
@@ -126,6 +144,22 @@ class ModelAdmin
         WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor')
         GROUP BY rango_edad;";
         return $this->ejecutarConsultaAgrupada($query);
+    }
+
+    public function getUsuariosPorEdadFiltrados($fechaInicio, $fechaFin)
+    {
+        $query = "SELECT CASE 
+        WHEN anio_nacimiento IS NULL THEN 'Sin Datos'
+        WHEN YEAR(CURDATE()) - anio_nacimiento < 18 THEN 'Menores'
+        WHEN YEAR(CURDATE()) - anio_nacimiento > 60 THEN 'Jubilados'
+        ELSE 'Medios'
+        END AS rango_edad,
+        COUNT(*) AS cantidad
+        FROM users
+        WHERE verificado = 1 AND rol NOT IN ('administrador', 'editor')
+        AND fecha_registro BETWEEN ? AND ? 
+        GROUP BY rango_edad;";
+        return $this->ejecutarConsultaAgrupada($query, [$fechaInicio, $fechaFin]);
     }
 
 
