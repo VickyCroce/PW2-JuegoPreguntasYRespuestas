@@ -3,6 +3,7 @@
 namespace Controller;
 
 use GenerarGraficos;
+use Helper\PdfCreator;
 
 class ControllerAdmin
 {
@@ -196,6 +197,28 @@ class ControllerAdmin
 
         $this->presenter->render('view/admin.mustache', $data);
     }
+
+    public function generarPdf()
+    {
+        $this->checkAdministrador();
+
+        $data = array_merge([
+            'cantidadJugadores' => $this->model->getCantidadJugadores(),
+            'cantidadPartidas' => $this->model->getCantidadPartidas(),
+            'cantidadPreguntasJuego' => $this->model->getCantidadPreguntasJuego(),
+            'cantidadPreguntasCreadas' => $this->model->getCantidadPreguntasCreadas(),
+            'porcentajeCorrectas' => $this->model->getRatioPorUsuario(),
+        ]);
+
+        $pdfCreator = new PdfCreator();
+        $html = $this->presenter->render('view/adminPdf.mustache', $data);
+
+        $pdfCreator->create($html);
+    }
+
+
+
+
 
 
 }

@@ -80,10 +80,12 @@
         </div>
     </div>
 
-    <!-- Botón para imprimir -->
     <div class="w3-margin-top">
-        <button onclick="window.print()" class="w3-button w3-teal w3-round-large">Imprimir Reportes</button>
+        <form method="POST" action="/PW2-JuegoPreguntasYRespuestas/ControllerAdmin/generarPdf">
+            <button type="submit" class="w3-button w3-teal w3-round-large">Descargar Reporte PDF</button>
+        </form>
     </div>
+
 </div>
 
 </body>

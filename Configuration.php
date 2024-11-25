@@ -52,6 +52,7 @@ include_once "helper/Presenter.php";
 include_once "helper/MustachePresenter.php";
 include_once "helper/Router.php";
 include_once "helper/GenerarGraficos.php";
+include_once "helper/PdfCreator.php";
 include_once("vendor\mustache\mustache\src\Mustache\Autoloader.php");
 class Configuration
 {
@@ -225,6 +226,11 @@ class Configuration
     private static function getPresenter()
     {
         return new Presenter();
+    }
+
+    private static function getPdfCreator()
+    {
+        return new PdfCreator();
     }
 
 }

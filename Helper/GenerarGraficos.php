@@ -1,6 +1,5 @@
 <?php
 
-
 class GenerarGraficos {
 
     // Gráfico de barras
